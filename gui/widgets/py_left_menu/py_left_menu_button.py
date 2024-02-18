@@ -232,25 +232,25 @@ class PyLeftMenuButton(QPushButton):
 
     # DRAW ICON WITH COLORS
     # ///////////////////////////////////////////////////////////////
-    def icon_paint(self, qp, image, rect, color):
+    def icon_paint(self, qp: QPainter, image, rect, color):
         icon = QPixmap(image)
         painter = QPainter(icon)
         painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
-        painter.fillRect(icon.rect(), color)
+        painter.fillRect(icon.rect(), QColor(color))
         qp.drawPixmap(
-            (rect.width() - icon.width()) / 2, 
-            (rect.height() - icon.height()) / 2,
+            (rect.width() - icon.width()) // 2, 
+            (rect.height() - icon.height()) // 2,
             icon
         )        
         painter.end()
 
     # DRAW ACTIVE ICON / RIGHT SIDE
     # ///////////////////////////////////////////////////////////////
-    def icon_active(self, qp, image, width):
+    def icon_active(self, qp: QPainter, image, width):
         icon = QPixmap(image)
         painter = QPainter(icon)
         painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
-        painter.fillRect(icon.rect(), self._bg_one)
+        painter.fillRect(icon.rect(), QColor(self._bg_one))
         qp.drawPixmap(width - 5, 0, icon)
         painter.end()
 

@@ -62,7 +62,7 @@ class PyIcon(QWidget):
         icon = QPixmap(icon_path)
         painter = QPainter(icon)
         painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
-        painter.fillRect(icon.rect(), color)       
+        painter.fillRect(icon.rect(), QColor(color))
         painter.end()
 
         # SET PIXMAP
