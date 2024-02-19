@@ -53,8 +53,6 @@ from gui.widgets.py_credits_bar.py_credits import PyCredits
 
 # PY WINDOW
 # ///////////////////////////////////////////////////////////////
-
-
 class UI_MainWindow(object):
     def setup_ui(self, parent):
         if not parent.objectName():
@@ -130,7 +128,7 @@ class UI_MainWindow(object):
             parent = self.left_menu_frame,
             app_parent = self.central_widget, # For tooltip parent
             dark_one = self.themes["app_color"]["dark_one"],
-            dark_three = self.themes['app_color']['orange'],
+            dark_three = self.themes["app_color"]['orange'], # ["dark_three"],
             dark_four = self.themes["app_color"]["dark_four"],
             bg_one = self.themes["app_color"]["bg_one"],
             icon_color = self.themes["app_color"]["icon_color"],
@@ -197,13 +195,13 @@ class UI_MainWindow(object):
         # ADD CUSTOM TITLE BAR TO LAYOUT
         self.title_bar = PyTitleBar(
             parent,
-            logo_width = 40, #Logo 宽度
+            logo_width = 32, # Logo 宽度
             app_parent = self.central_widget,
             logo_image = "logo_top.svg",
             bg_color = self.themes["app_color"]["bg_two"],
             div_color = self.themes["app_color"]["bg_three"],
             btn_bg_color = self.themes["app_color"]["bg_two"],
-            btn_bg_color_hover = self.themes["app_color"]["orange"],
+            btn_bg_color_hover = self.themes["app_color"]["orange"], # ["bg_three"],
             btn_bg_color_pressed = self.themes["app_color"]["bg_one"],
             icon_color = self.themes["app_color"]["icon_color"],
             icon_color_hover = self.themes["app_color"]["icon_hover"],
@@ -291,7 +289,6 @@ class UI_MainWindow(object):
             bg_color_active = self.themes["app_color"]["bg_two"],
             context_color = self.themes["app_color"]["orange"]
         )
-
 
         #  ADD TO LAYOUT
         self.credits_layout.addWidget(self.credits)

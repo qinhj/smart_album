@@ -26,8 +26,6 @@ from gui.core.qt_core import *
 # ///////////////////////////////////////////////////////////////
 from . ui_main import *
 
-from . flow_layout import *
-
 from utils.display_by_person import *
 
 import os
@@ -37,7 +35,7 @@ import json
 class MainFunctions():
     def __init__(self):
         super().__init__()
-        # SETUP MAIN WINDOw
+        # SETUP MAIN WINDOW
         # Load widgets from "gui\uis\main_window\ui_main.py"
         # ///////////////////////////////////////////////////////////////
         self.ui = UI_MainWindow()
@@ -152,10 +150,12 @@ class MainFunctions():
         self.group.addAnimation(self.right_box)
         self.group.start()
 
+    # CUSTOM FUNCTIONS
+    # ///////////////////////////////////////////////////////////////
     def load_persons(self):
         self.persons = get_persons_more(get_persons('output.json'))
 
-        #保证未命名分类始终位于底部
+        # 保证未命名分类始终位于底部
         if '未命名' in self.persons:
             unnamed = self.persons.pop('未命名')
             self.persons['未命名'] = unnamed
@@ -244,7 +244,6 @@ class MainFunctions():
             QApplication.processEvents()
         #print(image_page.flow_layout_boxs)
 
-
     def update_image_count(self, count):
         self.ui.credits.copyright_label.setText("总数量：{}".format(str(count)))
         self.ui.credits.person.setText("人物名：")
@@ -274,14 +273,16 @@ class MainFunctions():
         return self.flow_layout
 
     def select_single_image(self):
-        m = QFileDialog.getOpenFileName(None,"选取文件","./","图片 (*.png *.jpg *.jpeg *.tiff *.bmp);;")
+        """ 人脸搜索: 选择图片 """
+        m = QFileDialog.getOpenFileName(None, "选择图片", ".", "图片 (*.png *.jpg *.jpeg *.tiff *.bmp);;")
         self.selected_image = m[0]
         self.ui.credits.copyright_label.setText("选择图片：{}".format(self.selected_image))
         return m[0]
 
     def select_image_directory(self):
-        directory = QFileDialog.getExistingDirectory(None, "C:/")
-        with open('resources/settings.json', 'r+',encoding='utf-8') as f:
+        """ 人脸分类: 选择文件夹 """
+        directory = QFileDialog.getExistingDirectory(None)
+        with open('resources/settings.json', 'r+', encoding='utf-8') as f:
             if directory == '':
                 print("No folder selected")
                 return None
@@ -289,10 +290,8 @@ class MainFunctions():
             self.settings['image_path'] = directory
             f.seek(0)
             f.truncate()
-            f.write(json.dumps(self.settings,indent=4,ensure_ascii=False))
-        #print("Get Image Folder:{}".format(directory))
+            f.write(json.dumps(self.settings, indent=4, ensure_ascii=False))
         self.ui.credits.copyright_label.setText("选择文件夹：{}".format(directory))
-        #self.settings["image_path"] = directory
         return directory
     
     def load_search_result(self):
@@ -306,7 +305,9 @@ class MainFunctions():
             self.ui.credits.image_title.setText("")
             return None
         else:
-            name, paths = tuple(self.person_search_result.items())[0]
+            name, paths = "", []
+            if len(self.person_search_result):
+                name, paths = tuple(self.person_search_result.items())[0]
             self.ui.credits.copyright_label.setText("总数量：{}".format(len(paths)))
             self.ui.credits.person.setText("人物名：")
             self.ui.credits.person_name.setText(name)
@@ -353,7 +354,6 @@ class MainFunctions():
             self.target_image_box_layout.addWidget(self.target_image)
             self.target_image.checkbox.setCheckable(False)  
 
-
             self.search_target_lable = QLabel()
             self.search_target_lable.setObjectName(u"search_target_lable")
             self.search_target_lable.setStyleSheet(u"background: transparent;")
@@ -364,7 +364,6 @@ class MainFunctions():
 
             self.scrollArea_2_layout.addWidget(self.target_image_box)
         except AttributeError:
-
             #print("还未选择图片")
             return None
 
@@ -378,7 +377,6 @@ class MainFunctions():
         self.scrollArea_2_layout.update()
         self.scrollArea_2_WidgetContents.update()
         self.ui.load_pages.scrollArea_2.update()
-
 
         #print(self.person_search_result)
         image_page = PyImagePage()
@@ -493,7 +491,6 @@ class MainFunctions():
     def get_reserved_images(self):
         #print(self.image_pages)
         checked_buttons = []
-        unchecked_buttons = []
         image_page_to_delete = []
         for image_page in self.image_pages:
             buttons = image_page.button_box.buttons()
@@ -556,7 +553,6 @@ class MainFunctions():
         self.persons = edit_single_group_name(new_name, path, get_persons('output.json'))
         write_json(self.persons)
         MainFunctions.load_persons(self)
-        
 
         self.image_dic[origin_name] = origin_image_page
         """

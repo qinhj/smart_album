@@ -17,13 +17,11 @@
 # IMPORT PACKAGES AND MODULES
 # ///////////////////////////////////////////////////////////////
 import time
-from typing import Set
 
 
-from . functions_main_window import *
+from . functions_main_window import MainFunctions
 from utils.face_functions import get_duplicate_pics, search_person_pics, sorter_main
 from utils.embedder import differ_paths, get_image_paths
-from tensorflow.keras.models import load_model
 import utils.embedder as EMBEDDER
 
 # IMPORT QT CORE
@@ -44,14 +42,11 @@ from gui.widgets import *
 
 # LOAD UI MAIN
 # ///////////////////////////////////////////////////////////////
-from . ui_main import *
+from . ui_main import * # UI_MainWindow
 
 # MAIN FUNCTIONS 
 # ///////////////////////////////////////////////////////////////
 from . functions_main_window import *
-
-from . flow_layout import *
-
 
 # PY WINDOW
 # ///////////////////////////////////////////////////////////////
@@ -101,9 +96,16 @@ class SetupMainWindow:
         }
     ]
 
-     # ADD TITLE BAR MENUS
+    # ADD TITLE BAR MENUS
     # ///////////////////////////////////////////////////////////////
-    add_title_bar_menus = []
+    add_title_bar_menus = [
+        {
+            "btn_icon" : "icon_search.svg",
+            "btn_id" : "btn_search",
+            "btn_tooltip" : "Search",
+            "is_active" : False
+        },
+    ]
 
     # SETUP CUSTOM BTNs OF CUSTOM WIDGETS
     # Get sender() function when btn is clicked
@@ -179,7 +181,7 @@ class SetupMainWindow:
             self,
             menu = self.ui.left_column.menus.menu_1,
             title = "分类结果",
-            icon_path = Functions.set_svg_icon("icon_settings.svg")
+            icon_path = Functions.set_svg_icon("icon_folder_open.svg")
         )
         MainFunctions.set_right_column_menu(self, self.ui.right_column.menu_1)
 
@@ -210,34 +212,32 @@ class SetupMainWindow:
         # ///////////////////////////////////////////////////////////////
         themes = Themes()
         self.themes = themes.items
-        self.ui.load_pages.page_1.setStyleSheet
 
-        self.ui.credits.person_name.returnPressed.connect(lambda: MainFunctions.exec_edit_single_group_name(self, self.ui.credits.person_name))
-        #################################################################
-        # 选择文件夹
+        # ///////////////////////////////////////////////////////////////
+        # ADD Buttons To Page1 For "人脸分类"
+        # ///////////////////////////////////////////////////////////////
         self.func_btn_11 = PyPushButton(
-            text = '选择文件夹',
+            text = u"选择文件夹",
             radius = 8,
-            color = self.themes['app_color']['white'],
-            bg_color = self.themes['app_color']['dark_one'],
-            bg_color_hover = self.themes['app_color']['orange'],
-            bg_color_pressed = self.themes['app_color']['orange']
+            color = self.themes["app_color"]["white"],
+            bg_color = self.themes["app_color"]["dark_one"],
+            bg_color_hover = self.themes["app_color"]["orange"],
+            bg_color_pressed = self.themes["app_color"]["orange"]
         )
         self.func_btn_11.setMaximumWidth(200)
         self.func_btn_11.setMinimumWidth(200)
         self.func_btn_11.setMinimumHeight(40)
-
         self.func_btn_11.clicked.connect(lambda: MainFunctions.select_image_directory(self))
-        
-        #################################################################
-        # 识别分类
+        self.ui.load_pages.func_1_frame_1_layout = QHBoxLayout(self.ui.load_pages.func_1_frame_1)
+        self.ui.load_pages.func_1_frame_1_layout.addWidget(self.func_btn_11, alignment=Qt.AlignCenter)
+
         self.func_btn_12 = PyPushButton(
-            text = '开始分类',
+            text = u"开始分类",
             radius = 8,
-            color = self.themes['app_color']['white'],
-            bg_color = self.themes['app_color']['dark_one'],
-            bg_color_hover = self.themes['app_color']['orange'],
-            bg_color_pressed = self.themes['app_color']['orange']
+            color = self.themes["app_color"]["white"],
+            bg_color = self.themes["app_color"]["dark_one"],
+            bg_color_hover = self.themes["app_color"]["orange"],
+            bg_color_pressed = self.themes["app_color"]["orange"]
         )
         self.func_btn_12.setMaximumWidth(200)
         self.func_btn_12.setMinimumWidth(200)
@@ -246,7 +246,8 @@ class SetupMainWindow:
         def detect_finished():
             self.timer.stop()
             self.ui.credits.copyright_label.setText("完成识别，耗时 {} 秒".format(self.timer_count))
-            QMessageBox.information(self, "Picf", "完成识别")
+            QMessageBox.information(self, self.settings["app_name"], "完成识别")
+
         def detect_print_time():
             try:
                 processed_image = EMBEDDER.global_counter.value
@@ -263,9 +264,17 @@ class SetupMainWindow:
                 #print("正在识别中，{}/{}，已识别 {} 秒".format(processed_image, self.total_image, self.timer_count))
 
         def create_detect_worker():
-            if self.settings['image_path'] == '':
-                QMessageBox.information(self, "Picf", "还未选择图片文件夹，请先选择文件夹后再开始识别")
+            if self.settings["image_path"] == "":
+                QMessageBox.information(self, self.settings["app_name"], "还未选择图片文件夹，请先选择文件夹后再开始识别")
                 return None
+
+            image_paths = get_image_paths(self.settings["image_path"])
+            image_paths = differ_paths(image_paths, self.settings["image_path"])
+            self.total_image = len(image_paths)
+            if self.total_image== 0:
+                self.ui.credits.copyright_label.setText("共有 0 张新增图片，识别取消")
+                return None
+            #print("Found {} images..".format(self.total_image))
 
             self.t0 = time.time()
             self.timer_count = 0
@@ -273,43 +282,39 @@ class SetupMainWindow:
             self.timer.timeout.connect(lambda: detect_print_time())
             self.timer.start(100)
 
-            image_paths = get_image_paths(self.settings['image_path'])
-            image_paths = differ_paths(image_paths, self.settings['image_path'])
-            self.total_image = len(image_paths)
-            if self.total_image== 0:
-                self.ui.credits.copyright_label.setText("共有 0 张新增图片，识别取消")
-                return None
-
-            #print("Found {} images..".format(self.total_image))
-
             self.worker_detect = Worker('Detect', image_paths)
-            self.worker_detect.start()
             self.worker_detect.finished.connect(detect_finished)
+            self.worker_detect.start()
 
-        self.worker_detect = Worker('Detect')
         self.func_btn_12.clicked.connect(lambda: create_detect_worker())
-        #################################################################
-        # 人脸搜索
+        self.ui.load_pages.func_1_frame_2_layout = QHBoxLayout(self.ui.load_pages.func_1_frame_2)
+        self.ui.load_pages.func_1_frame_2_layout.addWidget(self.func_btn_12, alignment=Qt.AlignCenter)
+
+        # ///////////////////////////////////////////////////////////////
+        # ADD Button To Page1 For "人脸搜索"
+        # ///////////////////////////////////////////////////////////////
         self.func_btn_21 = PyPushButton(
-            text = '选择图片',
+            text = u"选择图片",
             radius = 8,
-            color = self.themes['app_color']['white'],
-            bg_color = self.themes['app_color']['dark_one'],
-            bg_color_hover = self.themes['app_color']['orange'],
-            bg_color_pressed = self.themes['app_color']['orange']
+            color = self.themes["app_color"]["white"],
+            bg_color = self.themes["app_color"]["dark_one"],
+            bg_color_hover = self.themes["app_color"]["orange"],
+            bg_color_pressed = self.themes["app_color"]["orange"]
         )
         self.func_btn_21.setMaximumWidth(200)
         self.func_btn_21.setMinimumWidth(200)
         self.func_btn_21.setMinimumHeight(40)
         self.func_btn_21.clicked.connect(lambda: MainFunctions.select_single_image(self))
+        self.ui.load_pages.func_2_frame_1_layout = QHBoxLayout(self.ui.load_pages.func_2_frame_1)
+        self.ui.load_pages.func_2_frame_1_layout.addWidget(self.func_btn_21, alignment=Qt.AlignCenter)
 
         self.func_btn_22 = PyPushButton(
-            text = '开始查找',
+            text = u"开始查找",
             radius = 8,
-            color = self.themes['app_color']['white'],
-            bg_color = self.themes['app_color']['dark_one'],
-            bg_color_hover = self.themes['app_color']['orange'],
-            bg_color_pressed = self.themes['app_color']['orange']
+            color = self.themes["app_color"]["white"],
+            bg_color = self.themes["app_color"]["dark_one"],
+            bg_color_hover = self.themes["app_color"]["orange"],
+            bg_color_pressed = self.themes["app_color"]["orange"]
         )
         self.func_btn_22.setMaximumWidth(200)
         self.func_btn_22.setMinimumWidth(200)
@@ -319,103 +324,102 @@ class SetupMainWindow:
             self.timer.stop()
             self.person_search_result = path
             self.ui.credits.copyright_label.setText("搜索完成，耗时 {} 秒".format(self.timer_count))
-            QMessageBox.information(self, "Picf", "搜索完成")
+            QMessageBox.information(self, self.settings["app_name"], "搜索完成")
 
         def search_print_time():
             self.timer_count = int(time.time() - self.t0)
             self.ui.credits.copyright_label.setText("正在搜索中，已开始 {} 秒".format(self.timer_count))
 
         def create_search_worker(path):
-
+            self.search_changed = True
+            self.has_searched = True
+            #self.ui.credits.copyright_label.setText("正在进行人脸搜索，请稍等")
             self.t0 = time.time()
             self.timer_count = 0
             self.timer = QTimer()
             self.timer.timeout.connect(lambda: search_print_time())
             self.timer.start(100)
-            
-            self.search_changed = True
-            self.has_searched = True
-            #self.ui.credits.copyright_label.setText("正在进行人脸搜索，请稍等")
             try:
                 self.worker_search.start()
             except AttributeError:
                 self.worker_search = Worker('Search', path)
-                self.worker_search.start()
                 self.worker_search.finished.connect(search_finished)
+                self.worker_search.start()
+
         def call_create_search_worker():
             try:
                 create_search_worker(self.selected_image)
             except AttributeError:
-                QMessageBox.information(self, "Picf", "还未选择照片，请先选择照片后再开始搜索")
+                QMessageBox.information(self, self.settings["app_name"], "还未选择照片，请先选择照片后再开始搜索")
+
         self.search_changed = False
         self.has_searched = False
         self.func_btn_22.clicked.connect(lambda: call_create_search_worker())
-        
-        ###################################################################
+        self.ui.load_pages.func_2_frame_2_layout = QHBoxLayout(self.ui.load_pages.func_2_frame_2)
+        self.ui.load_pages.func_2_frame_2_layout.addWidget(self.func_btn_22, alignment=Qt.AlignCenter)
 
+        # ///////////////////////////////////////////////////////////////
+        # ADD Button To Page1 For "智能筛选"
+        # ///////////////////////////////////////////////////////////////
         self.func_btn_31 = PyPushButton(
-            text = '开始筛重',
+            text = u"开始筛重",
             radius = 8,
-            color = self.themes['app_color']['white'],
-            bg_color = self.themes['app_color']['dark_one'],
-            bg_color_hover = self.themes['app_color']['orange'],
-            bg_color_pressed = self.themes['app_color']['orange']
+            color = self.themes["app_color"]["white"],
+            bg_color = self.themes["app_color"]["dark_one"],
+            bg_color_hover = self.themes["app_color"]["orange"],
+            bg_color_pressed = self.themes["app_color"]["orange"]
         )
         self.func_btn_31.setMaximumWidth(200)
         self.func_btn_31.setMinimumWidth(200)
         self.func_btn_31.setMinimumHeight(40)
 
-        self.func_btn_32 = QFrame()
-        self.func_btn_32.setStyleSheet(u"background: transparent;")
-        self.func_btn_32.setMaximumWidth(200)
-        self.func_btn_32.setMinimumWidth(200)
-        self.func_btn_32.setMinimumHeight(40)
         def dedup_finished(path):
             self.timer.stop()
             self.ui.credits.copyright_label.setText("筛查完成，耗时 {} 秒".format(self.timer_count))
-
             self.person_duplicate_result = path
             self.image_pages = []
-            QMessageBox.information(self, "Picf", "完成筛查")
+            QMessageBox.information(self, self.settings["app_name"], "完成筛查")
 
         def dedup_print_time():
             self.timer_count = int(time.time() - self.t0)
             self.ui.credits.copyright_label.setText("正在筛查中，已开始 {} 秒".format(self.timer_count))
             
         def create_duplicate_worker(path):
-
+            self.found_duplicate_image = True
+            #self.ui.credits.copyright_label.setText("正在进行相似图片筛查，请稍等")
             self.t0 = time.time()
             self.timer_count = 0
             self.timer = QTimer()
             self.timer.timeout.connect(lambda: dedup_print_time())
             self.timer.start(100)
-
-            self.found_duplicate_image = True
-            #self.ui.credits.copyright_label.setText("正在进行相似图片筛查，请稍等")
-            self.worker_duplicate = Worker('Duplicate', path)
-            self.worker_duplicate.start()
+            self.worker_duplicate = Worker("Duplicate", path)
             self.worker_duplicate.finished.connect(dedup_finished)
+            self.worker_duplicate.start()
 
-        self.func_btn_31.clicked.connect(lambda: create_duplicate_worker(self.settings['image_path']))
         self.found_duplicate_image = False
-        ###################################################################
+        self.func_btn_31.clicked.connect(lambda: create_duplicate_worker(self.settings['image_path']))
+        self.ui.load_pages.func_3_frame_1_layout = QHBoxLayout(self.ui.load_pages.func_3_frame_1)
+        self.ui.load_pages.func_3_frame_1_layout.addWidget(self.func_btn_31, alignment=Qt.AlignCenter)
 
-        self.ui.load_pages.func_1_frame_1_layout.addWidget(self.func_btn_11,Qt.AlignCenter,Qt.AlignCenter)
-        self.ui.load_pages.func_1_frame_2_layout.addWidget(self.func_btn_12,Qt.AlignCenter,Qt.AlignCenter)
-        self.ui.load_pages.func_2_frame_1_layout.addWidget(self.func_btn_21,Qt.AlignCenter,Qt.AlignCenter)
-        self.ui.load_pages.func_2_frame_2_layout.addWidget(self.func_btn_22,Qt.AlignCenter,Qt.AlignCenter)
-        self.ui.load_pages.func_3_frame_1_layout.addWidget(self.func_btn_31,Qt.AlignCenter,Qt.AlignCenter)
-        self.ui.load_pages.func_3_frame_2_layout.addWidget(self.func_btn_32,Qt.AlignCenter,Qt.AlignCenter)
+        self.func_btn_32 = QFrame()
+        self.func_btn_32.setStyleSheet(u"background: transparent;")
+        self.func_btn_32.setMaximumWidth(200)
+        self.func_btn_32.setMinimumWidth(200)
+        self.func_btn_32.setMinimumHeight(40)
+        self.ui.load_pages.func_3_frame_2_layout = QHBoxLayout(self.ui.load_pages.func_3_frame_2)
+        self.ui.load_pages.func_3_frame_2_layout.addWidget(self.func_btn_32, alignment=Qt.AlignCenter)
 
-
-
-        # ADD Widgets
-        # ///////////////////////////////////////////////////////////////
-        #SetupMainWindow.load_image(self)
-        #MainFunctions.load_images(self)
+        # ADD CONNECT
+        self.ui.credits.person_name.returnPressed.connect(lambda: MainFunctions.exec_edit_single_group_name(self, self.ui.credits.person_name))
         #MainFunctions.load_persons(self)
 
         # LEFT COLUMN
+        # ///////////////////////////////////////////////////////////////
+
+        # ADD Widgets
+        # ///////////////////////////////////////////////////////////////
+
+        # RIGHT COLUMN
         # ///////////////////////////////////////////////////////////////
 
         # ///////////////////////////////////////////////////////////////
@@ -434,18 +438,7 @@ class SetupMainWindow:
             self.top_right_grip.setGeometry(self.width() - 20, 5, 15, 15)
             self.bottom_left_grip.setGeometry(5, self.height() - 20, 15, 15)
             self.bottom_right_grip.setGeometry(self.width() - 20, self.height() - 20, 15, 15)
-    
-    def get_flow_layout(self):
-        return self.flow_layout
 
-    def get_frame(self):
-        return self.frame
-
-    def remove_pic(self):
-        temp_widget = SetupMainWindow.get_flow_layout(self).itemAt(0).widget()
-        #从flow_layout中删除第0张图片
-        SetupMainWindow.get_flow_layout(self).removeWidget(temp_widget)
-        SetupMainWindow.get_flow_layout(self).update()
 
 class Worker(QThread):
     finished = Signal(dict)
@@ -460,17 +453,10 @@ class Worker(QThread):
             sorter_main(self.path)
             self.finished.emit({})
         elif self.mode == "Search":
-            try:
-                self.model
-            except AttributeError:
-                self.model = load_model("Models/facenet.h5")
-                self.model_detector = load_model("Models/RFB.h5",compile=False)
-            result = search_person_pics(self.path, self.model, self.model_detector)
+            result = search_person_pics(self.path)
             self.finished.emit(result)
         elif self.mode == "Duplicate":
             result = get_duplicate_pics(self.path)
             self.finished.emit(result)
             #print(result)
         pass
-
-
