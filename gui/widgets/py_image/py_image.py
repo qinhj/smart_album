@@ -58,7 +58,6 @@ class PyImage(QWidget):
 
     def set_image(self):
         '''
-        
         pix_img = pix_img.convertToFormat(QImage.Format_RGB888)
         pix_img = QPixmap.fromImage(pix_img)
         pix_img = pix_img.scaled(300, 300, Qt.KeepAspectRatio)

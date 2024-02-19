@@ -93,5 +93,3 @@ class PyLineEdit(QLineEdit):
             _context_color = context_color
         )
         self.setStyleSheet(style_format)
-    
-    #def returnPressed()

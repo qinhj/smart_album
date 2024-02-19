@@ -1,5 +1,5 @@
 from gui.core.qt_core import *
-from gui.uis.windows.main_window.flow_layout import FlowLayout
+from . flow_layout import FlowLayout
 
 class PyImagePage(QFrame):
     def __init__(self):
