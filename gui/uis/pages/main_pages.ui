@@ -38,7 +38,7 @@
       <property name="styleSheet">
        <string notr="true">font-size: 14pt</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -54,6 +54,159 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
+       <item>
+        <widget class="QWidget" name="func_1" native="true">
+         <property name="styleSheet">
+          <string notr="true">background: transparent;</string>
+         </property>
+         <layout class="QVBoxLayout" name="func_1_layout">
+          <property name="spacing">
+           <number>50</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="func_1_label">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;font-family: Microsoft Yahei;font-size: 20pt;color: white;</string>
+            </property>
+            <property name="text">
+             <string>人脸分类</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="func_1_frame_1">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="func_1_frame_2">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="func_2" native="true">
+         <property name="styleSheet">
+          <string notr="true">background: transparent;</string>
+         </property>
+         <layout class="QVBoxLayout" name="func_2_layout">
+          <property name="spacing">
+           <number>50</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="func_2_label">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;font-family: Microsoft Yahei;font-size: 20pt;color: white;</string>
+            </property>
+            <property name="text">
+             <string>人脸搜索</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="func_2_frame_1">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="func_2_frame_2">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="func_3" native="true">
+         <property name="styleSheet">
+          <string notr="true">background: transparent;</string>
+         </property>
+         <layout class="QVBoxLayout" name="func_3_layout">
+          <property name="spacing">
+           <number>50</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="func_3_label">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;font-family: Microsoft Yahei;font-size: 20pt;color: white;</string>
+            </property>
+            <property name="text">
+             <string>智能筛选</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="func_3_frame_1">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="func_3_frame_2">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
@@ -83,14 +236,14 @@
       </property>
       <layout class="QVBoxLayout" name="page_3_layout">
        <item>
-        <widget class="QScrollArea" name="scrollArea">
+        <widget class="QScrollArea" name="scrollArea_1">
          <property name="styleSheet">
           <string notr="true">background: transparent;</string>
          </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
-         <property name="horizontalScrollBarPolicy">
+         <property name="verticalScrollBarPolicy">
           <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
          <property name="widgetResizable">
@@ -125,6 +278,72 @@
             <number>0</number>
            </property>
           </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_4">
+      <property name="styleSheet">
+       <string notr="true">font-size: 16pt</string>
+      </property>
+      <layout class="QVBoxLayout" name="page_4_layout">
+       <item>
+        <widget class="QScrollArea" name="scrollArea_2">
+         <property name="styleSheet">
+          <string notr="true">background: transparent;</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="verticalScrollBarPolicy">
+          <enum>Qt::ScrollBarAsNeeded</enum>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_2">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>100</width>
+            <height>30</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_5">
+      <property name="styleSheet">
+       <string notr="true">font-size: 16pt</string>
+      </property>
+      <layout class="QVBoxLayout" name="page_5_layout">
+       <item>
+        <widget class="QScrollArea" name="scrollArea_3">
+         <property name="styleSheet">
+          <string notr="true">background: transparent;</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="verticalScrollBarPolicy">
+          <enum>Qt::ScrollBarAsNeeded</enum>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_4">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>100</width>
+            <height>30</height>
+           </rect>
+          </property>
          </widget>
         </widget>
        </item>
