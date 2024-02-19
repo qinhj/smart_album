@@ -1,5 +1,4 @@
 # ///////////////////////////////////////////////////////////////
-# ///////////////////////////////////////////////////////////////
 #
 # BY: WANDERSON M.PIMENTA
 # PROJECT MADE WITH: Qt Designer and PySide6
@@ -39,7 +38,6 @@ from gui.uis.windows.main_window import *
 # ///////////////////////////////////////////////////////////////
 from gui.widgets import *
 
-
 # ADJUST QT FONT DPI FOR HIGHT SCALE AN 4K MONITOR
 # ///////////////////////////////////////////////////////////////
 os.environ["QT_FONT_DPI"] = "96"
@@ -54,17 +52,19 @@ class MainWindow(QMainWindow):
         # SETUP MAIN WINDOw
         # Load widgets from "gui\uis\main_window\ui_main.py"
         # ///////////////////////////////////////////////////////////////
-
         self.ui = UI_MainWindow()
         self.ui.setup_ui(self)
+
         # LOAD SETTINGS
         # ///////////////////////////////////////////////////////////////
         settings = Settings()
         self.settings = settings.items
+
         # SETUP MAIN WINDOW
         # ///////////////////////////////////////////////////////////////
         self.hide_grips = True # Show/Hide resize grips
         SetupMainWindow.setup_gui(self)
+
         # SHOW MAIN WINDOW
         # ///////////////////////////////////////////////////////////////
         self.show()
@@ -76,60 +76,83 @@ class MainWindow(QMainWindow):
     def btn_clicked(self):
         # GET BT CLICKED
         btn = SetupMainWindow.setup_btns(self)
-
         print(btn.objectName())
         # LEFT MENU
         # ///////////////////////////////////////////////////////////////
         
-        # OPEN PAGE HOME
-        if btn.objectName() == 'btn_home':
+        # HOME BTN
+        if btn.objectName() == "btn_home":
+            # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
+            # Close Left Column
             if MainFunctions.left_column_is_visible(self):
                 MainFunctions.toggle_left_column(self)
             MainFunctions.load_main_credit_bar(self)
-            # Load Page
+            # Load Page 1
             MainFunctions.set_page(self, self.ui.load_pages.page_1)
             
-        # OPEN PAGE pics
+        # OPEN PAGE 3(pics)
         if btn.objectName() == 'btn_page_pics':
+            # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
             try:
                 self.ui.load_pages.gridLayout_2.itemAt(0).widget().setParent(None)
                 self.ui.load_pages.gridLayout_2.removeWidget(self.ui.load_pages.gridLayout_2.itemAt(0).widget())
             except AttributeError:
                 pass
+            # Always Show Lefe Column
             if not MainFunctions.left_column_is_visible(self):
                 MainFunctions.toggle_left_column(self)
+            # Load Page 3
             MainFunctions.set_page(self, self.ui.load_pages.page_3)
             MainFunctions.load_persons(self)
             MainFunctions.update_image_count(self,0)
             
-        # OPEN PAGE 2
+        # OPEN PAGE 4
         if btn.objectName() == 'btn_page_search':
+            # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
+            # Close Left Column
             if MainFunctions.left_column_is_visible(self):
                 MainFunctions.toggle_left_column(self)
+            # Load Page 4
             MainFunctions.set_page(self, self.ui.load_pages.page_4)
             MainFunctions.load_search_result(self)
 
+        # OPEN PAGE 5
         if btn.objectName() == 'btn_page_duplicate':
+            # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
+            # Close Left Column
             if MainFunctions.left_column_is_visible(self):
                 MainFunctions.toggle_left_column(self)
+            # Load Page 5
             MainFunctions.set_page(self, self.ui.load_pages.page_5)
             MainFunctions.load_duplicate_result(self)
-        # OPEN Settings
-        if btn.objectName() == 'btn_settings' or btn.objectName() == 'btn_close_left_column':
+
+        # SETTINGS LEFT
+        if btn.objectName() == "btn_settings" or btn.objectName() == "btn_close_left_column":
+            # CHECK IF LEFT COLUMN IS VISIBLE
             if not MainFunctions.left_column_is_visible(self):
+                # Show / Hide
                 MainFunctions.toggle_left_column(self)
                 self.ui.left_menu.select_only_one_tab(btn.objectName())
             else:
-                self.ui.left_menu.deselect_all_tab()
-                MainFunctions.toggle_left_column(self)
-                self.ui.left_menu.select_only_one_tab(btn.objectName)
+                if btn.objectName() == "btn_close_left_column":
+                    self.ui.left_menu.deselect_all_tab()
+                    # Show / Hide
+                    MainFunctions.toggle_left_column(self)
+                self.ui.left_menu.select_only_one_tab(btn.objectName())
 
-        '''
-        '''
+            # Change Left Column Menu
+            if btn.objectName() != "btn_close_left_column":
+                MainFunctions.set_left_column_menu(
+                    self, 
+                    menu = self.ui.left_column.menus.menu_1,
+                    title = "Settings Left Column",
+                    icon_path = Functions.set_svg_icon("icon_settings.svg")
+                )
+        
         # TITLE BAR MENU
         # ///////////////////////////////////////////////////////////////
         
@@ -140,9 +163,8 @@ class MainWindow(QMainWindow):
                 btn.set_active(True)
 
                 # Show / Hide
-                #MainFunctions.toggle_left_column(self)
                 MainFunctions.toggle_right_column(self)
-            else:    
+            else:
                 btn.set_active(False)
 
                 # Show / Hide
@@ -152,8 +174,6 @@ class MainWindow(QMainWindow):
             top_settings = MainFunctions.get_left_menu_btn(self, "btn_settings")
             top_settings.set_active_tab(False)
 
-        else:
-            pass
         # DEBUG
         print(f"Button {btn.objectName()}, clicked!")
 
@@ -179,10 +199,11 @@ class MainWindow(QMainWindow):
         # SET DRAG POS WINDOW
         self.dragPos = event.globalPos()
 
+    # MOUSE CLICK EVENTS
+    # ///////////////////////////////////////////////////////////////
     def closeEvent(self, event):
-        print("Detected")
         self.close()
-        print("Closed")
+        print("[INFO] Quit {}. See you later.".format(self.settings["app_name"]))
 
 
 # SETTINGS WHEN TO START
