@@ -146,7 +146,7 @@ class Hashing:
         image_dir = Path(image_dir)
 
         files = [
-            i.absolute() for i in image_dir.glob('*') if not i.name.startswith('.')
+            i.absolute() for i in image_dir.glob('*') if not i.name.startswith('.') and '.' in i.name
         ]  # ignore hidden files
 
         logger.info(f'Start: Calculating hashes...')
