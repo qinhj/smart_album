@@ -1,16 +1,19 @@
-from utils.sort_images import sort_images
-from utils.display_by_person import  get_persons, get_persons_more,  print_by_person
+from . sort_images import sort_images
+from backend.display_by_person import  get_persons, get_persons_more,  print_by_person
 import time
-from utils.embedder import embedder
+from . embedder import embedder
 import json
 import os
 import shutil
 import sys
-from utils.display_by_person import *
-from utils.facenet import compute_embedding
-from utils.CW import draw_graph, chinese_whispers
-from utils.sort_images import image_sorter
-from imagededup.methods import PHash
+from backend.display_by_person import *
+from . facenet import compute_embedding
+from . CW import draw_graph, chinese_whispers
+from . sort_images import image_sorter
+from tensorflow.keras.models import load_model
+
+default_model = None
+default_model_detector = None
 
 def sorter_main(image_paths):
     t0 = time.time()
@@ -20,6 +23,7 @@ def sorter_main(image_paths):
         #persons = get_persons('output.json')
         #persons = get_persons_more(persons)
         #print_by_person(persons)
+    return {}
 
 def copy_images():
     root = './Sorted-pictures'
@@ -42,7 +46,22 @@ def get_image_folder():
 
 ######################################################################
 # 人脸搜索接口
-def search_person_pics(path, model, model_detector):
+def search_person_pics(path, model = None, model_detector = None):
+    global default_model
+    global default_model_detector
+    try:
+        if model is None:
+            if default_model is None:
+                default_model = load_model("Models/facenet.h5")
+            model = default_model
+        if model_detector is None:
+            if default_model_detector is None:
+                default_model_detector = load_model("Models/RFB.h5",compile=False)
+            model_detector = default_model_detector
+    except Exception:
+        print("[ERROR] Load tensorflow model failed!")
+        return {}
+
     args = {'threshold': 0.67, 'iterations': 30}
 
     data = load_pickle('embeddings.pickle')
@@ -80,38 +99,6 @@ def search_person_pics(path, model, model_detector):
     print_by_person(temp_persons)
     return temp_persons
 
-###################################################################
-# 相似性筛查
-def get_pic_to_delete(resevered_pics, all_pics):
-    return list(set(all_pics)-set(resevered_pics))
-
-def get_duplicate_pics(image_dir):
-    phasher = PHash()
-    encodings = phasher.encode_images(image_dir=image_dir)
-    duplicates = phasher.find_duplicates(encoding_map=encodings)
-    #print(duplicates)
-
-    duplicated_pics = []
-    for pic, sim_pics in duplicates.items():
-        if sim_pics:
-            sim_pics.append(pic)
-            sim_pics = sorted(sim_pics)
-            #print(sim_pics)
-            has_union_pics = False
-            for index, existed_sim_pics in enumerate(duplicated_pics):
-                set_sim_pics = set(sim_pics)
-                set_existed_sim_pics = set(existed_sim_pics)
-                if len(set_sim_pics.intersection(set_existed_sim_pics)) != 0:
-                    duplicated_pics[index] = list(set_existed_sim_pics.union(set_sim_pics))
-                    has_union_pics = True
-                    break
-                    #sim_pics.extend(existed_sim_pics)
-            if not has_union_pics:
-                duplicated_pics.append(sim_pics)
-    print("GET Duplicated Pics Done")
-    for pics in duplicated_pics:
-        print(pics)
-    return duplicated_pics
 
 if __name__ == '__main__':
     #sorter_main('./image')
@@ -153,5 +140,3 @@ if __name__ == '__main__':
             except FileNotFoundError:
                 pass
     '''
-
-    

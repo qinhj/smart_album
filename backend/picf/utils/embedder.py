@@ -22,44 +22,15 @@ warnings.filterwarnings("ignore")
 
 from multiprocessing import Pool, cpu_count, Manager
 from math import ceil
-from utils.facenet import compute_embedding
+from . facenet import compute_embedding
 from tensorflow.keras.models import load_model
-from utils.display_by_person import load_json,get_persons,write_json
+from backend.display_by_person import get_persons, write_json
+
 global global_counter
 global_counter = 0
 
-def differ_paths(paths, root_dir):
-    #从paths中剔除已存在于output.json中的图片并返回
-    images = load_json("output.json")
-    existed_paths = []
-    for image in images:
-        existed_paths.append(os.path.join(root_dir, image["pic_name"]))
-    new_paths = []
-    for path in paths:
-        if path not in existed_paths:
-            new_paths.append(path)
-    return new_paths
 
-def get_image_paths(root_dir):
-    """Generates a list of paths for the images in a root directory and ignores rest of the files
-    Args:
-        root_dir : string containing the relative path to root directory
-    Returns:
-        paths : list containing paths of the images in the directory
-    """
-    if not os.path.exists(root_dir):
-        print("Directory not found, please enter valid directory..")
-        sys.exit(1)
-
-    paths = []
-    for rootDir, directory, filenames in os.walk(root_dir):
-        for filename in filenames:
-            if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp')):
-                paths.append(os.path.join(rootDir, filename))
-
-    return paths
-
-def save_embeddings(process_data, global_counter, lock):
+def _save_embeddings(process_data, global_counter, lock):
     """Function used by each processing pool to compute embeddings for part of a dataset.
     The embeddings are saved into a temporary folder
 
@@ -67,9 +38,14 @@ def save_embeddings(process_data, global_counter, lock):
         process_data : dictionary consisting of data to be used by the pool 
     """
     # load the model for each process
-    
-    model = load_model("Models/facenet.h5",compile=False)
-    model_detector = load_model("Models/RFB.h5",compile=False)
+
+    try:
+        model = load_model("Models/facenet.h5",compile=False)
+        model_detector = load_model("Models/RFB.h5",compile=False)
+    except Exception:
+        print("[ERROR] Load tensorflow model failed!")
+        return
+
     # progress bar to track 
     #bar = tqdm(total=len(process_data['image_paths']),#position=process_data['process_id']) #进度条
 
@@ -94,14 +70,14 @@ def save_embeddings(process_data, global_counter, lock):
 
         #bar.update()
     #bar.close()
-
     #bar.clear()
 
     # write the embeddings computed by a process into the temporary folder
     with open(process_data['temp_path'], "wb") as f:
         pickle.dump(output, f)
+
     
-def get_best_processes(length):
+def _get_best_processes(length):
     if length < 2:
         processes = 1
     elif length < 6:
@@ -127,8 +103,8 @@ def get_best_processes(length):
 
 def embedder(image_paths):
     #t1 = time.time()
-    
-    processes = get_best_processes(len(image_paths))
+
+    processes = _get_best_processes(len(image_paths))
 
     # Define the number of processes to be used by the pool
     # Each process takes one core in the CPU
@@ -177,8 +153,8 @@ def embedder(image_paths):
     # Map the function
     print("Started {} processes..".format(processes))
 
-    partial_embeddings = partial(save_embeddings, global_counter = global_counter, lock = LOCK)
-    #pool.map(save_embeddings, (split_data, global_counter))
+    partial_embeddings = partial(_save_embeddings, global_counter = global_counter, lock = LOCK)
+    #pool.map(_save_embeddings, (split_data, global_counter))
     pool.map(partial_embeddings, split_data)
 
     # Wait until all parallel processes are done and then execute main script
@@ -191,18 +167,17 @@ def embedder(image_paths):
 
     for filename in os.listdir("temp"):
         data = pickle.load(open(os.path.join("temp", filename), "rb"))
-
         for dictionary in data:
-            # dictionary是提取到人脸的图片
-            # 将新增识别到的人脸数据添加到concat_embeddings中
+            # dictionary 是提取到人脸的图片
+            # 将新增识别到的人脸数据添加到 concat_embeddings 中
             concat_embeddings.append(dictionary)
-            #将提取到人脸的图片从image_paths中剔除，则image_paths中是新添加的、未检测到人脸的图片
+            # 将提取到人脸的图片从 image_paths 中剔除，则 image_paths 中是新添加的、未检测到人脸的图片
             if dictionary['path'] in image_paths:
                 image_paths.remove(dictionary['path'])
 
     # 将新识别到的人脸数据与已存在的人脸数据合并
     try:
-        existed_data = pickle.load(open("embeddings.pickle","rb"))
+        existed_data = pickle.load(open("embeddings.pickle", "rb"))
     except FileNotFoundError:
         existed_data = []
     #print(existed_data)
@@ -211,18 +186,14 @@ def embedder(image_paths):
 
     # 删除识别过程中的临时文件
     shutil.rmtree("temp") #delete ./temp
-    print("Saved embeddings of {} faces to disk..".format(len(concat_embeddings)))
+    print("Saved embeddings of {} faces to disk ...".format(len(concat_embeddings)))
     # By now a single pickle file is created and the temporary files are deleted
 
-    # 将新添加的、未检测到人脸的图片与output.json中的“未命名”分类合并
+    # 将新添加的、未检测到人脸的图片与 output.json 中的“未命名”分类合并
     persons = get_persons("output.json")
     if "未命名" not in persons:
         persons["未命名"] = []
     persons["未命名"].extend(image_paths)
     
     write_json(persons)
-
     return True
-
-    """
-    """

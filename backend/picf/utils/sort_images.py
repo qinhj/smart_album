@@ -6,8 +6,8 @@ import sys
 import json
 import re
 
-from utils.CW import draw_graph,chinese_whispers
-from utils.display_by_person import get_persons, load_json
+from . CW import draw_graph, chinese_whispers
+from backend.display_by_person import get_persons, load_json
 
 def image_sorter(G):
     """Copies images from the source and pastes them to a directory.
@@ -112,6 +112,6 @@ def sort_images():
     # Sort the images using the clusters
     images = image_sorter(graph)
     images.sort(key=lambda x: [int(s) if s.isdigit() else s for s in re.findall(r'\D+|\d+', x['person'])])
-    with open('output.json','w',encoding='utf-8') as f:
-        f.write(json.dumps(images,indent=4,ensure_ascii=False, sort_keys=True))
+    with open('output.json', 'w', encoding='utf-8') as f:
+        f.write(json.dumps(images, indent=4, ensure_ascii=False, sort_keys=True))
 

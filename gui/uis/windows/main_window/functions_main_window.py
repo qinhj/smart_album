@@ -16,7 +16,9 @@
 
 # IMPORT PACKAGES AND MODULES
 # ///////////////////////////////////////////////////////////////
-import sys
+import os
+import json
+from backend.display_by_person import *
 
 # IMPORT QT CORE
 # ///////////////////////////////////////////////////////////////
@@ -25,11 +27,6 @@ from gui.core.qt_core import *
 # LOAD UI MAIN
 # ///////////////////////////////////////////////////////////////
 from . ui_main import *
-
-from utils.display_by_person import *
-
-import os
-import json
 
 # FUNCTIONS
 class MainFunctions():
@@ -308,6 +305,8 @@ class MainFunctions():
             name, paths = "", []
             if len(self.person_search_result):
                 name, paths = tuple(self.person_search_result.items())[0]
+            else:
+                print("[INFO] Not found!")
             self.ui.credits.copyright_label.setText("总数量：{}".format(len(paths)))
             self.ui.credits.person.setText("人物名：")
             self.ui.credits.person_name.setText(name)

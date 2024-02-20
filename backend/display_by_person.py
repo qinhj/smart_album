@@ -5,7 +5,7 @@ import re
 
 def load_json(jsonfile):
     #输入json文件名，返回[{"person":name,"pic_name":path}]形式的列表
-    with open(jsonfile, 'r',encoding='utf-8') as f:
+    with open(jsonfile, 'r', encoding='utf-8') as f:
         images = json.load(f)
     return images
 
@@ -44,13 +44,13 @@ def write_json(persons):
     for name, paths in persons.items():
         for path in paths:
             image_dic = {}
-            image_dic['pic_name'] = os.path.basename(path)
+            image_dic['pic_name'] = path # os.path.basename(path)
             #print(image_dic['pic_name'])
             image_dic['person'] = name
             images.append(image_dic)
     images.sort(key=lambda x: [int(s) if s.isdigit() else s for s in re.findall(r'\D+|\d+', x['person'])])
-    with open('output.json','w',encoding='utf-8') as f:
-        f.write(json.dumps(images,indent=4,ensure_ascii=False,sort_keys=True))
+    with open('output.json', 'w', encoding='utf-8') as f:
+        f.write(json.dumps(images, indent=4, ensure_ascii=False, sort_keys=True))
 
 def print_by_person(persons):
     #将{name:[paths]}形式的字典按"人名:图片组"的形式格式化输出
@@ -59,12 +59,12 @@ def print_by_person(persons):
         print()
         print("Name:{}".format(name))
         for count,path in enumerate(paths):
-            index = path.rfind('\\',0,len(path))
-            print("{}:{}".format(count,path[index+1:]))
+            index = path.rfind('\\', 0, len(path))
+            print("{}:{}".format(count, path[index+1:]))
         print()
     print("------------------------------")
 
-def edit_group_name(new_group_name,old_group_name, persons):
+def edit_group_name(new_group_name, old_group_name, persons):
     #输入新名称、旧名称、{name:[paths]}形式的字典，返回更名后的{name:[paths]}形式的字典
     if new_group_name not in persons:
         persons[new_group_name] = persons.pop(old_group_name)

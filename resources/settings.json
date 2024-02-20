@@ -1,16 +1,16 @@
 {
-    "app_name": " Picf",
-    "version": "v1.6",
+    "app_name": "Smart Album",
+    "version": "v2.0.0",
     "copyright": "",
-    "year": 2021,
+    "year": 2024,
     "theme_name": "default",
     "custom_title_bar": true,
     "startup_size": [
-        1030,
+        1080,
         720
     ],
     "minimum_size": [
-        1030,
+        1080,
         720
     ],
     "lef_menu_size": {
@@ -32,5 +32,7 @@
         "title_size": 11,
         "text_size": 10
     },
+    "backend": "picf",
+    "output_path": "output.json",
     "image_path": ""
 }

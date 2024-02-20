@@ -16,13 +16,8 @@
 
 # IMPORT PACKAGES AND MODULES
 # ///////////////////////////////////////////////////////////////
-import time
-
-
+from backend.backend import backend_selector
 from . functions_main_window import MainFunctions
-from utils.face_functions import get_duplicate_pics, search_person_pics, sorter_main
-from utils.embedder import differ_paths, get_image_paths
-import utils.embedder as EMBEDDER
 
 # IMPORT QT CORE
 # ///////////////////////////////////////////////////////////////
@@ -53,7 +48,7 @@ from . functions_main_window import *
 class SetupMainWindow:
     def __init__(self):
         super().__init__()
-        # SETUP MAIN WINDOw
+        # SETUP MAIN WINDOW
         # Load widgets from "gui\uis\main_window\ui_main.py"
         # ///////////////////////////////////////////////////////////////
         self.ui = UI_MainWindow()
@@ -213,6 +208,17 @@ class SetupMainWindow:
         themes = Themes()
         self.themes = themes.items
 
+        # GET AND INIT AI BACKEND
+        # ///////////////////////////////////////////////////////////////
+        self.backend = backend_selector(self, self.settings["backend"])
+
+        # DEFINE BTN FLAGS USED IN MainFunctions
+        # ///////////////////////////////////////////////////////////////
+        self.selected_image = None
+        self.search_changed = False
+        self.has_searched = False
+        self.found_duplicate_image = False
+
         # ///////////////////////////////////////////////////////////////
         # ADD Buttons To Page1 For "人脸分类"
         # ///////////////////////////////////////////////////////////////
@@ -242,51 +248,7 @@ class SetupMainWindow:
         self.func_btn_12.setMaximumWidth(200)
         self.func_btn_12.setMinimumWidth(200)
         self.func_btn_12.setMinimumHeight(40)
-
-        def detect_finished():
-            self.timer.stop()
-            self.ui.credits.copyright_label.setText("完成识别，耗时 {} 秒".format(self.timer_count))
-            QMessageBox.information(self, self.settings["app_name"], "完成识别")
-
-        def detect_print_time():
-            try:
-                processed_image = EMBEDDER.global_counter.value
-            except AttributeError:
-                processed_image = 0
-            self.timer_count = int(time.time() - self.t0)
-            if processed_image == 0:
-                self.ui.credits.copyright_label.setText("正在加载模型，已开始 {} 秒".format(self.timer_count))
-                #print("正在加载模型，已开始 {} 秒".format(self.timer_count))
-            elif processed_image == self.total_image:
-                self.ui.credits.copyright_label.setText("识别完成，正在分类，已开始 {} 秒".format(self.timer_count))
-            else:
-                self.ui.credits.copyright_label.setText("正在识别中，{}/{}，已开始 {} 秒".format(processed_image, self.total_image, self.timer_count))
-                #print("正在识别中，{}/{}，已识别 {} 秒".format(processed_image, self.total_image, self.timer_count))
-
-        def create_detect_worker():
-            if self.settings["image_path"] == "":
-                QMessageBox.information(self, self.settings["app_name"], "还未选择图片文件夹，请先选择文件夹后再开始识别")
-                return None
-
-            image_paths = get_image_paths(self.settings["image_path"])
-            image_paths = differ_paths(image_paths, self.settings["image_path"])
-            self.total_image = len(image_paths)
-            if self.total_image== 0:
-                self.ui.credits.copyright_label.setText("共有 0 张新增图片，识别取消")
-                return None
-            #print("Found {} images..".format(self.total_image))
-
-            self.t0 = time.time()
-            self.timer_count = 0
-            self.timer = QTimer()
-            self.timer.timeout.connect(lambda: detect_print_time())
-            self.timer.start(100)
-
-            self.worker_detect = Worker('Detect', image_paths)
-            self.worker_detect.finished.connect(detect_finished)
-            self.worker_detect.start()
-
-        self.func_btn_12.clicked.connect(lambda: create_detect_worker())
+        self.func_btn_12.clicked.connect(lambda: self.backend("Detect"))
         self.ui.load_pages.func_1_frame_2_layout = QHBoxLayout(self.ui.load_pages.func_1_frame_2)
         self.ui.load_pages.func_1_frame_2_layout.addWidget(self.func_btn_12, alignment=Qt.AlignCenter)
 
@@ -319,42 +281,7 @@ class SetupMainWindow:
         self.func_btn_22.setMaximumWidth(200)
         self.func_btn_22.setMinimumWidth(200)
         self.func_btn_22.setMinimumHeight(40)
-
-        def search_finished(path):
-            self.timer.stop()
-            self.person_search_result = path
-            self.ui.credits.copyright_label.setText("搜索完成，耗时 {} 秒".format(self.timer_count))
-            QMessageBox.information(self, self.settings["app_name"], "搜索完成")
-
-        def search_print_time():
-            self.timer_count = int(time.time() - self.t0)
-            self.ui.credits.copyright_label.setText("正在搜索中，已开始 {} 秒".format(self.timer_count))
-
-        def create_search_worker(path):
-            self.search_changed = True
-            self.has_searched = True
-            #self.ui.credits.copyright_label.setText("正在进行人脸搜索，请稍等")
-            self.t0 = time.time()
-            self.timer_count = 0
-            self.timer = QTimer()
-            self.timer.timeout.connect(lambda: search_print_time())
-            self.timer.start(100)
-            try:
-                self.worker_search.start()
-            except AttributeError:
-                self.worker_search = Worker('Search', path)
-                self.worker_search.finished.connect(search_finished)
-                self.worker_search.start()
-
-        def call_create_search_worker():
-            try:
-                create_search_worker(self.selected_image)
-            except AttributeError:
-                QMessageBox.information(self, self.settings["app_name"], "还未选择照片，请先选择照片后再开始搜索")
-
-        self.search_changed = False
-        self.has_searched = False
-        self.func_btn_22.clicked.connect(lambda: call_create_search_worker())
+        self.func_btn_22.clicked.connect(lambda: self.backend("Search"))
         self.ui.load_pages.func_2_frame_2_layout = QHBoxLayout(self.ui.load_pages.func_2_frame_2)
         self.ui.load_pages.func_2_frame_2_layout.addWidget(self.func_btn_22, alignment=Qt.AlignCenter)
 
@@ -372,32 +299,7 @@ class SetupMainWindow:
         self.func_btn_31.setMaximumWidth(200)
         self.func_btn_31.setMinimumWidth(200)
         self.func_btn_31.setMinimumHeight(40)
-
-        def dedup_finished(path):
-            self.timer.stop()
-            self.ui.credits.copyright_label.setText("筛查完成，耗时 {} 秒".format(self.timer_count))
-            self.person_duplicate_result = path
-            self.image_pages = []
-            QMessageBox.information(self, self.settings["app_name"], "完成筛查")
-
-        def dedup_print_time():
-            self.timer_count = int(time.time() - self.t0)
-            self.ui.credits.copyright_label.setText("正在筛查中，已开始 {} 秒".format(self.timer_count))
-            
-        def create_duplicate_worker(path):
-            self.found_duplicate_image = True
-            #self.ui.credits.copyright_label.setText("正在进行相似图片筛查，请稍等")
-            self.t0 = time.time()
-            self.timer_count = 0
-            self.timer = QTimer()
-            self.timer.timeout.connect(lambda: dedup_print_time())
-            self.timer.start(100)
-            self.worker_duplicate = Worker("Duplicate", path)
-            self.worker_duplicate.finished.connect(dedup_finished)
-            self.worker_duplicate.start()
-
-        self.found_duplicate_image = False
-        self.func_btn_31.clicked.connect(lambda: create_duplicate_worker(self.settings['image_path']))
+        self.func_btn_31.clicked.connect(lambda: self.backend("Duplicate"))
         self.ui.load_pages.func_3_frame_1_layout = QHBoxLayout(self.ui.load_pages.func_3_frame_1)
         self.ui.load_pages.func_3_frame_1_layout.addWidget(self.func_btn_31, alignment=Qt.AlignCenter)
 
@@ -438,25 +340,3 @@ class SetupMainWindow:
             self.top_right_grip.setGeometry(self.width() - 20, 5, 15, 15)
             self.bottom_left_grip.setGeometry(5, self.height() - 20, 15, 15)
             self.bottom_right_grip.setGeometry(self.width() - 20, self.height() - 20, 15, 15)
-
-
-class Worker(QThread):
-    finished = Signal(dict)
-    def __init__(self, mode, path = ''):
-        super().__init__()
-        self.mode = mode 
-        if path != '':
-            self.path = path
-
-    def run(self):
-        if self.mode == "Detect":
-            sorter_main(self.path)
-            self.finished.emit({})
-        elif self.mode == "Search":
-            result = search_person_pics(self.path)
-            self.finished.emit(result)
-        elif self.mode == "Duplicate":
-            result = get_duplicate_pics(self.path)
-            self.finished.emit(result)
-            #print(result)
-        pass
