@@ -75,9 +75,9 @@ def create_search_worker(main_window: QMainWindow, worker_handler, *args):
     if worker_handler is None:
         raise RuntimeError("Input worker handler for face search task is None!")
 
-    # TODO: decouple with input QWidget
-    main_window.search_changed = True
-    main_window.has_searched = True
+    if main_window.settings["image_path"] == "":
+        QMessageBox.information(main_window, main_window.settings["app_name"], "还未选择图片文件夹，请先选择文件夹后再开始识别")
+        return None
 
     copyright_label = main_window.ui.credits.copyright_label
     #copyright_label.setText("正在进行人脸搜索，请稍等")
@@ -99,9 +99,12 @@ def create_search_worker(main_window: QMainWindow, worker_handler, *args):
         copyright_label.setText("搜索完成，耗时 {} 秒".format(timer_count))
         QMessageBox.information(main_window, main_window.settings["app_name"], "搜索完成")
 
-    if main_window.selected_image is None:
+    if main_window.selected_image is None or main_window.selected_image == '':
         QMessageBox.information(main_window, main_window.settings["app_name"], "还未选择照片，请先选择照片后再开始搜索")
     else:
+        # TODO: decouple with input QWidget
+        main_window.search_changed = True
+        main_window.has_searched = True
         main_window.worker_search = Worker(worker_handler, main_window.selected_image)
         main_window.worker_search.finished.connect(search_finished)
         main_window.worker_search.start()
@@ -112,7 +115,9 @@ def create_duplicate_worker(main_window: QMainWindow, worker_handler, *args):
     if worker_handler is None:
         raise RuntimeError("Input worker handler for duplicate task is None!")
 
-    main_window.found_duplicate_image = True
+    if main_window.settings["image_path"] == "":
+        QMessageBox.information(main_window, main_window.settings["app_name"], "还未选择图片文件夹，请先选择文件夹后再开始识别")
+        return None
 
     copyright_label = main_window.ui.credits.copyright_label
     #copyright_label.setText("正在进行相似图片筛查，请稍等")
@@ -135,6 +140,7 @@ def create_duplicate_worker(main_window: QMainWindow, worker_handler, *args):
         main_window.image_pages = []
         QMessageBox.information(main_window, main_window.settings["app_name"], "完成筛查")
 
+    main_window.found_duplicate_image = True
     main_window.worker_duplicate = Worker(worker_handler, main_window.settings['image_path'])
     main_window.worker_duplicate.finished.connect(dedup_finished)
     main_window.worker_duplicate.start()

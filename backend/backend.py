@@ -52,7 +52,7 @@ class FakeBackend(IBackend):
             write_json(persons)
             return {u"未命名": image_paths} # just do nothing
 
-        def fake_search(image_paths):
+        def fake_search(image_path):
             print("[WARN] fake search will ignore input images!")
             # always reset settings['image_path'] as test data dir
             main_window.settings['image_path'] = self._image_dir
