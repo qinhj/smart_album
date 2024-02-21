@@ -102,6 +102,19 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QFrame" name="func_1_frame_3">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -120,7 +133,7 @@
              <string notr="true">background: transparent;font-family: Microsoft Yahei;font-size: 20pt;color: white;</string>
             </property>
             <property name="text">
-             <string>人脸搜索</string>
+             <string>以图搜图</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -153,6 +166,19 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QFrame" name="func_2_frame_3">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -171,7 +197,7 @@
              <string notr="true">background: transparent;font-family: Microsoft Yahei;font-size: 20pt;color: white;</string>
             </property>
             <property name="text">
-             <string>智能筛选</string>
+             <string>智能分析</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -193,6 +219,19 @@
           </item>
           <item>
            <widget class="QFrame" name="func_3_frame_2">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="func_3_frame_3">
             <property name="styleSheet">
              <string notr="true">background: transparent;</string>
             </property>
@@ -285,7 +324,9 @@
      </widget>
      <widget class="QWidget" name="page_4">
       <property name="styleSheet">
-       <string notr="true">font-size: 16pt</string>
+       <string notr="true">QFrame {
+	font-size: 16pt;
+}</string>
       </property>
       <layout class="QVBoxLayout" name="page_4_layout">
        <item>
@@ -318,7 +359,9 @@
      </widget>
      <widget class="QWidget" name="page_5">
       <property name="styleSheet">
-       <string notr="true">font-size: 16pt</string>
+       <string notr="true">QFrame {
+	font-size: 16pt;
+}</string>
       </property>
       <layout class="QVBoxLayout" name="page_5_layout">
        <item>

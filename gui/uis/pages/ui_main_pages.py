@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main_pagesQXgmIk.ui'
+## Form generated from reading UI file 'main_pages.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.2.1
 ##
@@ -48,14 +48,26 @@ class Ui_MainPages(object):
         self.func_1_frame_1 = QFrame(self.func_1)
         self.func_1_frame_1.setObjectName(u"func_1_frame_1")
         self.func_1_frame_1.setStyleSheet(u"background: transparent;")
+        self.func_1_frame_1.setFrameShape(QFrame.StyledPanel)
+        self.func_1_frame_1.setFrameShadow(QFrame.Raised)
 
         self.func_1_layout.addWidget(self.func_1_frame_1)
 
         self.func_1_frame_2 = QFrame(self.func_1)
         self.func_1_frame_2.setObjectName(u"func_1_frame_2")
         self.func_1_frame_2.setStyleSheet(u"background: transparent;")
+        self.func_1_frame_2.setFrameShape(QFrame.StyledPanel)
+        self.func_1_frame_2.setFrameShadow(QFrame.Raised)
 
         self.func_1_layout.addWidget(self.func_1_frame_2)
+
+        self.func_1_frame_3 = QFrame(self.func_1)
+        self.func_1_frame_3.setObjectName(u"func_1_frame_3")
+        self.func_1_frame_3.setStyleSheet(u"background: transparent;")
+        self.func_1_frame_3.setFrameShape(QFrame.StyledPanel)
+        self.func_1_frame_3.setFrameShadow(QFrame.Raised)
+
+        self.func_1_layout.addWidget(self.func_1_frame_3)
         self.func_1_layout.addStretch()
 
         self.horizontalLayout.addWidget(self.func_1)
@@ -77,14 +89,26 @@ class Ui_MainPages(object):
         self.func_2_frame_1 = QFrame(self.func_2)
         self.func_2_frame_1.setObjectName(u"func_2_frame_1")
         self.func_2_frame_1.setStyleSheet(u"background: transparent;")
+        self.func_2_frame_1.setFrameShape(QFrame.StyledPanel)
+        self.func_2_frame_1.setFrameShadow(QFrame.Raised)
 
         self.func_2_layout.addWidget(self.func_2_frame_1)
 
         self.func_2_frame_2 = QFrame(self.func_2)
         self.func_2_frame_2.setObjectName(u"func_2_frame_2")
         self.func_2_frame_2.setStyleSheet(u"background: transparent;")
+        self.func_2_frame_2.setFrameShape(QFrame.StyledPanel)
+        self.func_2_frame_2.setFrameShadow(QFrame.Raised)
 
         self.func_2_layout.addWidget(self.func_2_frame_2)
+
+        self.func_2_frame_3 = QFrame(self.func_2)
+        self.func_2_frame_3.setObjectName(u"func_2_frame_3")
+        self.func_2_frame_3.setStyleSheet(u"background: transparent;")
+        self.func_2_frame_3.setFrameShape(QFrame.StyledPanel)
+        self.func_2_frame_3.setFrameShadow(QFrame.Raised)
+
+        self.func_2_layout.addWidget(self.func_2_frame_3)
         self.func_2_layout.addStretch()
 
         self.horizontalLayout.addWidget(self.func_2)
@@ -106,14 +130,26 @@ class Ui_MainPages(object):
         self.func_3_frame_1 = QFrame(self.func_3)
         self.func_3_frame_1.setObjectName(u"func_3_frame_1")
         self.func_3_frame_1.setStyleSheet(u"background: transparent;")
+        self.func_3_frame_1.setFrameShape(QFrame.StyledPanel)
+        self.func_3_frame_1.setFrameShadow(QFrame.Raised)
 
         self.func_3_layout.addWidget(self.func_3_frame_1)
 
         self.func_3_frame_2 = QFrame(self.func_3)
         self.func_3_frame_2.setObjectName(u"func_3_frame_2")
         self.func_3_frame_2.setStyleSheet(u"background: transparent;")
+        self.func_3_frame_2.setFrameShape(QFrame.StyledPanel)
+        self.func_3_frame_2.setFrameShadow(QFrame.Raised)
 
         self.func_3_layout.addWidget(self.func_3_frame_2)
+
+        self.func_3_frame_3 = QFrame(self.func_3)
+        self.func_3_frame_3.setObjectName(u"func_3_frame_3")
+        self.func_3_frame_3.setStyleSheet(u"background: transparent;")
+        self.func_3_frame_3.setFrameShape(QFrame.StyledPanel)
+        self.func_3_frame_3.setFrameShadow(QFrame.Raised)
+
+        self.func_3_layout.addWidget(self.func_3_frame_3)
         self.func_3_layout.addStretch()
 
 
@@ -203,8 +239,8 @@ class Ui_MainPages(object):
 
     def retranslateUi(self, MainPages):
         MainPages.setWindowTitle(QCoreApplication.translate("MainPages", u"Form", None))
-        self.func_1_label.setText(QCoreApplication.translate("MainPages", u"\u4eba\u8138\u5206\u7c7b", None)) # 人脸分类
-        self.func_2_label.setText(QCoreApplication.translate("MainPages", u"\u4eba\u8138\u641c\u7d22", None)) # 人脸搜索
-        self.func_3_label.setText(QCoreApplication.translate("MainPages", u"\u667a\u80fd\u7b5b\u9009", None)) # 智能筛选
+        self.func_1_label.setText(QCoreApplication.translate("MainPages", u"\u4eba\u8138\u5206\u7c7b", None))
+        self.func_2_label.setText(QCoreApplication.translate("MainPages", u"\u4ee5\u56fe\u641c\u56fe", None))
+        self.func_3_label.setText(QCoreApplication.translate("MainPages", u"\u667a\u80fd\u5206\u6790", None))
     # retranslateUi
 

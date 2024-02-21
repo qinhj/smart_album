@@ -157,12 +157,12 @@ class MainFunctions():
             unnamed = self.persons.pop('未命名')
             self.persons['未命名'] = unnamed
         
+        # widget to list person names as buttons
         self.temp_widget = QWidget()
         self.person_group = QButtonGroup()
         self.btn_boxes_layout = QVBoxLayout(self.temp_widget)
         for name, paths in self.persons.items():
-            #print(paths)
-            #print("PK")
+            #print(name, paths)
             btn = PyPushButton(
                 text=name,
                 radius = 5,
@@ -206,7 +206,7 @@ class MainFunctions():
         #print(btn.text())
         #print(btn.paths)
         btn = self.person_group.checkedButton()
-        MainFunctions.load_image_page(self,name=btn.text(), paths=btn.paths)
+        MainFunctions.load_image_page(self, name=btn.text(), paths=btn.paths)
         MainFunctions.update_image_count(self, len(btn.paths))
         self.ui.credits.person_name.setText(btn.text())
         QApplication.processEvents()
@@ -270,14 +270,14 @@ class MainFunctions():
         return self.flow_layout
 
     def select_single_image(self):
-        """ 人脸搜索: 选择图片 """
-        m = QFileDialog.getOpenFileName(None, "选择图片", ".", "图片 (*.png *.jpg *.jpeg *.tiff *.bmp);;")
+        """ 以图搜图: 选择图片 """
+        m = QFileDialog.getOpenFileName(None, "选择图片", ".", "图片 (*.png *.jpg *.JPG *.jpeg *.JPEG *.tiff *.bmp);;")
         self.selected_image = m[0]
         self.ui.credits.copyright_label.setText("选择图片：{}".format(self.selected_image))
         return m[0]
 
     def select_image_directory(self):
-        """ 人脸分类: 选择文件夹 """
+        """ 选择文件夹 """
         directory = QFileDialog.getExistingDirectory(None)
         with open('resources/settings.json', 'r+', encoding='utf-8') as f:
             if directory == '':
@@ -292,7 +292,7 @@ class MainFunctions():
         return directory
     
     def load_search_result(self):
-        if not self.has_searched:
+        if not self.image_search_done:
             self.ui.credits.copyright_label.setText("还未选择图片")
             self.ui.credits.person.setText("")
             self.ui.credits.person_name.setText("")
@@ -303,8 +303,8 @@ class MainFunctions():
             return None
         else:
             name, paths = "", []
-            if len(self.person_search_result):
-                name, paths = tuple(self.person_search_result.items())[0]
+            if len(self.image_search_result):
+                name, paths = tuple(self.image_search_result.items())[0]
             else:
                 print("[INFO] Not found!")
             self.ui.credits.copyright_label.setText("总数量：{}".format(len(paths)))
@@ -315,10 +315,10 @@ class MainFunctions():
             self.ui.credits.image.setText("图片名：")
             self.ui.credits.image_title.setText("")
         
-        if not self.search_changed:
+        if not self.image_search_changed:
             return None
 
-        self.search_changed = False
+        self.image_search_changed = False
         try:
             self.scrollArea_2_WidgetContents.setParent(None)
             self.ui.load_pages.scrollArea_2.removeWidget(self.scrollArea_2_WidgetContents)
@@ -346,22 +346,32 @@ class MainFunctions():
         QApplication.processEvents()
 
         try:
-            self.target_image_box = QWidget()
-            self.target_image_box_layout = QHBoxLayout(self.target_image_box)
-            self.target_image_box_layout.setAlignment(Qt.AlignCenter)
-            self.target_image = PyImage(self.selected_image)
-            self.target_image_box_layout.addWidget(self.target_image)
-            self.target_image.checkbox.setCheckable(False)  
-
             self.search_target_lable = QLabel()
             self.search_target_lable.setObjectName(u"search_target_lable")
             self.search_target_lable.setStyleSheet(u"background: transparent;")
-            self.search_target_lable.setText("所选照片")
             self.search_target_lable.setStyleSheet(u"font-family:Microsoft Yahei;font-size: 14pt")
             self.search_target_lable.setAlignment(Qt.AlignCenter)
             self.scrollArea_2_layout.addWidget(self.search_target_lable)
 
-            self.scrollArea_2_layout.addWidget(self.target_image_box)
+            if os.path.exists(self.selected_image):
+                self.search_target_lable.setText(u"所选照片")
+                self.target_image_box = QWidget()
+                self.target_image_box_layout = QHBoxLayout(self.target_image_box)
+                self.target_image_box_layout.setAlignment(Qt.AlignCenter)
+                self.target_image = PyImage(self.selected_image)
+                self.target_image_box_layout.addWidget(self.target_image)
+                self.target_image.checkbox.setCheckable(False)
+                self.scrollArea_2_layout.addWidget(self.target_image_box)
+            else:
+                self.search_target_lable.setText(u"输入文本")
+                self.target_text_lable = QLabel()
+                self.target_text_lable.setObjectName(u"search_target_text")
+                self.target_text_lable.setStyleSheet(u"background: transparent;")
+                self.target_text_lable.setText(self.selected_image)
+                self.target_text_lable.setStyleSheet(u"font-family:Microsoft Yahei;font-size: 14pt")
+                self.target_text_lable.setAlignment(Qt.AlignCenter)
+                self.scrollArea_2_layout.addWidget(self.target_text_lable)
+
         except AttributeError:
             #print("还未选择图片")
             return None
@@ -377,9 +387,9 @@ class MainFunctions():
         self.scrollArea_2_WidgetContents.update()
         self.ui.load_pages.scrollArea_2.update()
 
-        #print(self.person_search_result)
+        #print(self.image_search_result)
         image_page = PyImagePage()
-        for name, paths in self.person_search_result.items():
+        for name, paths in self.image_search_result.items():
             for path in paths:
                 path = os.path.normpath(os.path.join(self.settings['image_path'], path))
                 image_box = PyImage(path)
@@ -391,7 +401,7 @@ class MainFunctions():
                 self.scrollArea_2_layout.update()
                 #QApplication.processEvents()
             self.ui.credits.copyright_label.setText("总数量：{}".format(len(paths)))
-            self.ui.credits.person.setText("人物名：")
+            self.ui.credits.person.setText("") # ("人物名：")
             self.ui.credits.person_name.setText(name)
             self.ui.credits.person_name.setFocusPolicy(Qt.NoFocus)
             self.ui.credits.person_name.setReadOnly(True)
@@ -406,8 +416,8 @@ class MainFunctions():
         ########################################################################
         # ADD Confirm Button
         ########################################################################
-        if not self.found_duplicate_image:
-            self.ui.credits.copyright_label.setText("还未进行相似性筛查")
+        if not self.image_similarity_done:
+            self.ui.credits.copyright_label.setText("还未进行智能筛重")
             self.ui.credits.person.setText("")
             self.ui.credits.person_name.setText("")
             self.ui.credits.person_name.setFocusPolicy(Qt.NoFocus)
@@ -463,7 +473,7 @@ class MainFunctions():
         self.scrollArea_3_layout.setSpacing(20)
 
         try:
-            for paths in self.person_duplicate_result:
+            for paths in self.image_similarity_result:
                 image_page = PyImagePage()
                 image_page.button_box.setExclusive(False)
                 self.scrollArea_3_layout.addWidget(image_page)
@@ -478,11 +488,11 @@ class MainFunctions():
                 self.image_pages.append(image_page)
             QApplication.processEvents()
             """
-            for image in self.person_duplicate_result:
+            for image in self.image_similarity_result:
                 print(image)
             """
         except AttributeError:
-            print("还未进行相似筛查")
+            print("还未进行智能筛重")
             return None
         self.ui.credits.copyright_label.setText("选择要删除的图片并点击确定")
 
