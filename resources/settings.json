@@ -32,7 +32,7 @@
         "title_size": 11,
         "text_size": 10
     },
-    "backend": "picf",
+    "backend": "fake",
     "output_path": "output.json",
     "image_path": ""
 }

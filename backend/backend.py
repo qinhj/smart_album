@@ -85,7 +85,4 @@ class FakeBackend(IBackend):
 def backend_selector(qw: QWidget, name: str):
     if name.lower() == "fake":
         return FakeBackend(qw)
-    if name.lower() == "picf":
-        from backend.picf.api import PicfBackend
-        return PicfBackend(qw)
     raise RuntimeError("Unsupported backend: {}".format(name))
