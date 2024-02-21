@@ -76,7 +76,7 @@ class MainWindow(QMainWindow):
     def btn_clicked(self):
         # GET BT CLICKED
         btn = SetupMainWindow.setup_btns(self)
-        print(btn.objectName())
+
         # LEFT MENU
         # ///////////////////////////////////////////////////////////////
         
@@ -92,7 +92,7 @@ class MainWindow(QMainWindow):
             MainFunctions.set_page(self, self.ui.load_pages.page_1)
             
         # OPEN PAGE 3(pics)
-        if btn.objectName() == 'btn_page_pics':
+        if btn.objectName() == 'btn_page_face_cluster':
             # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
             try:
@@ -105,11 +105,19 @@ class MainWindow(QMainWindow):
                 MainFunctions.toggle_left_column(self)
             # Load Page 3
             MainFunctions.set_page(self, self.ui.load_pages.page_3)
+            # Load && Update Menu 1
+            MainFunctions.set_left_column_menu(
+                self,
+                menu = self.ui.left_column.menus.menu_1,
+                title = btn.text(),
+                icon_path = btn._icon_path
+            )
             MainFunctions.load_persons(self)
-            MainFunctions.update_image_count(self,0)
+            # Update Credits / Bottom App Frame
+            MainFunctions.update_image_count(self, 0)
             
         # OPEN PAGE 4
-        if btn.objectName() == 'btn_page_search':
+        if btn.objectName() == 'btn_page_image_search':
             # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
             # Close Left Column
@@ -120,7 +128,7 @@ class MainWindow(QMainWindow):
             MainFunctions.load_search_result(self)
 
         # OPEN PAGE 5
-        if btn.objectName() == 'btn_page_duplicate':
+        if btn.objectName() == 'btn_page_image_similarity':
             # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
             # Close Left Column
@@ -173,6 +181,10 @@ class MainWindow(QMainWindow):
             # Get Left Menu Btn            
             top_settings = MainFunctions.get_left_menu_btn(self, "btn_settings")
             top_settings.set_active_tab(False)
+
+        # BUTTON SEARCH
+        if btn.objectName() == "btn_search":
+            self.backend("image_search")
 
         # DEBUG
         print(f"Button {btn.objectName()}, clicked!")
