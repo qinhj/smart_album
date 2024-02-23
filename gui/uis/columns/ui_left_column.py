@@ -32,17 +32,17 @@ class Ui_LeftColumn(object):
         self.menus.setObjectName(u"menus")
         self.menu_1 = QWidget()
         self.menu_1.setObjectName(u"menu_1")
-        self.verticalLayout = QVBoxLayout(self.menu_1)
-        self.verticalLayout.setSpacing(5)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(5, 5, 5, 5)
+        self.menu_1_layout = QVBoxLayout(self.menu_1)
+        self.menu_1_layout.setSpacing(5)
+        self.menu_1_layout.setObjectName(u"menu_1_layout")
+        self.menu_1_layout.setContentsMargins(5, 5, 5, 5)
         self.menus.addWidget(self.menu_1)
         self.menu_2 = QWidget()
         self.menu_2.setObjectName(u"menu_2")
-        self.verticalLayout_2 = QVBoxLayout(self.menu_2)
-        self.verticalLayout_2.setSpacing(5)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(5, 5, 5, 5)
+        self.menu_2_layout = QVBoxLayout(self.menu_2)
+        self.menu_2_layout.setSpacing(5)
+        self.menu_2_layout.setObjectName(u"menu_2_layout")
+        self.menu_2_layout.setContentsMargins(5, 5, 5, 5)
         self.btn_4_widget = QWidget(self.menu_2)
         self.btn_4_widget.setObjectName(u"btn_4_widget")
         self.btn_4_widget.setMinimumSize(QSize(0, 40))
@@ -52,7 +52,7 @@ class Ui_LeftColumn(object):
         self.btn_4_layout.setObjectName(u"btn_4_layout")
         self.btn_4_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.verticalLayout_2.addWidget(self.btn_4_widget)
+        self.menu_2_layout.addWidget(self.btn_4_widget)
 
         self.label_2 = QLabel(self.menu_2)
         self.label_2.setObjectName(u"label_2")
@@ -62,7 +62,7 @@ class Ui_LeftColumn(object):
         self.label_2.setStyleSheet(u"font-size: 16pt")
         self.label_2.setAlignment(Qt.AlignCenter)
 
-        self.verticalLayout_2.addWidget(self.label_2)
+        self.menu_2_layout.addWidget(self.label_2)
 
         self.label_3 = QLabel(self.menu_2)
         self.label_3.setObjectName(u"label_3")
@@ -73,7 +73,7 @@ class Ui_LeftColumn(object):
         self.label_3.setAlignment(Qt.AlignCenter)
         self.label_3.setWordWrap(True)
 
-        self.verticalLayout_2.addWidget(self.label_3)
+        self.menu_2_layout.addWidget(self.label_3)
 
         self.menus.addWidget(self.menu_2)
 

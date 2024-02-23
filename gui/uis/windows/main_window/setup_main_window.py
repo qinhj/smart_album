@@ -112,8 +112,8 @@ class SetupMainWindow:
             return self.ui.left_menu.sender()
         elif self.ui.left_column.sender() != None:
             return self.ui.left_column.sender()
-        elif self.ui.left_column.menus.verticalLayout.sender() != None:
-            return self.ui.left_column.menus.verticalLayout.sender()
+        elif self.ui.left_column.menus.menu_1_layout.sender() != None:
+            return self.ui.left_column.menus.menu_1_layout.sender()
 
     # SETUP MAIN WINDOW WITH CUSTOM PARAMETERS
     # ///////////////////////////////////////////////////////////////
@@ -231,8 +231,17 @@ class SetupMainWindow:
         self.image_similarity_result = []
         self.image_similarity_done = False
 
+        # LEFT COLUMN
         # ///////////////////////////////////////////////////////////////
-        # ADD Buttons To Page1 For "人脸分类"
+
+        # ADD WIDGETS: Person List Placeholder
+        self.ui.left_column.menus.menu_1_layout.addWidget(QWidget())
+
+        # PAGES
+        # ///////////////////////////////////////////////////////////////
+
+        # ///////////////////////////////////////////////////////////////
+        # PAGE 1 - ADD BUTTON FOR "人脸分类"
         # ///////////////////////////////////////////////////////////////
         self.func_btn_11 = PyPushButton(
             text = u"选择文件夹",
@@ -273,7 +282,7 @@ class SetupMainWindow:
         self.ui.load_pages.func_1_frame_3_layout.addWidget(self.func_btn_13, alignment=Qt.AlignCenter)
 
         # ///////////////////////////////////////////////////////////////
-        # ADD Button To Page1 For "以图搜图"
+        # PAGE 1 - ADD BUTTON FOR "以图搜图"
         # ///////////////////////////////////////////////////////////////
         self.func_btn_21 = PyPushButton(
             text = u"选择文件夹",
@@ -321,7 +330,7 @@ class SetupMainWindow:
         self.ui.load_pages.func_2_frame_3_layout.addWidget(self.func_btn_23, alignment=Qt.AlignCenter)
 
         # ///////////////////////////////////////////////////////////////
-        # ADD Button To Page1 For "智能分析"
+        # PAGE 1 - ADD BUTTON FOR "智能分析"
         # ///////////////////////////////////////////////////////////////
         self.func_btn_31 = PyPushButton(
             text = u"选择文件夹",
@@ -368,12 +377,27 @@ class SetupMainWindow:
         self.ui.load_pages.func_3_frame_3_layout = QHBoxLayout(self.ui.load_pages.func_3_frame_3)
         self.ui.load_pages.func_3_frame_3_layout.addWidget(self.func_btn_33, alignment=Qt.AlignCenter)
 
-        # ADD CONNECT
-        self.ui.credits.person_name.returnPressed.connect(lambda: MainFunctions.exec_edit_single_group_name(self, self.ui.credits.person_name))
-        #MainFunctions.load_persons(self)
-
-        # LEFT COLUMN
+        # SET GRID LAYOUT FOR PAGE3 ("人物列表")
         # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.gridLayout_2 = QGridLayout(self.ui.load_pages.scrollAreaWidgetContents)
+        self.ui.load_pages.gridLayout_2.setSpacing(0)
+        self.ui.load_pages.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.ui.load_pages.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+
+        # SET SCROLLBAR STYLE
+        # ///////////////////////////////////////////////////////////////
+        custom_scrollbar_style = style_scrollbar.format(
+            _radius = 8,
+            _bg_color = self.themes["app_color"]["bg_two"],
+            _bg_color_hover = self.themes['app_color']['dark_one'],
+            _bg_color_pressed = self.themes["app_color"]["orange"]
+        )
+        self.ui.load_pages.scrollArea_1.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
+        self.ui.load_pages.scrollArea_2.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
+        self.ui.load_pages.scrollArea_3.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
+
+        # ADD CONNECT TO CUSTOM WIDGET CREDITS
+        self.ui.credits.person_name.returnPressed.connect(lambda: MainFunctions.exec_edit_single_group_name(self, self.ui.credits.person_name))
 
         # ADD Widgets
         # ///////////////////////////////////////////////////////////////
@@ -397,3 +421,26 @@ class SetupMainWindow:
             self.top_right_grip.setGeometry(self.width() - 20, 5, 15, 15)
             self.bottom_left_grip.setGeometry(5, self.height() - 20, 15, 15)
             self.bottom_right_grip.setGeometry(self.width() - 20, self.height() - 20, 15, 15)
+
+style_scrollbar = '''
+QScrollBar {{
+	border: solid;
+	border-radius: {_radius};	
+	background: {_bg_color};
+}}
+QScrollBar:handle {{
+    border-radius: {_radius};
+	background: {_bg_color_hover};
+}}
+QScrollBar:handle:pressed {{
+	background: {_bg_color_pressed};
+}}
+QScrollBar:add-page,
+QScrollBar:sub-page{{
+    background: transparent;
+}}
+QScrollBar:add-line,
+QScrollBar:sub-line{{
+    background: transparent;
+}}
+'''

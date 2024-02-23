@@ -293,24 +293,6 @@ class UI_MainWindow(object):
         #  ADD TO LAYOUT
         self.credits_layout.addWidget(self.credits)
 
-        # SET SCROLLBAR STYLE
-        custom_scrollbar_style = style_scrollbar.format(
-            _radius = 8,
-            _bg_color = self.themes["app_color"]["bg_two"],
-            _bg_color_hover = self.themes['app_color']['dark_one'],
-            _bg_color_pressed = self.themes["app_color"]["orange"]
-        )
-
-        self.scrollbar1 = QScrollBar(Qt.Vertical)
-        self.scrollbar2 = QScrollBar(Qt.Vertical)
-        self.scrollbar3 = QScrollBar(Qt.Vertical)
-        self.scrollbar1.setStyleSheet(custom_scrollbar_style)
-        self.scrollbar2.setStyleSheet(custom_scrollbar_style)
-        self.scrollbar3.setStyleSheet(custom_scrollbar_style)
-        self.load_pages.scrollArea_1.setVerticalScrollBar(self.scrollbar1)
-        self.load_pages.scrollArea_2.setVerticalScrollBar(self.scrollbar2)
-        self.load_pages.scrollArea_3.setVerticalScrollBar(self.scrollbar3) 
-
         # ADD WIDGETS TO RIGHT LAYOUT
         # ///////////////////////////////////////////////////////////////
         self.right_app_layout.addWidget(self.title_bar_frame)
@@ -327,26 +309,3 @@ class UI_MainWindow(object):
         # ADD CENTRAL WIDGET AND SET CONTENT MARGINS
         # ///////////////////////////////////////////////////////////////
         parent.setCentralWidget(self.central_widget)
-
-style_scrollbar = '''
-QScrollBar {{
-	border: solid;
-	border-radius: {_radius};	
-	background: {_bg_color};
-}}
-QScrollBar:handle {{
-    border-radius: {_radius};
-	background: {_bg_color_hover};
-}}
-QScrollBar:handle:pressed {{
-	background: {_bg_color_pressed};
-}}
-QScrollBar:add-page,
-QScrollBar:sub-page{{
-    background: transparent;
-}}
-QScrollBar:add-line,
-QScrollBar:sub-line{{
-    background: transparent;
-}}
-'''

@@ -183,14 +183,14 @@ class MainFunctions():
         self.btn_boxes_layout.addStretch()
         self.btn_boxes_layout.setSpacing(10)
         try:
-            if self.ui.left_column.menus.verticalLayout.count() > 0:
-                self.ui.left_column.menus.verticalLayout.itemAt(0).widget().setParent(None)
-                self.ui.left_column.menus.verticalLayout.removeWidget(self.ui.left_column.menus.verticalLayout.itemAt(0).widget())
-                self.ui.left_column.menus.verticalLayout.update()
+            if self.ui.left_column.menus.menu_1_layout.count() > 0:
+                self.ui.left_column.menus.menu_1_layout.itemAt(0).widget().setParent(None)
+                self.ui.left_column.menus.menu_1_layout.removeWidget(self.ui.left_column.menus.menu_1_layout.itemAt(0).widget())
+                self.ui.left_column.menus.menu_1_layout.update()
         except AttributeError:
             pass
 
-        self.ui.left_column.menus.verticalLayout.addWidget(self.temp_widget)
+        self.ui.left_column.menus.menu_1_layout.addWidget(self.temp_widget)
         self.image_dic = {}
 
     def load_images_by_person(self):

@@ -35,7 +35,7 @@
       <number>0</number>
      </property>
      <widget class="QWidget" name="menu_1">
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="menu_1_layout">
        <property name="spacing">
         <number>5</number>
        </property>
@@ -54,7 +54,7 @@
       </layout>
      </widget>
      <widget class="QWidget" name="menu_2">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="menu_2_layout">
        <property name="spacing">
         <number>5</number>
        </property>
