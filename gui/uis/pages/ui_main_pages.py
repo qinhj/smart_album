@@ -203,6 +203,7 @@ class Ui_MainPages(object):
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
         self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 100, 30))
+        self.scrollAreaWidgetContents_2.setStyleSheet(u"background: transparent;")
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
 
         self.page_4_layout.addWidget(self.scrollArea_2)
@@ -221,10 +222,11 @@ class Ui_MainPages(object):
         self.scrollArea_3.setFrameShape(QFrame.NoFrame)
         self.scrollArea_3.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.scrollArea_3.setWidgetResizable(True)
-        self.scrollAreaWidgetContents_4 = QWidget()
-        self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 100, 30))
-        self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_4)
+        self.scrollAreaWidgetContents_3 = QWidget()
+        self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 100, 30))
+        self.scrollAreaWidgetContents_3.setStyleSheet(u"background: transparent;")
+        self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_3)
 
         self.page_5_layout.addWidget(self.scrollArea_3)
 
