@@ -5,10 +5,9 @@ class PyImagePage(QFrame):
     def __init__(self):
         super().__init__()
         self.flow_layout = FlowLayout()
-        self.button_box = QButtonGroup()
-        self.button_box.setExclusive(True)
+        self.btn_group = QButtonGroup()
+        self.btn_group.setExclusive(True)
         self.setStyleSheet("background: transparent")
         self.setFrameShape(QFrame.NoFrame)
         self.setLayout(self.flow_layout)
-        self.flow_layout_boxs = []
 

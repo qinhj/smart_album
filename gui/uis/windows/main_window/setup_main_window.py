@@ -224,10 +224,15 @@ class SetupMainWindow:
 
         # DEFINE BTN FLAGS USED IN MainFunctions
         # ///////////////////////////////////////////////////////////////
+        # Face Cluster
+        self.person_list_btn_group = None
+        self.image_page_dict_person = {}
+        # Image Search
         self.selected_image = None
         self.image_search_changed = False
         self.image_search_done = False
         self.image_search_result = {}
+        # Image Similarity
         self.image_similarity_result = []
         self.image_similarity_done = False
 
@@ -397,7 +402,8 @@ class SetupMainWindow:
         self.ui.load_pages.scrollArea_3.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
 
         # ADD CONNECT TO CUSTOM WIDGET CREDITS
-        self.ui.credits.person_name.returnPressed.connect(lambda: MainFunctions.exec_edit_single_group_name(self, self.ui.credits.person_name))
+        self.ui.credits.person_name.returnPressed.connect(
+            lambda: MainFunctions.update_image_object_label(self, self.ui.credits.person_name))
 
         # ADD Widgets
         # ///////////////////////////////////////////////////////////////

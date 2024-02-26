@@ -87,7 +87,7 @@ class MainWindow(QMainWindow):
             # Close Left Column
             if MainFunctions.left_column_is_visible(self):
                 MainFunctions.toggle_left_column(self)
-            MainFunctions.load_main_credit_bar(self)
+            MainFunctions.update_ui_credit_bar(self)
             # Load Page 1
             MainFunctions.set_page(self, self.ui.load_pages.page_1)
             
@@ -112,9 +112,9 @@ class MainWindow(QMainWindow):
                 title = btn.text(),
                 icon_path = btn._icon_path
             )
-            MainFunctions.load_persons(self)
+            MainFunctions.update_left_column_menu1(self)
             # Update Credits / Bottom App Frame
-            MainFunctions.update_image_count(self, 0)
+            MainFunctions.update_ui_credit_bar(self, copyright=u"总数量：{}".format(0))
             
         # OPEN PAGE 4
         if btn.objectName() == 'btn_page_image_search':
