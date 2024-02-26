@@ -202,8 +202,38 @@ class Ui_MainPages(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 100, 30))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 832, 572))
         self.scrollAreaWidgetContents_2.setStyleSheet(u"background: transparent;")
+        self.scrollArea_2_layout = QVBoxLayout(self.scrollAreaWidgetContents_2)
+        self.scrollArea_2_layout.setSpacing(0)
+        self.scrollArea_2_layout.setObjectName(u"scrollArea_2_layout")
+        self.scrollArea_2_layout.setContentsMargins(0, 0, 0, 0)
+        self.search_target_lable = QLabel(self.scrollAreaWidgetContents_2)
+        self.search_target_lable.setObjectName(u"search_target_lable")
+        self.search_target_lable.setStyleSheet(u"background: transparent;font-family:Microsoft Yahei;font-size: 14pt")
+        self.search_target_lable.setAlignment(Qt.AlignCenter)
+
+        self.scrollArea_2_layout.addWidget(self.search_target_lable)
+
+        self.search_target_text = QLabel(self.scrollAreaWidgetContents_2)
+        self.search_target_text.setObjectName(u"search_target_text")
+        self.search_target_text.setStyleSheet(u"background: transparent;font-family:Microsoft Yahei;font-size: 14pt")
+        self.search_target_text.setAlignment(Qt.AlignCenter)
+
+        self.scrollArea_2_layout.addWidget(self.search_target_text)
+
+        self.input_image = QWidget(self.scrollAreaWidgetContents_2)
+        self.input_image.setObjectName(u"input_image")
+
+        self.scrollArea_2_layout.addWidget(self.input_image)
+
+        self.search_result_lable = QLabel(self.scrollAreaWidgetContents_2)
+        self.search_result_lable.setObjectName(u"search_result_lable")
+        self.search_result_lable.setStyleSheet(u"background: transparent;font-family:Microsoft Yahei;font-size: 14pt")
+        self.search_result_lable.setAlignment(Qt.AlignCenter)
+
+        self.scrollArea_2_layout.addWidget(self.search_result_lable)
+
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
 
         self.page_4_layout.addWidget(self.scrollArea_2)
@@ -248,5 +278,8 @@ class Ui_MainPages(object):
         self.func_1_label.setText(QCoreApplication.translate("MainPages", u"\u4eba\u8138\u5206\u7c7b", None))
         self.func_2_label.setText(QCoreApplication.translate("MainPages", u"\u4ee5\u56fe\u641c\u56fe", None))
         self.func_3_label.setText(QCoreApplication.translate("MainPages", u"\u667a\u80fd\u5206\u6790", None))
+        self.search_target_lable.setText(QCoreApplication.translate("MainPages", u"TextLabel", None))
+        self.search_target_text.setText(QCoreApplication.translate("MainPages", u"TextLabel", None))
+        self.search_result_lable.setText(QCoreApplication.translate("MainPages", u"\u641c\u7d22\u7ed3\u679c", None))
     # retranslateUi
 
