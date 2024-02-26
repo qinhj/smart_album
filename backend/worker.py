@@ -47,6 +47,7 @@ class TimerLabel(QTimer):
 
 _TEXT_NEED_IMAGE_DIR = u"还未选择图片文件夹，请先选择文件夹"
 _TEXT_FILL_BLANK = "                                    "
+_TEXT_NEED_IMAGE_PATH = u"还未选择图片或输入文本，请先选择图片或输入文本后再执行"
 
 # Default worker for face cluster task
 def create_worker_face_cluster(main_window: QMainWindow, worker_handler, *args):
@@ -79,6 +80,11 @@ def create_worker_image_search(main_window: QMainWindow, worker_handler, *args):
         QMessageBox.information(main_window, main_window.settings["app_name"], _TEXT_NEED_IMAGE_DIR)
         return None
 
+    if main_window.selected_image is None or main_window.selected_image == '':
+        QMessageBox.information(
+            main_window, main_window.settings["app_name"], _TEXT_NEED_IMAGE_PATH)
+        return None
+
     timer = TimerLabel(main_window.ui.credits.copyright_label)
     timer.start(100)
 
@@ -87,17 +93,12 @@ def create_worker_image_search(main_window: QMainWindow, worker_handler, *args):
         main_window.image_search_result = result
         QMessageBox.information(main_window, main_window.settings["app_name"], u"智能搜图完成{}".format(_TEXT_FILL_BLANK))
 
-    if main_window.selected_image is None or main_window.selected_image == '':
-        QMessageBox.information(
-            main_window, main_window.settings["app_name"],
-            u"还未选择图片或输入文本，请先选择图片或输入文本后再执行")
-    else:
-        # TODO: decouple with input main_window?
-        main_window.image_search_changed = True
-        main_window.image_search_worker = Worker(worker_handler, [main_window.settings["image_path"], main_window.selected_image])
-        main_window.image_search_worker.finished.connect(search_finished)
-        main_window.image_search_worker.start()
-        main_window.image_search_done = True
+    # TODO: decouple with input main_window?
+    main_window.image_search_changed = True
+    main_window.image_search_worker = Worker(worker_handler, [main_window.settings["image_path"], main_window.selected_image])
+    main_window.image_search_worker.finished.connect(search_finished)
+    main_window.image_search_worker.start()
+    main_window.image_search_done = True
 
 
 # Default worker for image similarity task
