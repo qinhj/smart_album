@@ -232,6 +232,7 @@ class SetupMainWindow:
         self.image_search_changed = False
         self.image_search_done = False
         self.image_search_result = {}
+        self.image_search_pages = None
         # Image Similarity
         self.image_similarity_done = False
         self.image_similarity_result = []
@@ -409,12 +410,13 @@ class SetupMainWindow:
         self.ui.load_pages.gridLayout_2.setObjectName(u"gridLayout_2")
         self.ui.load_pages.gridLayout_2.setContentsMargins(0, 0, 0, 0)
 
-        # SET VERTICAL LAYOUT FOR PAGE5 ("智能搜图")
+        # SET VERTICAL LAYOUT FOR PAGE4 ("智能搜图")
         # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.scrollArea_2_layout = QVBoxLayout(self.ui.load_pages.scrollAreaWidgetContents_2)
-        self.ui.load_pages.scrollArea_2_layout.setSpacing(0)
-        self.ui.load_pages.scrollArea_2_layout.setObjectName(u"scrollArea_2_layout")
-        self.ui.load_pages.scrollArea_2_layout.setContentsMargins(0, 0, 0, 0)
+        self.ui.load_pages.input_image_layout = QHBoxLayout(self.ui.load_pages.input_image)
+        self.ui.load_pages.input_image_layout.setSpacing(0)
+        self.ui.load_pages.input_image_layout.setObjectName(u"input_image_layout")
+        self.ui.load_pages.input_image_layout.setContentsMargins(0, 0, 0, 0)
+        self.ui.load_pages.input_image_layout.setAlignment(Qt.AlignCenter)
 
         # SET VERTICAL LAYOUT FOR PAGE5 ("智能筛重")
         # ///////////////////////////////////////////////////////////////

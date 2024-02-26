@@ -299,11 +299,16 @@ class MainFunctions():
     def load_image_search_result(self):
         if not self.image_search_done:
             MainFunctions.update_ui_credit_bar(self, copyright=u"还未选择图片")
+            self.ui.load_pages.scrollAreaWidgetContents_2.hide()
             return None
         
         if len(self.image_search_result) == 0:
             MainFunctions.update_ui_credit_bar(self, copyright=u"未能找到相关图片")
+            self.ui.load_pages.scrollAreaWidgetContents_2.hide()
             return None
+        #print(self.image_search_result)
+
+        self.ui.load_pages.scrollAreaWidgetContents_2.show()
 
         name, paths = tuple(self.image_search_result.items())[0]
         MainFunctions.update_ui_credit_bar(
@@ -313,86 +318,50 @@ class MainFunctions():
             return None
 
         self.image_search_changed = False
-        try:
-            self.scrollArea_2_WidgetContents.setParent(None)
-            self.ui.load_pages.scrollArea_2.removeWidget(self.scrollArea_2_WidgetContents)
-        except AttributeError:
-            pass
-
-        self.scrollArea_2_WidgetContents = QWidget()
-        self.scrollArea_2_WidgetContents.setObjectName(u"scrollArea_2_WidgetContents")
-        self.scrollArea_2_WidgetContents.setGeometry(QRect(0, 0, 100, 30))
-        self.scrollArea_2_WidgetContents.setStyleSheet(u"background: transparent;")
-        self.scrollArea_2_layout = QVBoxLayout(self.scrollArea_2_WidgetContents)
-        self.scrollArea_2_layout.setSpacing(0)
-        self.scrollArea_2_layout.setObjectName(u"scrollArea_2_layout")
-        self.scrollArea_2_layout.setContentsMargins(0, 0, 0, 0)
-        self.ui.load_pages.scrollArea_2.setWidget(self.scrollArea_2_WidgetContents)
-        #self.scrollArea_2_layout.addStretch(50)
+        if os.path.exists(self.selected_image):
+            self.ui.load_pages.search_target_lable.setText(u"所选照片")
+            self.ui.load_pages.input_image.show()
+            self.ui.load_pages.search_target_text.hide()
+            # update widget for input image
+            if self.ui.load_pages.input_image_layout.count():
+                assert(self.ui.load_pages.input_image_layout.count() == 1)
+                _prev_widget = self.ui.load_pages.input_image_layout.itemAt(0).widget()
+                _prev_widget.setParent(None)
+                self.ui.load_pages.input_image_layout.removeWidget(_prev_widget)
+            _image_widget = PyImage(self.selected_image)
+            _image_widget.checkbox.setCheckable(False)
+            self.ui.load_pages.input_image_layout.addWidget(_image_widget)
+            self.ui.load_pages.input_image_layout.update()
+        else:
+            self.ui.load_pages.search_target_lable.setText(u"输入文本")
+            self.ui.load_pages.input_image.hide()
+            self.ui.load_pages.search_target_text.show()
+            self.ui.load_pages.search_target_text.setText(self.selected_image)
+        self.ui.load_pages.scrollArea_2_layout.update()
 
         MainFunctions.update_ui_credit_bar(self, copyright=u"正在加载图片")
         QApplication.processEvents()
 
-        try:
-            self.search_target_lable = QLabel()
-            self.search_target_lable.setObjectName(u"search_target_lable")
-            self.search_target_lable.setStyleSheet(u"background: transparent;")
-            self.search_target_lable.setStyleSheet(u"font-family:Microsoft Yahei;font-size: 14pt")
-            self.search_target_lable.setAlignment(Qt.AlignCenter)
-            self.scrollArea_2_layout.addWidget(self.search_target_lable)
+        # update widget for output images
+        if self.image_search_pages:
+            self.image_search_pages.setParent(None)
+            self.ui.load_pages.scrollArea_2_layout.removeWidget(self.image_search_pages)
 
-            if os.path.exists(self.selected_image):
-                self.search_target_lable.setText(u"所选照片")
-                self.target_image_box = QWidget()
-                self.target_image_box_layout = QHBoxLayout(self.target_image_box)
-                self.target_image_box_layout.setAlignment(Qt.AlignCenter)
-                self.target_image = PyImage(self.selected_image)
-                self.target_image_box_layout.addWidget(self.target_image)
-                self.target_image.checkbox.setCheckable(False)
-                self.scrollArea_2_layout.addWidget(self.target_image_box)
-            else:
-                self.search_target_lable.setText(u"输入文本")
-                self.target_text_lable = QLabel()
-                self.target_text_lable.setObjectName(u"search_target_text")
-                self.target_text_lable.setStyleSheet(u"background: transparent;")
-                self.target_text_lable.setText(self.selected_image)
-                self.target_text_lable.setStyleSheet(u"font-family:Microsoft Yahei;font-size: 14pt")
-                self.target_text_lable.setAlignment(Qt.AlignCenter)
-                self.scrollArea_2_layout.addWidget(self.target_text_lable)
-
-        except AttributeError:
-            #print("还未选择图片")
-            return None
-
-        self.search_result_lable = QLabel()
-        self.search_result_lable.setObjectName(u"search_result_lable")
-        self.search_result_lable.setStyleSheet(u"background: transparent;")
-        self.search_result_lable.setText("搜索结果")
-        self.search_result_lable.setStyleSheet(u"font-family:Microsoft Yahei;font-size: 14pt")
-        self.search_result_lable.setAlignment(Qt.AlignCenter)
-        self.scrollArea_2_layout.addWidget(self.search_result_lable)
-        self.scrollArea_2_layout.update()
-        self.scrollArea_2_WidgetContents.update()
-        self.ui.load_pages.scrollArea_2.update()
-
-        #print(self.image_search_result)
-        image_page = PyImagePage()
-        for name, paths in self.image_search_result.items():
-            for path in paths:
-                path = os.path.normpath(os.path.join(self.settings['image_path'], path))
-                image_box = PyImage(path)
-                image_box.checkbox.stateChanged.connect(lambda: MainFunctions.get_checked_button(self, image_page))
-                image_page.flow_layout.addWidget(image_box)
-                image_page.btn_group.addButton(image_box.checkbox)
-                image_page.flow_layout.update()
-                self.scrollArea_2_layout.update()
-                #QApplication.processEvents()
-            MainFunctions.update_ui_credit_bar(
-                self, image_label=u"图片名：", copyright=u"总数量：{}".format(len(paths)))
-
-        self.scrollArea_2_layout.addWidget(image_page)
-        self.scrollArea_2_layout.addStretch()
-        self.scrollArea_2_layout.setSpacing(20)
+        self.image_search_pages = PyImagePage()
+        for path in paths:
+            image_box = PyImage(path)
+            image_box.checkbox.stateChanged.connect(
+                lambda: MainFunctions.get_checked_button(self, self.image_search_pages, True))
+            self.image_search_pages.flow_layout.addWidget(image_box)
+            self.image_search_pages.flow_layout.update()
+            self.image_search_pages.btn_group.addButton(image_box.checkbox)
+            QApplication.processEvents()
+        MainFunctions.update_ui_credit_bar(
+            self, u"输入：", name, "", "", u"总数量：{}".format(len(paths)))
+        self.ui.load_pages.scrollArea_2_layout.addWidget(self.image_search_pages)
+        self.ui.load_pages.scrollArea_2_layout.addStretch()
+        self.ui.load_pages.scrollArea_2_layout.setSpacing(20)
+        self.ui.load_pages.scrollArea_2_layout.update()
 
     def load_image_similarity_result(self):
         if not self.image_similarity_done:
