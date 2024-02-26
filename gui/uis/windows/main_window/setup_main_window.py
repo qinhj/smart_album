@@ -233,8 +233,9 @@ class SetupMainWindow:
         self.image_search_done = False
         self.image_search_result = {}
         # Image Similarity
-        self.image_similarity_result = []
         self.image_similarity_done = False
+        self.image_similarity_result = []
+        self.image_similarity_pages = []
 
         # LEFT COLUMN
         # ///////////////////////////////////////////////////////////////
@@ -382,13 +383,6 @@ class SetupMainWindow:
         self.ui.load_pages.func_3_frame_3_layout = QHBoxLayout(self.ui.load_pages.func_3_frame_3)
         self.ui.load_pages.func_3_frame_3_layout.addWidget(self.func_btn_33, alignment=Qt.AlignCenter)
 
-        # SET GRID LAYOUT FOR PAGE3 ("人物列表")
-        # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.gridLayout_2 = QGridLayout(self.ui.load_pages.scrollAreaWidgetContents)
-        self.ui.load_pages.gridLayout_2.setSpacing(0)
-        self.ui.load_pages.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.ui.load_pages.gridLayout_2.setContentsMargins(0, 0, 0, 0)
-
         # SET SCROLLBAR STYLE
         # ///////////////////////////////////////////////////////////////
         custom_scrollbar_style = style_scrollbar.format(
@@ -407,6 +401,35 @@ class SetupMainWindow:
 
         # ADD Widgets
         # ///////////////////////////////////////////////////////////////
+
+        # SET GRID LAYOUT FOR PAGE3 ("人物列表")
+        # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.gridLayout_2 = QGridLayout(self.ui.load_pages.scrollAreaWidgetContents)
+        self.ui.load_pages.gridLayout_2.setSpacing(0)
+        self.ui.load_pages.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.ui.load_pages.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+
+        # SET VERTICAL LAYOUT FOR PAGE5 ("智能筛重")
+        # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.scrollArea_3_layout = QVBoxLayout(self.ui.load_pages.scrollAreaWidgetContents_3)
+        self.ui.load_pages.scrollArea_3_layout.setSpacing(0)
+        self.ui.load_pages.scrollArea_3_layout.setObjectName(u"scrollArea_3_layout")
+        self.ui.load_pages.scrollArea_3_layout.setContentsMargins(0, 0, 0, 0)
+        self.ui.load_pages.scrollArea_3_layout.setSpacing(20)
+
+        # ADD CONFIRM BUTTON FOR PAGE5
+        self.commit_delete_button = PyPushButton(
+            text = u'确定',
+            radius = 8,
+            color = self.themes['app_color']['white'],
+            bg_color = self.themes['app_color']['dark_one'],
+            bg_color_hover = self.themes['app_color']['orange'],
+            bg_color_pressed = self.themes['app_color']['orange']
+        )
+        self.commit_delete_button.setMinimumHeight(40)
+        self.ui.load_pages.page_5_layout.addWidget(self.commit_delete_button)
+        self.commit_delete_button.hide()
+        self.commit_delete_button.clicked.connect(lambda: MainFunctions.update_page5_with_similar_images(self))
 
         # RIGHT COLUMN
         # ///////////////////////////////////////////////////////////////

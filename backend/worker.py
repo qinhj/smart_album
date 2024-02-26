@@ -115,7 +115,7 @@ def create_worker_image_similarity(main_window: QMainWindow, worker_handler, *ar
     def similarity_finished(path):
         timer.stop()
         main_window.image_similarity_result = path
-        main_window.image_pages = []
+        main_window.image_similarity_pages = [] # reset PyImagePage list
         QMessageBox.information(main_window, main_window.settings["app_name"], u"智能筛重完成{}".format(_TEXT_FILL_BLANK))
 
     main_window.image_similarity_worker = Worker(worker_handler, main_window.settings['image_path'])

@@ -136,7 +136,7 @@ class MainWindow(QMainWindow):
                 MainFunctions.toggle_left_column(self)
             # Load Page 5
             MainFunctions.set_page(self, self.ui.load_pages.page_5)
-            MainFunctions.load_duplicate_result(self)
+            MainFunctions.load_image_similarity_result(self)
 
         # SETTINGS LEFT
         if btn.objectName() == "btn_settings" or btn.objectName() == "btn_close_left_column":

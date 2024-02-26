@@ -264,12 +264,12 @@ class MainFunctions():
         self.ui.credits.copyright_label.setText(copyright)
         self.ui.credits.update()
 
-    def get_checked_button(self, image_page):
+    def get_checked_button(self, image_page, read_only = False):
         btn = image_page.btn_group.checkedButton()
         print("{} Checked".format(btn.objectName())) 
         self.ui.credits.image_title.setText(btn.objectName())
-        self.ui.credits.person_name.setFocusPolicy(Qt.WheelFocus)
-        self.ui.credits.person_name.setReadOnly(False)
+        self.ui.credits.person_name.setFocusPolicy(Qt.NoFocus if read_only else Qt.WheelFocus)
+        self.ui.credits.person_name.setReadOnly(read_only)
 
     def get_flow_layout(self):
         return self.flow_layout
@@ -341,13 +341,7 @@ class MainFunctions():
         self.ui.load_pages.scrollArea_2.setWidget(self.scrollArea_2_WidgetContents)
         #self.scrollArea_2_layout.addStretch(50)
 
-        self.ui.credits.copyright_label.setText("正在加载图片")
-        self.ui.credits.person.setText("")
-        self.ui.credits.person_name.setText("")
-        self.ui.credits.person_name.setFocusPolicy(Qt.NoFocus)
-        self.ui.credits.person_name.setReadOnly(True)
-        self.ui.credits.image.setText("")
-        self.ui.credits.image_title.setText("")
+        MainFunctions.update_ui_credit_bar(self, copyright=u"正在加载图片")
         QApplication.processEvents()
 
         try:
@@ -404,129 +398,80 @@ class MainFunctions():
                 image_page.flow_layout.update()
                 self.scrollArea_2_layout.update()
                 #QApplication.processEvents()
-            self.ui.credits.copyright_label.setText("总数量：{}".format(len(paths)))
-            self.ui.credits.person.setText("") # ("人物名：")
-            self.ui.credits.person_name.setText(name)
-            self.ui.credits.person_name.setFocusPolicy(Qt.NoFocus)
-            self.ui.credits.person_name.setReadOnly(True)
-            self.ui.credits.image.setText("图片名：")
-            self.ui.credits.image_title.setText("")
+            MainFunctions.update_ui_credit_bar(
+                self, image_label=u"图片名：", copyright=u"总数量：{}".format(len(paths)))
 
         self.scrollArea_2_layout.addWidget(image_page)
         self.scrollArea_2_layout.addStretch()
         self.scrollArea_2_layout.setSpacing(20)
 
-    def load_duplicate_result(self):
-        ########################################################################
-        # ADD Confirm Button
-        ########################################################################
+    def load_image_similarity_result(self):
         if not self.image_similarity_done:
-            self.ui.credits.copyright_label.setText("还未进行智能筛重")
-            self.ui.credits.person.setText("")
-            self.ui.credits.person_name.setText("")
-            self.ui.credits.person_name.setFocusPolicy(Qt.NoFocus)
-            self.ui.credits.person_name.setReadOnly(True)
-            self.ui.credits.image.setText("")
-            self.ui.credits.image_title.setText("")
+            MainFunctions.update_ui_credit_bar(self, copyright=u"还未进行智能筛重")
             return None
         else:            
-            self.ui.credits.copyright_label.setText("正在加载图片")
-            self.ui.credits.person.setText("")
-            self.ui.credits.person_name.setText("")
-            self.ui.credits.person_name.setFocusPolicy(Qt.NoFocus)
-            self.ui.credits.person_name.setReadOnly(True)
-            self.ui.credits.image.setText("")
-            self.ui.credits.image_title.setText("")
+            MainFunctions.update_ui_credit_bar(self, copyright=u"正在加载图片")
             QApplication.processEvents()
 
-            if len(self.image_pages) != 0:
-                self.ui.credits.copyright_label.setText("选择要删除的图片并点击确定")
-                return None
-
-        """"""
-        try:
-            self.ui.load_pages.page_5_layout.itemAt(1).widget().setParent(None)
-            self.ui.load_pages.page_5_layout.removeWidget(self.ui.load_pages.page_5_layout.itemAt(1).widget())
-        except AttributeError:
-            pass
-        
-        self.commit_delete_button = PyPushButton(
-            text = '确定',
-            radius = 8,
-            color = self.themes['app_color']['white'],
-            bg_color = self.themes['app_color']['dark_one'],
-            bg_color_hover = self.themes['app_color']['orange'],
-            bg_color_pressed = self.themes['app_color']['orange']
-        )
-        self.commit_delete_button.setMinimumHeight(40)
-        self.ui.load_pages.page_5_layout.addWidget(self.commit_delete_button)
-        self.commit_delete_button.clicked.connect(lambda: MainFunctions.get_reserved_images(self))
-
-        #########################################################################
-        # ADD Pics
-        #########################################################################
-        self.scrollArea_3_WidgetContents = QWidget()
-        self.scrollArea_3_WidgetContents.setObjectName(u"scrollArea_3_WidgetContents")
-        self.scrollArea_3_WidgetContents.setGeometry(QRect(0, 0, 100, 30))
-        self.scrollArea_3_WidgetContents.setStyleSheet(u"background: transparent;")
-        self.ui.load_pages.scrollArea_3.setWidget(self.scrollArea_3_WidgetContents)
-        self.scrollArea_3_layout = QVBoxLayout(self.scrollArea_3_WidgetContents)
-        self.scrollArea_3_layout.setSpacing(0)
-        self.scrollArea_3_layout.setObjectName(u"scrollArea_3_layout")
-        self.scrollArea_3_layout.setContentsMargins(0, 0, 0, 0)
-        self.scrollArea_3_layout.setSpacing(20)
-
-        try:
-            for paths in self.image_similarity_result:
-                image_page = PyImagePage()
-                image_page.btn_group.setExclusive(False)
-                self.scrollArea_3_layout.addWidget(image_page)
-                for path in paths:
-                    path = os.path.normpath(os.path.join(self.settings['image_path'], path))
-                    image_box = PyImage(path)
-                    image_page.flow_layout.addWidget(image_box)
-                    image_page.btn_group.addButton(image_box.checkbox)
-                    image_page.flow_layout.update()
-                    self.scrollArea_3_layout.update()
-                self.image_pages.append(image_page)
-            QApplication.processEvents()
-        except AttributeError:
-            print("还未进行智能筛重")
+        if len(self.image_similarity_pages) != 0:
+            self.commit_delete_button.show()
+            self.ui.credits.copyright_label.setText(u"选择要删除的图片并点击确定")
             return None
-        self.ui.credits.copyright_label.setText("选择要删除的图片并点击确定")
 
+        if len(self.image_similarity_result) == 0:
+            self.commit_delete_button.hide()
+            self.ui.credits.copyright_label.setText(u"未发现相似图片")
+            return None
 
-    def get_reserved_images(self):
-        #print(self.image_pages)
-        checked_buttons = []
+        # ADD IMAGES
+        for paths in self.image_similarity_result:
+            image_page = PyImagePage()
+            image_page.btn_group.setExclusive(False)
+            self.ui.load_pages.scrollArea_3_layout.addWidget(image_page)
+            for path in paths:
+                image_box = PyImage(path)
+                image_page.flow_layout.addWidget(image_box)
+                image_page.flow_layout.update()
+                image_page.btn_group.addButton(image_box.checkbox)
+                self.ui.load_pages.scrollArea_3_layout.update()
+            self.image_similarity_pages.append(image_page)
+        QApplication.processEvents()
+        self.commit_delete_button.show()
+        self.ui.credits.copyright_label.setText(u"选择要删除的图片并点击确定")
+
+    def update_page5_with_similar_images(self):
+        image_path_to_delete = []
         image_page_to_delete = []
-        for image_page in self.image_pages:
-            buttons = image_page.btn_group.buttons()
-            checked_widgets = []
-            for index, button in enumerate(buttons):
+        for image_page in self.image_similarity_pages:
+            checked_buttons, checked_widgets = [], []
+            for index, button in enumerate(image_page.btn_group.buttons()):
                 if button.isChecked():
                     #print(index)
-                    checked_buttons.append(button.objectName())
+                    image_path_to_delete.append(button.objectName())
+                    checked_buttons.append(button)
                     checked_widgets.append(image_page.flow_layout.itemAt(index).widget())
-                    # 从image_page.button_box中移除button
-                    image_page.btn_group.removeButton(button)
-            # 从image_page中移除checked_widget
+            # remove checked widgets from image page
             for checked_widget in checked_widgets:
                 checked_widget.setParent(None)
                 image_page.flow_layout.removeWidget(checked_widget)
                 image_page.flow_layout.update()
                 QApplication.processEvents()
-            # 如果image_page中的图片为零，从scrollArea_3_layout中移除image_page
-            if image_page.flow_layout.count() == 0:
+            # remove checked buttons from button group
+            for checked_button in checked_buttons:
+                image_page.btn_group.removeButton(checked_button)
+            # add empty or single image page to delete list
+            if image_page.flow_layout.count() < 2:
                 image_page.setParent(None)
-                self.scrollArea_3_layout.removeWidget(image_page)
+                self.ui.load_pages.scrollArea_3_layout.removeWidget(image_page)
                 image_page_to_delete.append(image_page)
                 QApplication.processEvents()
+        # remove empty image page from page5
         for image_page in image_page_to_delete:
-            self.image_pages.remove(image_page)
-        print(checked_buttons)
-        _ = delete_images(checked_buttons, "output.json")
+            self.image_similarity_pages.remove(image_page)
+        print(image_path_to_delete)
+        _ = delete_images(image_path_to_delete, "output.json")
         MainFunctions.update_left_column_menu1(self)
+        self.image_page_dict_person = {}
 
     def update_image_object_label(self, person_name_editer: PyLineEdit):
         assert(self.person_list_btn_group is not None)
@@ -535,7 +480,7 @@ class MainFunctions():
         # get old name
         old_name = self.person_list_btn_group.checkedButton().text()
         if new_name == old_name:
-            print("[INFO] ignore image label change since they're same")
+            print("[INFO] Ignore image label change since they're same!")
             return
 
         assert(old_name in self.image_page_dict_person.keys())
@@ -572,6 +517,9 @@ class MainFunctions():
         input_dialog = QInputDialog(self)
         name_new, ok = input_dialog.getText(self, u"更改名称", "New Name: ")
         if ok:
+            if name_new == name_old:
+                print("[INFO] Ignore rename since they're same!")
+                return
             if name_new not in person_dict.keys():
                 person_dict[name_new] = person_dict.pop(name_old)
                 if name_old in self.image_page_dict_person.keys():

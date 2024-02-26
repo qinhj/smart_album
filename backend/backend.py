@@ -76,10 +76,17 @@ class FakeBackend(IBackend):
         def fake_image_similarity(image_dir):
             print("[WARN] fake image similarity will ignore input image directory!")
             fake_result = [
-                os.path.normpath(os.path.join(self._image_dir, "Obama_00.jpg")),
-                os.path.normpath(os.path.join(self._image_dir, "Obama_00.copy.jpg"))
+                [
+                    os.path.normpath(os.path.join(self._image_dir, "Obama_00.jpg")),
+                    os.path.normpath(os.path.join(self._image_dir, "Obama_00.copy.jpg")),
+                ],
+                [
+                    os.path.normpath(os.path.join(self._image_dir, "Obama_01.jpg")),
+                    os.path.normpath(os.path.join(self._image_dir, "copy_01.jpg")),
+                    os.path.normpath(os.path.join(self._image_dir, "copy_02.jpg")),
+                ],
             ]
-            return [fake_result]
+            return fake_result
 
         # create handler for supported task and thread worker
         self._task_handler = {
