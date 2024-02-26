@@ -125,7 +125,7 @@ class MainWindow(QMainWindow):
                 MainFunctions.toggle_left_column(self)
             # Load Page 4
             MainFunctions.set_page(self, self.ui.load_pages.page_4)
-            MainFunctions.load_search_result(self)
+            MainFunctions.load_image_search_result(self)
 
         # OPEN PAGE 5
         if btn.objectName() == 'btn_page_image_similarity':

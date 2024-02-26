@@ -409,6 +409,13 @@ class SetupMainWindow:
         self.ui.load_pages.gridLayout_2.setObjectName(u"gridLayout_2")
         self.ui.load_pages.gridLayout_2.setContentsMargins(0, 0, 0, 0)
 
+        # SET VERTICAL LAYOUT FOR PAGE5 ("智能搜图")
+        # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.scrollArea_2_layout = QVBoxLayout(self.ui.load_pages.scrollAreaWidgetContents_2)
+        self.ui.load_pages.scrollArea_2_layout.setSpacing(0)
+        self.ui.load_pages.scrollArea_2_layout.setObjectName(u"scrollArea_2_layout")
+        self.ui.load_pages.scrollArea_2_layout.setContentsMargins(0, 0, 0, 0)
+
         # SET VERTICAL LAYOUT FOR PAGE5 ("智能筛重")
         # ///////////////////////////////////////////////////////////////
         self.ui.load_pages.scrollArea_3_layout = QVBoxLayout(self.ui.load_pages.scrollAreaWidgetContents_3)

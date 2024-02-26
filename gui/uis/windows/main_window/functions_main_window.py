@@ -296,29 +296,18 @@ class MainFunctions():
         self.ui.credits.copyright_label.setText("选择文件夹：{}".format(directory))
         return directory
     
-    def load_search_result(self):
+    def load_image_search_result(self):
         if not self.image_search_done:
-            self.ui.credits.copyright_label.setText("还未选择图片")
-            self.ui.credits.person.setText("")
-            self.ui.credits.person_name.setText("")
-            self.ui.credits.person_name.setFocusPolicy(Qt.NoFocus)
-            self.ui.credits.person_name.setReadOnly(True)
-            self.ui.credits.image.setText("")
-            self.ui.credits.image_title.setText("")
+            MainFunctions.update_ui_credit_bar(self, copyright=u"还未选择图片")
             return None
-        else:
-            name, paths = "", []
-            if len(self.image_search_result):
-                name, paths = tuple(self.image_search_result.items())[0]
-            else:
-                print("[INFO] Not found!")
-            self.ui.credits.copyright_label.setText("总数量：{}".format(len(paths)))
-            self.ui.credits.person.setText("人物名：")
-            self.ui.credits.person_name.setText(name)
-            self.ui.credits.person_name.setFocusPolicy(Qt.NoFocus)
-            self.ui.credits.person_name.setReadOnly(True)
-            self.ui.credits.image.setText("图片名：")
-            self.ui.credits.image_title.setText("")
+        
+        if len(self.image_search_result) == 0:
+            MainFunctions.update_ui_credit_bar(self, copyright=u"未能找到相关图片")
+            return None
+
+        name, paths = tuple(self.image_search_result.items())[0]
+        MainFunctions.update_ui_credit_bar(
+            self, u"输入：", name, "", "", u"总数量：{}".format(len(paths)))
         
         if not self.image_search_changed:
             return None
