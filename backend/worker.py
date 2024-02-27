@@ -49,6 +49,29 @@ _TEXT_NEED_IMAGE_DIR = u"还未选择图片文件夹，请先选择文件夹"
 _TEXT_FILL_BLANK = "                                    "
 _TEXT_NEED_IMAGE_PATH = u"还未选择图片或输入文本，请先选择图片或输入文本后再执行"
 
+# Default worker for smart album task
+def create_worker_smart_album(main_window: QMainWindow, worker_handler, *args):
+    if worker_handler is None:
+        raise RuntimeError("Input worker handler for smart album task is None!")
+
+    if main_window.settings["image_path"] == "":
+        QMessageBox.information(main_window, main_window.settings["app_name"], _TEXT_NEED_IMAGE_DIR)
+        return None
+
+    timer = TimerLabel(main_window.ui.credits.copyright_label)
+    timer.start(100)
+
+    def generate_finished(result):
+        timer.stop()
+        main_window.smart_album_result = result
+        QMessageBox.information(main_window, main_window.settings["app_name"], u"智能影集生成完毕{}".format(_TEXT_FILL_BLANK))
+
+    main_window.smart_album_worker = Worker(worker_handler, main_window.settings["image_path"])
+    main_window.smart_album_worker.finished.connect(generate_finished)
+    main_window.smart_album_worker.start()
+    main_window.smart_album_image_page = {}
+
+
 # Default worker for face cluster task
 def create_worker_face_cluster(main_window: QMainWindow, worker_handler, *args):
     if worker_handler is None:

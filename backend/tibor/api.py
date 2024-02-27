@@ -7,9 +7,11 @@
 # IMPORT PACKAGES AND MODULES
 # ///////////////////////////////////////////////////////////////
 from backend.backend import IBackend
+from backend.worker import create_worker_smart_album
 from backend.worker import create_worker_face_cluster
 from backend.worker import create_worker_image_search
 from backend.worker import create_worker_image_similarity
+from backend.tibor.tibor_smart_album import tibor_smart_album
 from backend.tibor.tibor_face_cluster import tibor_face_cluster
 from backend.tibor.tibor_image_search import tibor_image_search
 from backend.tibor.tibor_image_similarity import tibor_image_similarity
@@ -25,6 +27,7 @@ class TiborBackend(IBackend):
         super().__init__(main_window)
         # create handler for supported task and thread worker
         self._task_handler = {
+            "smart_album"  : [create_worker_smart_album,  tibor_smart_album],
             "face_cluster" : [create_worker_face_cluster, tibor_face_cluster],
             "image_search" : [create_worker_image_search, tibor_image_search],
             "image_similarity" : [create_worker_image_similarity, tibor_image_similarity],

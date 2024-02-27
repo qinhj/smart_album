@@ -8,6 +8,7 @@
 # ///////////////////////////////////////////////////////////////
 import os
 from abc import ABC, abstractmethod
+from backend.worker import create_worker_smart_album
 from backend.worker import create_worker_face_cluster
 from backend.worker import create_worker_image_search
 from backend.worker import create_worker_image_similarity
@@ -36,6 +37,27 @@ class FakeBackend(IBackend):
     def __init__(self, main_window: QMainWindow):
         super().__init__(main_window)
         self._image_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "assets", "obama")
+
+        def fake_smart_album(image_dir):
+            print("[WARN] fake smart album will ignore input image directory!")
+            fake_result = [
+                {
+                    "name" : "Obama_00",
+                    "images": [
+                        os.path.normpath(os.path.join(self._image_dir, "Obama_00.jpg")),
+                        os.path.normpath(os.path.join(self._image_dir, "Obama_00.copy.jpg")),
+                    ]
+                },
+                {
+                    "name" : "Obama_01",
+                    "images": [
+                        os.path.normpath(os.path.join(self._image_dir, "Obama_01.jpg")),
+                        os.path.normpath(os.path.join(self._image_dir, "copy_01.jpg")),
+                        os.path.normpath(os.path.join(self._image_dir, "copy_02.jpg")),
+                    ]
+                },
+            ]
+            return fake_result
 
         def fake_face_cluster(image_dir):
             persons = {}
@@ -90,6 +112,7 @@ class FakeBackend(IBackend):
 
         # create handler for supported task and thread worker
         self._task_handler = {
+            "smart_album"  : [create_worker_smart_album,  fake_smart_album],
             "face_cluster" : [create_worker_face_cluster, fake_face_cluster],
             "image_search" : [create_worker_image_search, fake_image_search],
             "image_similarity" : [create_worker_image_similarity, fake_image_similarity],
