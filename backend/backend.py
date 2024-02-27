@@ -129,7 +129,7 @@ class FakeBackend(IBackend):
 def backend_selector(qw: QWidget, name: str):
     if name.lower() == "fake":
         return FakeBackend(qw)
-    if name.lower() == "tibor":
-        from backend.tibor.api import TiborBackend
-        return TiborBackend(qw)
+    if name.lower() == "tiorb":
+        from backend.tiorb.api import TiorbBackend
+        return TiorbBackend(qw)
     raise RuntimeError("Unsupported backend: {}".format(name))

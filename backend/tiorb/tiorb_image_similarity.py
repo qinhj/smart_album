@@ -17,7 +17,7 @@ default_model = os.path.normpath(os.path.join(parent, "models", "similar"))
 default_threads = "4"
 default_workspace = os.path.normpath(os.path.join(parent, "temp", "similar"))
 
-def tibor_image_similarity(image_dir, model_dir = default_model, output_dir = default_workspace,
+def tiorb_image_similarity(image_dir, model_dir = default_model, output_dir = default_workspace,
                   thread_num: str = default_threads, use_gpu: str = "0"):
     args = [default_bin, thread_num, model_dir, image_dir, output_dir, use_gpu]
     cp = run_subprocess(["mkdir -p {}".format(output_dir)], shell=True)
@@ -40,4 +40,4 @@ def tibor_image_similarity(image_dir, model_dir = default_model, output_dir = de
 
 
 if __name__ == "__main__":
-    tibor_image_similarity(os.path.realpath("data/images"))
+    tiorb_image_similarity(os.path.realpath("data/images"))

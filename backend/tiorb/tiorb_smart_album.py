@@ -17,7 +17,7 @@ default_model = os.path.normpath(os.path.join(parent, "models", "nli"))
 default_threads = "16"
 default_workspace = os.path.normpath(os.path.join(parent, "temp", "nli"))
 
-def tibor_smart_album(image_dir, model_dir = default_model,
+def tiorb_smart_album(image_dir, model_dir = default_model,
                        output_dir = default_workspace, thread_num: str = default_threads):
     args = [default_bin, thread_num, model_dir, image_dir, output_dir]
     cp = run_subprocess(["mkdir -p {}".format(output_dir)], shell=True)
@@ -31,4 +31,4 @@ def tibor_smart_album(image_dir, model_dir = default_model,
 
 
 if __name__ == "__main__":
-    tibor_smart_album(os.path.realpath("data/images"))
+    tiorb_smart_album(os.path.realpath("data/images"))
