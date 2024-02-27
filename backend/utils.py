@@ -11,42 +11,6 @@ import sys
 import json
 
 # FUNCTIONS
-
-def get_duplicate_pics(image_dir):
-    """ 相似性筛查 """
-    from imagededup.methods import PHash
-    phasher = PHash()
-    try:
-        encodings = phasher.encode_images(image_dir=image_dir)
-    except Exception:
-        print("[ERROR] phasher.encode_images failed, input image dir: {}".format(image_dir))
-        return []
-    duplicates = phasher.find_duplicates(encoding_map=encodings)
-    #print(duplicates)
-
-    duplicated_pics = []
-    for pic, sim_pics in duplicates.items():
-        if sim_pics:
-            sim_pics.append(pic)
-            sim_pics = sorted(sim_pics)
-            #print(sim_pics)
-            has_union_pics = False
-            for index, existed_sim_pics in enumerate(duplicated_pics):
-                set_sim_pics = set(sim_pics)
-                set_existed_sim_pics = set(existed_sim_pics)
-                if len(set_sim_pics.intersection(set_existed_sim_pics)) != 0:
-                    duplicated_pics[index] = list(set_existed_sim_pics.union(set_sim_pics))
-                    has_union_pics = True
-                    break
-                    #sim_pics.extend(existed_sim_pics)
-            if not has_union_pics:
-                duplicated_pics.append(sim_pics)
-    print("GET Duplicated Pics Done")
-    for pics in duplicated_pics:
-        print(pics)
-    return duplicated_pics
-
-
 def get_image_paths(root_dir):
     """
     Brief:  Generates a list of paths for the images in a root directory and ignores rest of the files
