@@ -76,7 +76,7 @@ class MainWindow(QMainWindow):
     def btn_clicked(self):
         # GET BT CLICKED
         btn = SetupMainWindow.setup_btns(self)
-        print(btn.objectName())
+
         # LEFT MENU
         # ///////////////////////////////////////////////////////////////
         
@@ -87,29 +87,52 @@ class MainWindow(QMainWindow):
             # Close Left Column
             if MainFunctions.left_column_is_visible(self):
                 MainFunctions.toggle_left_column(self)
-            MainFunctions.load_main_credit_bar(self)
+            MainFunctions.update_ui_credit_bar(self)
             # Load Page 1
             MainFunctions.set_page(self, self.ui.load_pages.page_1)
-            
-        # OPEN PAGE 3(pics)
-        if btn.objectName() == 'btn_page_pics':
+
+        # OPEN PAGE 2(smart album)
+        if btn.objectName() == 'btn_page_smart_album':
             # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
-            try:
-                self.ui.load_pages.gridLayout_2.itemAt(0).widget().setParent(None)
-                self.ui.load_pages.gridLayout_2.removeWidget(self.ui.load_pages.gridLayout_2.itemAt(0).widget())
-            except AttributeError:
-                pass
-            # Always Show Lefe Column
+            # Always Show Left Column
+            if not MainFunctions.left_column_is_visible(self):
+                MainFunctions.toggle_left_column(self)
+            # Load Page 2
+            MainFunctions.set_page(self, self.ui.load_pages.page_2)
+            if self.ui.load_pages.scrollArea_4_layout.count():
+                MainFunctions.delete_widget(self, self.ui.load_pages.scrollArea_4_layout, 0, 1)
+            # Load && Update Menu 2
+            MainFunctions.update_left_column_menu2(self)
+            MainFunctions.set_left_column_menu(
+                self,
+                menu = self.ui.left_column.menus.menu_2,
+                title = btn.text(),
+                icon_path = btn._icon_path
+            )
+
+        # OPEN PAGE 3(pics)
+        if btn.objectName() == 'btn_page_face_cluster':
+            # Select Menu
+            self.ui.left_menu.select_only_one(btn.objectName())
+            # Always Show Left Column
             if not MainFunctions.left_column_is_visible(self):
                 MainFunctions.toggle_left_column(self)
             # Load Page 3
             MainFunctions.set_page(self, self.ui.load_pages.page_3)
-            MainFunctions.load_persons(self)
-            MainFunctions.update_image_count(self,0)
-            
+            if self.ui.load_pages.gridLayout_2.count():
+                MainFunctions.delete_widget(self, self.ui.load_pages.gridLayout_2, 0, 1)
+            # Load && Update Menu 1
+            MainFunctions.update_left_column_menu1(self)
+            MainFunctions.set_left_column_menu(
+                self,
+                menu = self.ui.left_column.menus.menu_1,
+                title = btn.text(),
+                icon_path = btn._icon_path
+            )
+
         # OPEN PAGE 4
-        if btn.objectName() == 'btn_page_search':
+        if btn.objectName() == 'btn_page_image_search':
             # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
             # Close Left Column
@@ -117,10 +140,10 @@ class MainWindow(QMainWindow):
                 MainFunctions.toggle_left_column(self)
             # Load Page 4
             MainFunctions.set_page(self, self.ui.load_pages.page_4)
-            MainFunctions.load_search_result(self)
+            MainFunctions.load_image_search_result(self)
 
         # OPEN PAGE 5
-        if btn.objectName() == 'btn_page_duplicate':
+        if btn.objectName() == 'btn_page_image_similarity':
             # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
             # Close Left Column
@@ -128,7 +151,7 @@ class MainWindow(QMainWindow):
                 MainFunctions.toggle_left_column(self)
             # Load Page 5
             MainFunctions.set_page(self, self.ui.load_pages.page_5)
-            MainFunctions.load_duplicate_result(self)
+            MainFunctions.load_image_similarity_result(self)
 
         # SETTINGS LEFT
         if btn.objectName() == "btn_settings" or btn.objectName() == "btn_close_left_column":
@@ -173,6 +196,10 @@ class MainWindow(QMainWindow):
             # Get Left Menu Btn            
             top_settings = MainFunctions.get_left_menu_btn(self, "btn_settings")
             top_settings.set_active_tab(False)
+
+        # BUTTON SEARCH
+        if btn.objectName() == "btn_search":
+            self.backend("image_search")
 
         # DEBUG
         print(f"Button {btn.objectName()}, clicked!")
