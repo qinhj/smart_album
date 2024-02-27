@@ -90,32 +90,47 @@ class MainWindow(QMainWindow):
             MainFunctions.update_ui_credit_bar(self)
             # Load Page 1
             MainFunctions.set_page(self, self.ui.load_pages.page_1)
-            
+
+        # OPEN PAGE 2(smart album)
+        if btn.objectName() == 'btn_page_smart_album':
+            # Select Menu
+            self.ui.left_menu.select_only_one(btn.objectName())
+            # Always Show Left Column
+            if not MainFunctions.left_column_is_visible(self):
+                MainFunctions.toggle_left_column(self)
+            # Load Page 2
+            MainFunctions.set_page(self, self.ui.load_pages.page_2)
+            if self.ui.load_pages.scrollArea_4_layout.count():
+                MainFunctions.delete_widget(self, self.ui.load_pages.scrollArea_4_layout, 0, 1)
+            # Load && Update Menu 2
+            MainFunctions.update_left_column_menu2(self)
+            MainFunctions.set_left_column_menu(
+                self,
+                menu = self.ui.left_column.menus.menu_2,
+                title = btn.text(),
+                icon_path = btn._icon_path
+            )
+
         # OPEN PAGE 3(pics)
         if btn.objectName() == 'btn_page_face_cluster':
             # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
-            try:
-                self.ui.load_pages.gridLayout_2.itemAt(0).widget().setParent(None)
-                self.ui.load_pages.gridLayout_2.removeWidget(self.ui.load_pages.gridLayout_2.itemAt(0).widget())
-            except AttributeError:
-                pass
-            # Always Show Lefe Column
+            # Always Show Left Column
             if not MainFunctions.left_column_is_visible(self):
                 MainFunctions.toggle_left_column(self)
             # Load Page 3
             MainFunctions.set_page(self, self.ui.load_pages.page_3)
+            if self.ui.load_pages.gridLayout_2.count():
+                MainFunctions.delete_widget(self, self.ui.load_pages.gridLayout_2, 0, 1)
             # Load && Update Menu 1
+            MainFunctions.update_left_column_menu1(self)
             MainFunctions.set_left_column_menu(
                 self,
                 menu = self.ui.left_column.menus.menu_1,
                 title = btn.text(),
                 icon_path = btn._icon_path
             )
-            MainFunctions.update_left_column_menu1(self)
-            # Update Credits / Bottom App Frame
-            MainFunctions.update_ui_credit_bar(self, copyright=u"总数量：{}".format(0))
-            
+
         # OPEN PAGE 4
         if btn.objectName() == 'btn_page_image_search':
             # Select Menu

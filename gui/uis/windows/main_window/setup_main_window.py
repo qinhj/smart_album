@@ -88,7 +88,15 @@ class SetupMainWindow:
             "btn_tooltip": "相似图片",
             "show_top": True,
             "is_active": False
-        }
+        },
+        {
+            "btn_icon": "icon_heart.svg",
+            "btn_id": "btn_page_smart_album",
+            "btn_text": "智能影集",
+            "btn_tooltip": "智能影集",
+            "show_top": True,
+            "is_active": False
+        },
     ]
 
     # ADD TITLE BAR MENUS
@@ -114,6 +122,8 @@ class SetupMainWindow:
             return self.ui.left_column.sender()
         elif self.ui.left_column.menus.menu_1_layout.sender() != None:
             return self.ui.left_column.menus.menu_1_layout.sender()
+        elif self.ui.left_column.menus.menu_2_layout.sender() != None:
+            return self.ui.left_column.menus.menu_2_layout.sender()
 
     # SETUP MAIN WINDOW WITH CUSTOM PARAMETERS
     # ///////////////////////////////////////////////////////////////
@@ -237,6 +247,10 @@ class SetupMainWindow:
         self.image_similarity_done = False
         self.image_similarity_result = []
         self.image_similarity_pages = []
+        # Smart Album
+        self.smart_album_result = None # dict: {"name":"", "images":[]}, None for init
+        self.smart_album_btn_group = None
+        self.smart_album_image_page = {}
 
         # LEFT COLUMN
         # ///////////////////////////////////////////////////////////////
@@ -380,7 +394,7 @@ class SetupMainWindow:
         self.func_btn_33.setMaximumWidth(200)
         self.func_btn_33.setMinimumWidth(200)
         self.func_btn_33.setMinimumHeight(40)
-        self.func_btn_33.clicked.connect(lambda: self.backend("image_similarity"))
+        self.func_btn_33.clicked.connect(lambda: self.backend("smart_album"))
         self.ui.load_pages.func_3_frame_3_layout = QHBoxLayout(self.ui.load_pages.func_3_frame_3)
         self.ui.load_pages.func_3_frame_3_layout.addWidget(self.func_btn_33, alignment=Qt.AlignCenter)
 
@@ -402,6 +416,13 @@ class SetupMainWindow:
 
         # ADD Widgets
         # ///////////////////////////////////////////////////////////////
+
+        # SET GRID LAYOUT FOR PAGE2 ("智能影集")
+        # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.scrollArea_4_layout = QGridLayout(self.ui.load_pages.scrollAreaWidgetContents_4)
+        self.ui.load_pages.scrollArea_4_layout.setSpacing(0)
+        self.ui.load_pages.scrollArea_4_layout.setObjectName(u"scrollArea_4_layout")
+        self.ui.load_pages.scrollArea_4_layout.setContentsMargins(0, 0, 0, 0)
 
         # SET GRID LAYOUT FOR PAGE3 ("人物列表")
         # ///////////////////////////////////////////////////////////////
