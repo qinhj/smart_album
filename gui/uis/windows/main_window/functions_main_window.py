@@ -336,10 +336,12 @@ class MainFunctions():
     def select_image_directory(self):
         """ 选择文件夹 """
         directory = QFileDialog.getExistingDirectory(None)
-        with open('resources/settings.json', 'r+', encoding='utf-8') as f:
-            if directory == '':
-                print("No folder selected")
-                return None
+        if directory == '':
+            print("No folder selected")
+            return None
+        from gui.core.json_settings import Settings
+        settings = Settings()
+        with open(settings.settings_path, 'r+', encoding='utf-8') as f:
             self.settings = json.load(f)
             self.settings['image_path'] = directory
             f.seek(0)
