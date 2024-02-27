@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main_pagesQXgmIk.ui'
+## Form generated from reading UI file 'main_pages.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.2.1
 ##
@@ -48,14 +48,26 @@ class Ui_MainPages(object):
         self.func_1_frame_1 = QFrame(self.func_1)
         self.func_1_frame_1.setObjectName(u"func_1_frame_1")
         self.func_1_frame_1.setStyleSheet(u"background: transparent;")
+        self.func_1_frame_1.setFrameShape(QFrame.StyledPanel)
+        self.func_1_frame_1.setFrameShadow(QFrame.Raised)
 
         self.func_1_layout.addWidget(self.func_1_frame_1)
 
         self.func_1_frame_2 = QFrame(self.func_1)
         self.func_1_frame_2.setObjectName(u"func_1_frame_2")
         self.func_1_frame_2.setStyleSheet(u"background: transparent;")
+        self.func_1_frame_2.setFrameShape(QFrame.StyledPanel)
+        self.func_1_frame_2.setFrameShadow(QFrame.Raised)
 
         self.func_1_layout.addWidget(self.func_1_frame_2)
+
+        self.func_1_frame_3 = QFrame(self.func_1)
+        self.func_1_frame_3.setObjectName(u"func_1_frame_3")
+        self.func_1_frame_3.setStyleSheet(u"background: transparent;")
+        self.func_1_frame_3.setFrameShape(QFrame.StyledPanel)
+        self.func_1_frame_3.setFrameShadow(QFrame.Raised)
+
+        self.func_1_layout.addWidget(self.func_1_frame_3)
         self.func_1_layout.addStretch()
 
         self.horizontalLayout.addWidget(self.func_1)
@@ -77,14 +89,26 @@ class Ui_MainPages(object):
         self.func_2_frame_1 = QFrame(self.func_2)
         self.func_2_frame_1.setObjectName(u"func_2_frame_1")
         self.func_2_frame_1.setStyleSheet(u"background: transparent;")
+        self.func_2_frame_1.setFrameShape(QFrame.StyledPanel)
+        self.func_2_frame_1.setFrameShadow(QFrame.Raised)
 
         self.func_2_layout.addWidget(self.func_2_frame_1)
 
         self.func_2_frame_2 = QFrame(self.func_2)
         self.func_2_frame_2.setObjectName(u"func_2_frame_2")
         self.func_2_frame_2.setStyleSheet(u"background: transparent;")
+        self.func_2_frame_2.setFrameShape(QFrame.StyledPanel)
+        self.func_2_frame_2.setFrameShadow(QFrame.Raised)
 
         self.func_2_layout.addWidget(self.func_2_frame_2)
+
+        self.func_2_frame_3 = QFrame(self.func_2)
+        self.func_2_frame_3.setObjectName(u"func_2_frame_3")
+        self.func_2_frame_3.setStyleSheet(u"background: transparent;")
+        self.func_2_frame_3.setFrameShape(QFrame.StyledPanel)
+        self.func_2_frame_3.setFrameShadow(QFrame.Raised)
+
+        self.func_2_layout.addWidget(self.func_2_frame_3)
         self.func_2_layout.addStretch()
 
         self.horizontalLayout.addWidget(self.func_2)
@@ -106,14 +130,26 @@ class Ui_MainPages(object):
         self.func_3_frame_1 = QFrame(self.func_3)
         self.func_3_frame_1.setObjectName(u"func_3_frame_1")
         self.func_3_frame_1.setStyleSheet(u"background: transparent;")
+        self.func_3_frame_1.setFrameShape(QFrame.StyledPanel)
+        self.func_3_frame_1.setFrameShadow(QFrame.Raised)
 
         self.func_3_layout.addWidget(self.func_3_frame_1)
 
         self.func_3_frame_2 = QFrame(self.func_3)
         self.func_3_frame_2.setObjectName(u"func_3_frame_2")
         self.func_3_frame_2.setStyleSheet(u"background: transparent;")
+        self.func_3_frame_2.setFrameShape(QFrame.StyledPanel)
+        self.func_3_frame_2.setFrameShadow(QFrame.Raised)
 
         self.func_3_layout.addWidget(self.func_3_frame_2)
+
+        self.func_3_frame_3 = QFrame(self.func_3)
+        self.func_3_frame_3.setObjectName(u"func_3_frame_3")
+        self.func_3_frame_3.setStyleSheet(u"background: transparent;")
+        self.func_3_frame_3.setFrameShape(QFrame.StyledPanel)
+        self.func_3_frame_3.setFrameShadow(QFrame.Raised)
+
+        self.func_3_layout.addWidget(self.func_3_frame_3)
         self.func_3_layout.addStretch()
 
 
@@ -128,6 +164,20 @@ class Ui_MainPages(object):
         self.page_2_layout.setSpacing(5)
         self.page_2_layout.setObjectName(u"page_2_layout")
         self.page_2_layout.setContentsMargins(5, 5, 5, 5)
+        self.scrollArea_4 = QScrollArea(self.page_2)
+        self.scrollArea_4.setObjectName(u"scrollArea_4")
+        self.scrollArea_4.setStyleSheet(u"background: transparent;")
+        self.scrollArea_4.setFrameShape(QFrame.NoFrame)
+        self.scrollArea_4.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scrollArea_4.setWidgetResizable(True)
+        self.scrollAreaWidgetContents_4 = QWidget()
+        self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 832, 572))
+        self.scrollAreaWidgetContents_4.setStyleSheet(u"background: transparent;")
+        self.scrollArea_4.setWidget(self.scrollAreaWidgetContents_4)
+
+        self.page_2_layout.addWidget(self.scrollArea_4)
+
         self.pages.addWidget(self.page_2)
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
@@ -144,12 +194,8 @@ class Ui_MainPages(object):
         self.scrollArea_1.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 100, 30))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 832, 572))
         self.scrollAreaWidgetContents.setStyleSheet(u"background: transparent;")
-        self.gridLayout_2 = QGridLayout(self.scrollAreaWidgetContents)
-        self.gridLayout_2.setSpacing(0)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
         self.scrollArea_1.setWidget(self.scrollAreaWidgetContents)
 
         self.page_3_layout.addWidget(self.scrollArea_1)
@@ -168,6 +214,41 @@ class Ui_MainPages(object):
         self.scrollArea_2.setFrameShape(QFrame.NoFrame)
         self.scrollArea_2.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.scrollArea_2.setWidgetResizable(True)
+        self.scrollAreaWidgetContents_2 = QWidget()
+        self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 832, 572))
+        self.scrollAreaWidgetContents_2.setStyleSheet(u"background: transparent;")
+        self.scrollArea_2_layout = QVBoxLayout(self.scrollAreaWidgetContents_2)
+        self.scrollArea_2_layout.setSpacing(0)
+        self.scrollArea_2_layout.setObjectName(u"scrollArea_2_layout")
+        self.scrollArea_2_layout.setContentsMargins(0, 0, 0, 0)
+        self.search_target_lable = QLabel(self.scrollAreaWidgetContents_2)
+        self.search_target_lable.setObjectName(u"search_target_lable")
+        self.search_target_lable.setStyleSheet(u"background: transparent;font-family:Microsoft Yahei;font-size: 14pt")
+        self.search_target_lable.setAlignment(Qt.AlignCenter)
+
+        self.scrollArea_2_layout.addWidget(self.search_target_lable)
+
+        self.search_target_text = QLabel(self.scrollAreaWidgetContents_2)
+        self.search_target_text.setObjectName(u"search_target_text")
+        self.search_target_text.setStyleSheet(u"background: transparent;font-family:Microsoft Yahei;font-size: 14pt")
+        self.search_target_text.setAlignment(Qt.AlignCenter)
+
+        self.scrollArea_2_layout.addWidget(self.search_target_text)
+
+        self.input_image = QWidget(self.scrollAreaWidgetContents_2)
+        self.input_image.setObjectName(u"input_image")
+
+        self.scrollArea_2_layout.addWidget(self.input_image)
+
+        self.search_result_lable = QLabel(self.scrollAreaWidgetContents_2)
+        self.search_result_lable.setObjectName(u"search_result_lable")
+        self.search_result_lable.setStyleSheet(u"background: transparent;font-family:Microsoft Yahei;font-size: 14pt")
+        self.search_result_lable.setAlignment(Qt.AlignCenter)
+
+        self.scrollArea_2_layout.addWidget(self.search_result_lable)
+
+        self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
 
         self.page_4_layout.addWidget(self.scrollArea_2)
 
@@ -185,6 +266,11 @@ class Ui_MainPages(object):
         self.scrollArea_3.setFrameShape(QFrame.NoFrame)
         self.scrollArea_3.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.scrollArea_3.setWidgetResizable(True)
+        self.scrollAreaWidgetContents_3 = QWidget()
+        self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 100, 30))
+        self.scrollAreaWidgetContents_3.setStyleSheet(u"background: transparent;")
+        self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_3)
 
         self.page_5_layout.addWidget(self.scrollArea_3)
 
@@ -203,8 +289,11 @@ class Ui_MainPages(object):
 
     def retranslateUi(self, MainPages):
         MainPages.setWindowTitle(QCoreApplication.translate("MainPages", u"Form", None))
-        self.func_1_label.setText(QCoreApplication.translate("MainPages", u"\u4eba\u8138\u5206\u7c7b", None)) # 人脸分类
-        self.func_2_label.setText(QCoreApplication.translate("MainPages", u"\u4eba\u8138\u641c\u7d22", None)) # 人脸搜索
-        self.func_3_label.setText(QCoreApplication.translate("MainPages", u"\u667a\u80fd\u7b5b\u9009", None)) # 智能筛选
+        self.func_1_label.setText(QCoreApplication.translate("MainPages", u"\u4eba\u8138\u5206\u7c7b", None))
+        self.func_2_label.setText(QCoreApplication.translate("MainPages", u"\u4ee5\u56fe\u641c\u56fe", None))
+        self.func_3_label.setText(QCoreApplication.translate("MainPages", u"\u667a\u80fd\u5206\u6790", None))
+        self.search_target_lable.setText(QCoreApplication.translate("MainPages", u"TextLabel", None))
+        self.search_target_text.setText(QCoreApplication.translate("MainPages", u"TextLabel", None))
+        self.search_result_lable.setText(QCoreApplication.translate("MainPages", u"\u641c\u7d22\u7ed3\u679c", None))
     # retranslateUi
 

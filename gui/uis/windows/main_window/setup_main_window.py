@@ -67,28 +67,36 @@ class SetupMainWindow:
         },
         {
             "btn_icon": "icon_folder_open.svg",
-            "btn_id": "btn_page_pics",
-            "btn_text": "分类结果",
-            "btn_tooltip": "分类结果",
+            "btn_id": "btn_page_face_cluster",
+            "btn_text": "人物列表",
+            "btn_tooltip": "人物列表",
             "show_top": True,
             "is_active": False
         },
         {
             "btn_icon": "icon_search.svg",
-            "btn_id": "btn_page_search",
-            "btn_text": "搜索结果",
-            "btn_tooltip": "搜索结果",
+            "btn_id": "btn_page_image_search",
+            "btn_text": "搜图结果",
+            "btn_tooltip": "搜图结果",
             "show_top": True,
             "is_active": False
         },
         {
             "btn_icon": "icon_signal.svg",
-            "btn_id": "btn_page_duplicate",
-            "btn_text": "筛重结果",
-            "btn_tooltip": "筛重结果",
+            "btn_id": "btn_page_image_similarity",
+            "btn_text": "相似图片",
+            "btn_tooltip": "相似图片",
             "show_top": True,
             "is_active": False
-        }
+        },
+        {
+            "btn_icon": "icon_heart.svg",
+            "btn_id": "btn_page_smart_album",
+            "btn_text": "智能影集",
+            "btn_tooltip": "智能影集",
+            "show_top": True,
+            "is_active": False
+        },
     ]
 
     # ADD TITLE BAR MENUS
@@ -112,8 +120,10 @@ class SetupMainWindow:
             return self.ui.left_menu.sender()
         elif self.ui.left_column.sender() != None:
             return self.ui.left_column.sender()
-        elif self.ui.left_column.menus.verticalLayout.sender() != None:
-            return self.ui.left_column.menus.verticalLayout.sender()
+        elif self.ui.left_column.menus.menu_1_layout.sender() != None:
+            return self.ui.left_column.menus.menu_1_layout.sender()
+        elif self.ui.left_column.menus.menu_2_layout.sender() != None:
+            return self.ui.left_column.menus.menu_2_layout.sender()
 
     # SETUP MAIN WINDOW WITH CUSTOM PARAMETERS
     # ///////////////////////////////////////////////////////////////
@@ -151,6 +161,16 @@ class SetupMainWindow:
 
         # TITLE BAR / ADD EXTRA BUTTONS
         # ///////////////////////////////////////////////////////////////
+        # ADD LINE EDIT TO MENU FOR CUSTOM SEARCH
+        self.search_text = PyLineEdit(place_holder_text = u"文搜图")
+        self.search_text.setAlignment(Qt.AlignLeft)
+        self.search_text.setReadOnly(False)
+        self.ui.title_bar.custom_buttons_layout.addWidget(self.search_text)
+        def search_text_slot(text):
+            print("Input test: {}".format(self.search_text.text()))
+            self.selected_image = text
+            self.backend("image_search")
+        self.search_text.returnPressed.connect(lambda: search_text_slot(self.search_text.text()))
         # ADD MENUS
         self.ui.title_bar.add_menus(SetupMainWindow.add_title_bar_menus)
 
@@ -175,7 +195,7 @@ class SetupMainWindow:
         MainFunctions.set_left_column_menu(
             self,
             menu = self.ui.left_column.menus.menu_1,
-            title = "分类结果",
+            title = "人物列表",
             icon_path = Functions.set_svg_icon("icon_folder_open.svg")
         )
         MainFunctions.set_right_column_menu(self, self.ui.right_column.menu_1)
@@ -214,13 +234,35 @@ class SetupMainWindow:
 
         # DEFINE BTN FLAGS USED IN MainFunctions
         # ///////////////////////////////////////////////////////////////
+        # Face Cluster
+        self.person_list_btn_group = None
+        self.image_page_dict_person = {}
+        # Image Search
         self.selected_image = None
-        self.search_changed = False
-        self.has_searched = False
-        self.found_duplicate_image = False
+        self.image_search_changed = False
+        self.image_search_done = False
+        self.image_search_result = {}
+        self.image_search_pages = None
+        # Image Similarity
+        self.image_similarity_done = False
+        self.image_similarity_result = []
+        self.image_similarity_pages = []
+        # Smart Album
+        self.smart_album_result = None # dict: {"name":"", "images":[]}, None for init
+        self.smart_album_btn_group = None
+        self.smart_album_image_page = {}
+
+        # LEFT COLUMN
+        # ///////////////////////////////////////////////////////////////
+
+        # ADD WIDGETS: Person List Placeholder
+        self.ui.left_column.menus.menu_1_layout.addWidget(QWidget())
+
+        # PAGES
+        # ///////////////////////////////////////////////////////////////
 
         # ///////////////////////////////////////////////////////////////
-        # ADD Buttons To Page1 For "人脸分类"
+        # PAGE 1 - ADD BUTTON FOR "人脸分类"
         # ///////////////////////////////////////////////////////////////
         self.func_btn_11 = PyPushButton(
             text = u"选择文件夹",
@@ -248,15 +290,23 @@ class SetupMainWindow:
         self.func_btn_12.setMaximumWidth(200)
         self.func_btn_12.setMinimumWidth(200)
         self.func_btn_12.setMinimumHeight(40)
-        self.func_btn_12.clicked.connect(lambda: self.backend("Detect"))
+        self.func_btn_12.clicked.connect(lambda: self.backend("face_cluster"))
         self.ui.load_pages.func_1_frame_2_layout = QHBoxLayout(self.ui.load_pages.func_1_frame_2)
         self.ui.load_pages.func_1_frame_2_layout.addWidget(self.func_btn_12, alignment=Qt.AlignCenter)
 
+        self.func_btn_13 = QFrame()
+        self.func_btn_13.setStyleSheet(u"background: transparent;")
+        self.func_btn_13.setMaximumWidth(200)
+        self.func_btn_13.setMinimumWidth(200)
+        self.func_btn_13.setMinimumHeight(40)
+        self.ui.load_pages.func_1_frame_3_layout = QHBoxLayout(self.ui.load_pages.func_1_frame_3)
+        self.ui.load_pages.func_1_frame_3_layout.addWidget(self.func_btn_13, alignment=Qt.AlignCenter)
+
         # ///////////////////////////////////////////////////////////////
-        # ADD Button To Page1 For "人脸搜索"
+        # PAGE 1 - ADD BUTTON FOR "以图搜图"
         # ///////////////////////////////////////////////////////////////
         self.func_btn_21 = PyPushButton(
-            text = u"选择图片",
+            text = u"选择文件夹",
             radius = 8,
             color = self.themes["app_color"]["white"],
             bg_color = self.themes["app_color"]["dark_one"],
@@ -266,12 +316,12 @@ class SetupMainWindow:
         self.func_btn_21.setMaximumWidth(200)
         self.func_btn_21.setMinimumWidth(200)
         self.func_btn_21.setMinimumHeight(40)
-        self.func_btn_21.clicked.connect(lambda: MainFunctions.select_single_image(self))
+        self.func_btn_21.clicked.connect(lambda: MainFunctions.select_image_directory(self))
         self.ui.load_pages.func_2_frame_1_layout = QHBoxLayout(self.ui.load_pages.func_2_frame_1)
         self.ui.load_pages.func_2_frame_1_layout.addWidget(self.func_btn_21, alignment=Qt.AlignCenter)
 
         self.func_btn_22 = PyPushButton(
-            text = u"开始查找",
+            text = u"选择图片",
             radius = 8,
             color = self.themes["app_color"]["white"],
             bg_color = self.themes["app_color"]["dark_one"],
@@ -281,15 +331,30 @@ class SetupMainWindow:
         self.func_btn_22.setMaximumWidth(200)
         self.func_btn_22.setMinimumWidth(200)
         self.func_btn_22.setMinimumHeight(40)
-        self.func_btn_22.clicked.connect(lambda: self.backend("Search"))
+        self.func_btn_22.clicked.connect(lambda: MainFunctions.select_single_image(self))
         self.ui.load_pages.func_2_frame_2_layout = QHBoxLayout(self.ui.load_pages.func_2_frame_2)
         self.ui.load_pages.func_2_frame_2_layout.addWidget(self.func_btn_22, alignment=Qt.AlignCenter)
 
+        self.func_btn_23 = PyPushButton(
+            text = u"开始查找",
+            radius = 8,
+            color = self.themes["app_color"]["white"],
+            bg_color = self.themes["app_color"]["dark_one"],
+            bg_color_hover = self.themes["app_color"]["orange"],
+            bg_color_pressed = self.themes["app_color"]["orange"]
+        )
+        self.func_btn_23.setMaximumWidth(200)
+        self.func_btn_23.setMinimumWidth(200)
+        self.func_btn_23.setMinimumHeight(40)
+        self.func_btn_23.clicked.connect(lambda: self.backend("image_search"))
+        self.ui.load_pages.func_2_frame_3_layout = QHBoxLayout(self.ui.load_pages.func_2_frame_3)
+        self.ui.load_pages.func_2_frame_3_layout.addWidget(self.func_btn_23, alignment=Qt.AlignCenter)
+
         # ///////////////////////////////////////////////////////////////
-        # ADD Button To Page1 For "智能筛选"
+        # PAGE 1 - ADD BUTTON FOR "智能分析"
         # ///////////////////////////////////////////////////////////////
         self.func_btn_31 = PyPushButton(
-            text = u"开始筛重",
+            text = u"选择文件夹",
             radius = 8,
             color = self.themes["app_color"]["white"],
             bg_color = self.themes["app_color"]["dark_one"],
@@ -299,27 +364,102 @@ class SetupMainWindow:
         self.func_btn_31.setMaximumWidth(200)
         self.func_btn_31.setMinimumWidth(200)
         self.func_btn_31.setMinimumHeight(40)
-        self.func_btn_31.clicked.connect(lambda: self.backend("Duplicate"))
+        self.func_btn_31.clicked.connect(lambda: MainFunctions.select_image_directory(self))
         self.ui.load_pages.func_3_frame_1_layout = QHBoxLayout(self.ui.load_pages.func_3_frame_1)
         self.ui.load_pages.func_3_frame_1_layout.addWidget(self.func_btn_31, alignment=Qt.AlignCenter)
 
-        self.func_btn_32 = QFrame()
-        self.func_btn_32.setStyleSheet(u"background: transparent;")
+        self.func_btn_32 = PyPushButton(
+            text = u"智能筛重",
+            radius = 8,
+            color = self.themes["app_color"]["white"],
+            bg_color = self.themes["app_color"]["dark_one"],
+            bg_color_hover = self.themes["app_color"]["orange"],
+            bg_color_pressed = self.themes["app_color"]["orange"]
+        )
         self.func_btn_32.setMaximumWidth(200)
         self.func_btn_32.setMinimumWidth(200)
         self.func_btn_32.setMinimumHeight(40)
+        self.func_btn_32.clicked.connect(lambda: self.backend("image_similarity"))
         self.ui.load_pages.func_3_frame_2_layout = QHBoxLayout(self.ui.load_pages.func_3_frame_2)
         self.ui.load_pages.func_3_frame_2_layout.addWidget(self.func_btn_32, alignment=Qt.AlignCenter)
 
-        # ADD CONNECT
-        self.ui.credits.person_name.returnPressed.connect(lambda: MainFunctions.exec_edit_single_group_name(self, self.ui.credits.person_name))
-        #MainFunctions.load_persons(self)
+        self.func_btn_33 = PyPushButton(
+            text = u"智能影集",
+            radius = 8,
+            color = self.themes["app_color"]["white"],
+            bg_color = self.themes["app_color"]["dark_one"],
+            bg_color_hover = self.themes["app_color"]["orange"],
+            bg_color_pressed = self.themes["app_color"]["orange"]
+        )
+        self.func_btn_33.setMaximumWidth(200)
+        self.func_btn_33.setMinimumWidth(200)
+        self.func_btn_33.setMinimumHeight(40)
+        self.func_btn_33.clicked.connect(lambda: self.backend("smart_album"))
+        self.ui.load_pages.func_3_frame_3_layout = QHBoxLayout(self.ui.load_pages.func_3_frame_3)
+        self.ui.load_pages.func_3_frame_3_layout.addWidget(self.func_btn_33, alignment=Qt.AlignCenter)
 
-        # LEFT COLUMN
+        # SET SCROLLBAR STYLE
         # ///////////////////////////////////////////////////////////////
+        custom_scrollbar_style = style_scrollbar.format(
+            _radius = 8,
+            _bg_color = self.themes["app_color"]["bg_two"],
+            _bg_color_hover = self.themes['app_color']['dark_one'],
+            _bg_color_pressed = self.themes["app_color"]["orange"]
+        )
+        self.ui.load_pages.scrollArea_1.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
+        self.ui.load_pages.scrollArea_2.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
+        self.ui.load_pages.scrollArea_3.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
+
+        # ADD CONNECT TO CUSTOM WIDGET CREDITS
+        self.ui.credits.person_name.returnPressed.connect(
+            lambda: MainFunctions.update_image_object_label(self, self.ui.credits.person_name))
 
         # ADD Widgets
         # ///////////////////////////////////////////////////////////////
+
+        # SET GRID LAYOUT FOR PAGE2 ("智能影集")
+        # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.scrollArea_4_layout = QGridLayout(self.ui.load_pages.scrollAreaWidgetContents_4)
+        self.ui.load_pages.scrollArea_4_layout.setSpacing(0)
+        self.ui.load_pages.scrollArea_4_layout.setObjectName(u"scrollArea_4_layout")
+        self.ui.load_pages.scrollArea_4_layout.setContentsMargins(0, 0, 0, 0)
+
+        # SET GRID LAYOUT FOR PAGE3 ("人物列表")
+        # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.gridLayout_2 = QGridLayout(self.ui.load_pages.scrollAreaWidgetContents)
+        self.ui.load_pages.gridLayout_2.setSpacing(0)
+        self.ui.load_pages.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.ui.load_pages.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+
+        # SET VERTICAL LAYOUT FOR PAGE4 ("智能搜图")
+        # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.input_image_layout = QHBoxLayout(self.ui.load_pages.input_image)
+        self.ui.load_pages.input_image_layout.setSpacing(0)
+        self.ui.load_pages.input_image_layout.setObjectName(u"input_image_layout")
+        self.ui.load_pages.input_image_layout.setContentsMargins(0, 0, 0, 0)
+        self.ui.load_pages.input_image_layout.setAlignment(Qt.AlignCenter)
+
+        # SET VERTICAL LAYOUT FOR PAGE5 ("智能筛重")
+        # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.scrollArea_3_layout = QVBoxLayout(self.ui.load_pages.scrollAreaWidgetContents_3)
+        self.ui.load_pages.scrollArea_3_layout.setSpacing(0)
+        self.ui.load_pages.scrollArea_3_layout.setObjectName(u"scrollArea_3_layout")
+        self.ui.load_pages.scrollArea_3_layout.setContentsMargins(0, 0, 0, 0)
+        self.ui.load_pages.scrollArea_3_layout.setSpacing(20)
+
+        # ADD CONFIRM BUTTON FOR PAGE5
+        self.commit_delete_button = PyPushButton(
+            text = u'确定',
+            radius = 8,
+            color = self.themes['app_color']['white'],
+            bg_color = self.themes['app_color']['dark_one'],
+            bg_color_hover = self.themes['app_color']['orange'],
+            bg_color_pressed = self.themes['app_color']['orange']
+        )
+        self.commit_delete_button.setMinimumHeight(40)
+        self.ui.load_pages.page_5_layout.addWidget(self.commit_delete_button)
+        self.commit_delete_button.hide()
+        self.commit_delete_button.clicked.connect(lambda: MainFunctions.update_page5_with_similar_images(self))
 
         # RIGHT COLUMN
         # ///////////////////////////////////////////////////////////////
@@ -340,3 +480,26 @@ class SetupMainWindow:
             self.top_right_grip.setGeometry(self.width() - 20, 5, 15, 15)
             self.bottom_left_grip.setGeometry(5, self.height() - 20, 15, 15)
             self.bottom_right_grip.setGeometry(self.width() - 20, self.height() - 20, 15, 15)
+
+style_scrollbar = '''
+QScrollBar {{
+	border: solid;
+	border-radius: {_radius};	
+	background: {_bg_color};
+}}
+QScrollBar:handle {{
+    border-radius: {_radius};
+	background: {_bg_color_hover};
+}}
+QScrollBar:handle:pressed {{
+	background: {_bg_color_pressed};
+}}
+QScrollBar:add-page,
+QScrollBar:sub-page{{
+    background: transparent;
+}}
+QScrollBar:add-line,
+QScrollBar:sub-line{{
+    background: transparent;
+}}
+'''
