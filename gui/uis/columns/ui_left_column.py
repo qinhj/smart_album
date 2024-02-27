@@ -43,38 +43,6 @@ class Ui_LeftColumn(object):
         self.menu_2_layout.setSpacing(5)
         self.menu_2_layout.setObjectName(u"menu_2_layout")
         self.menu_2_layout.setContentsMargins(5, 5, 5, 5)
-        self.btn_4_widget = QWidget(self.menu_2)
-        self.btn_4_widget.setObjectName(u"btn_4_widget")
-        self.btn_4_widget.setMinimumSize(QSize(0, 40))
-        self.btn_4_widget.setMaximumSize(QSize(16777215, 40))
-        self.btn_4_layout = QVBoxLayout(self.btn_4_widget)
-        self.btn_4_layout.setSpacing(0)
-        self.btn_4_layout.setObjectName(u"btn_4_layout")
-        self.btn_4_layout.setContentsMargins(0, 0, 0, 0)
-
-        self.menu_2_layout.addWidget(self.btn_4_widget)
-
-        self.label_2 = QLabel(self.menu_2)
-        self.label_2.setObjectName(u"label_2")
-        font = QFont()
-        font.setPointSize(16)
-        self.label_2.setFont(font)
-        self.label_2.setStyleSheet(u"font-size: 16pt")
-        self.label_2.setAlignment(Qt.AlignCenter)
-
-        self.menu_2_layout.addWidget(self.label_2)
-
-        self.label_3 = QLabel(self.menu_2)
-        self.label_3.setObjectName(u"label_3")
-        font1 = QFont()
-        font1.setPointSize(9)
-        self.label_3.setFont(font1)
-        self.label_3.setStyleSheet(u"font-size: 9pt")
-        self.label_3.setAlignment(Qt.AlignCenter)
-        self.label_3.setWordWrap(True)
-
-        self.menu_2_layout.addWidget(self.label_3)
-
         self.menus.addWidget(self.menu_2)
 
         self.main_pages_layout.addWidget(self.menus)
@@ -90,8 +58,5 @@ class Ui_LeftColumn(object):
 
     def retranslateUi(self, LeftColumn):
         LeftColumn.setWindowTitle(QCoreApplication.translate("LeftColumn", u"Form", None))
-        self.label_2.setText(QCoreApplication.translate("LeftColumn", u"Menu 2 - Left Menu", None))
-        self.label_3.setText(QCoreApplication.translate("LeftColumn", u"This is just an example menu.\n"
-"Add Qt Widgets or your custom widgets here.", None))
     # retranslateUi
 
