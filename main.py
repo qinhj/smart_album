@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # ///////////////////////////////////////////////////////////////
 #
 # BY: WANDERSON M.PIMENTA
@@ -14,12 +16,23 @@
 #
 # ///////////////////////////////////////////////////////////////
 
+# Shell Code
+#"""eval" set -xe """#"
+
+# Set Virtual Env
+#"""eval" export WORKSPACE=$(readlink -f $(dirname $0)/..) """#"
+#"""eval" export PATH=$WORKSPACE/bin:$PATH """#"
+#"""eval" export PYTHONPATH=$WORKSPACE/lib/$(readlink $WORKSPACE/bin/python)/site-packages:${PYTHONPATH} """#"
+
+# Python Code
+magic='--calling-python-from-/bin/bash--'
+"""exec" $([[ $* =~ --gdb ]] && echo "gdb --args") python3 "$0" "$@" """#$magic"
+
 # IMPORT PACKAGES AND MODULES
 # ///////////////////////////////////////////////////////////////
 from gui.uis.windows.main_window.functions_main_window import *
 import sys
 import os
-import time
 
 # IMPORT QT CORE
 # ///////////////////////////////////////////////////////////////
@@ -237,6 +250,11 @@ class MainWindow(QMainWindow):
 # Set the initial class and also additional parameters of the "QApplication" class
 # ///////////////////////////////////////////////////////////////
 if __name__ == "__main__":
+    import re
+    if sys.argv[-1] == '#%s' % magic:
+        del sys.argv[-1]
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+
     # APPLICATION
     # ///////////////////////////////////////////////////////////////
     app = QApplication(sys.argv)
@@ -246,3 +264,5 @@ if __name__ == "__main__":
     # EXEC APP
     # ///////////////////////////////////////////////////////////////
     sys.exit(app.exec_())
+
+del magic
