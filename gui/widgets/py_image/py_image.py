@@ -38,9 +38,7 @@ class PyImage(QWidget):
         #self.checkbox.setStyleSheet("QCheckBox::indicator { width: 180px; height: 180px; }")
         #self.checkbox.setMinimumSize(200,200)
         #self.checkbox.setMaximumSize(200,200)
-        index = self.filepath.rfind('\\',0,len(self.filepath))
-        filename = self.filepath[index+1:]
-        self.checkbox.setObjectName(filename)
+        self.checkbox.setObjectName(self.filepath)
         self.checkbox.setGeometry(QRect(5, 5, 190,190))
         #为边框留出空间，左上角坐标减少border，整体长宽增加2*border
         self.checkbox.setChecked(False)

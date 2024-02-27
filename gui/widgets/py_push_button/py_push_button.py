@@ -68,7 +68,6 @@ class PyPushButton(QPushButton):
             _bg_color_pressed = bg_color_pressed
         )
         self.setStyleSheet(custom_style)
-        self.paths = []
     
     def mouseDoubleClickEvent(self, event):
         self.DoubleClickSig.emit(self)
