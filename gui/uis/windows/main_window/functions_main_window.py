@@ -488,7 +488,11 @@ class MainFunctions():
 
         new_name = person_name_editer.text()
         # get old name
-        old_name = self.person_list_btn_group.checkedButton().text()
+        _btn = self.person_list_btn_group.checkedButton()
+        if _btn is None: # or _btn.text() not in self.image_page_dict_person.keys():
+            # Maybe trigged by Other Events
+            return
+        old_name = _btn.text()
         if new_name == old_name:
             print("[INFO] Ignore image label change since they're same!")
             return
