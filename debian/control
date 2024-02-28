@@ -1,0 +1,10 @@
+Package: bianbu-smart-album-@BACKEND
+Version: @VERSION_NUMBER
+Section: Utils
+Priority: optional
+Architecture: @ARCH
+Build-Depends: debhelper-compat (= 12)
+Depends: @DEP python3-pyside2.qtsvg, python3-pyside2.qtgui, python3-pyside2.qtwidgets, python3-pyside2.qtcore
+Conflicts: @CON
+Maintainer: hongjie.qin@spacemit.com
+Description: bianbu smart album with backend of @BACKEND

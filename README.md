@@ -13,7 +13,7 @@ sudo apt install -y python3-pyqt5*
 
 # with pyside
 sudo apt show python3-pyside* | grep -P "^Package: "
-sudo apt install -y python3-pyside2* # python3-pyside2.qtgui
+sudo apt install -y python3-pyside2.qtsvg # Depends: python3-pyside2.qtwidgets/qtgui/qtcore
 ```
 
 * Ubuntu (~22.10)
