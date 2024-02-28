@@ -30,6 +30,9 @@ function copy_install_to_desktop() {
   if [[ ! -f ${curFileName}/.config/${entry_point}/output.json ]]; then
     echo "[]" > ${curFileName}/.config/${entry_point}/output.json
   fi
+  # change owner
+  owner=$(basename ${curFileName})
+  chown -R ${owner}:${curUserName} ${curFileName}/.config/${entry_point}
 }
 
 aiDesktop=(
