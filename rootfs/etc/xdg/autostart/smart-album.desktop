@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=pose-tracker
+Exec=/usr/bin/bianbu-smart-album desktop /usr/share/applications/smart-album.desktop
+Terminal=false
+NoDisplay=true
+StartupNotify=false
