@@ -17,6 +17,7 @@ function copy_install_to_desktop() {
     if test $? -eq 0; then
       chmod +x "${curFileName}/${gDesktopName}/${aiDesktopName}"
       chown ${curUserName} "${curFileName}/${gDesktopName}/${aiDesktopName}"
+      #gio set "${curFileName}/${gDesktopName}/${aiDesktopName}" metadata::trusted true
     fi
   else
     echo "[WARN] /usr/share/applications/${aiDesktopName} not exist!"
