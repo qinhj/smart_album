@@ -154,6 +154,7 @@ class MainWindow(QMainWindow):
                 title = btn.text(),
                 icon_path = btn._icon_path
             )
+            MainFunctions.update_ui_credit_bar(self)
 
         # OPEN PAGE 4
         if btn.objectName() == 'btn_page_image_search':

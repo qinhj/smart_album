@@ -167,7 +167,10 @@ class MainFunctions():
             MainFunctions.update_ui_credit_bar(self, copyright=u"未能生成智能影集")
             #self.ui.load_pages.scrollAreaWidgetContents_4.hide()
             return None
+
         #print(self.smart_album_result)
+        MainFunctions.update_ui_credit_bar(
+            self, copyright=u"影集数量：{}".format(len(self.smart_album_result)))
 
         if len(self.smart_album_image_page):
             return # no change
