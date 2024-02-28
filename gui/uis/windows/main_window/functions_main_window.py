@@ -150,7 +150,7 @@ class MainFunctions():
     # CUSTOM FUNCTIONS
     # ///////////////////////////////////////////////////////////////
     def delete_widget(self, layout: QLayout, index: int = 0, count: int = 1):
-        assert(layout.count() == count)
+        assert(layout.count() == count), "layout count {} != expected count {}".format(layout.count(), count)
         _target_widget = layout.itemAt(index).widget()
         _target_widget.setParent(None)
         layout.removeWidget(_target_widget)
@@ -432,6 +432,11 @@ class MainFunctions():
             self.ui.credits.copyright_label.setText(u"未发现相似图片")
             return None
 
+        # REMOVE PREVIOUS WIDGET
+        _image_page_count = self.ui.load_pages.scrollArea_3_layout.count()
+        for index in range(_image_page_count-1, -1, -1):
+            MainFunctions.delete_widget(
+                self, self.ui.load_pages.scrollArea_3_layout, index, index+1)
         # ADD IMAGES
         for paths in self.image_similarity_result:
             image_page = PyImagePage()
