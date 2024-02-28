@@ -220,12 +220,12 @@ class SetupMainWindow:
 
         # LOAD SETTINGS
         # ///////////////////////////////////////////////////////////////
-        settings = Settings()
+        settings = Settings(self.settings_path)
         self.settings = settings.items
 
         # LOAD THEME COLOR
         # ///////////////////////////////////////////////////////////////
-        themes = Themes()
+        themes = Themes(self.settings_path)
         self.themes = themes.items
 
         # GET AND INIT AI BACKEND

@@ -59,10 +59,21 @@ os.environ["QT_FONT_DPI"] = "96"
 # MAIN WINDOW
 # ///////////////////////////////////////////////////////////////
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, workspace: str = None):
         super().__init__()
 
-        # SETUP MAIN WINDOw
+        self.app_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+        self.workspace = workspace
+
+        # SETUP SETTINGS PATH
+        # ///////////////////////////////////////////////////////////////
+        self.settings_path = os.path.normpath(os.path.join(self.app_path, f"resources/settings.json"))
+        if self.workspace:
+            settings_path = os.path.normpath(os.path.join(self.workspace, "settings.json"))
+            if os.path.isfile(settings_path):
+                self.settings_path = settings_path
+
+        # SETUP MAIN WINDOW
         # Load widgets from "gui\uis\main_window\ui_main.py"
         # ///////////////////////////////////////////////////////////////
         self.ui = UI_MainWindow()
@@ -70,7 +81,7 @@ class MainWindow(QMainWindow):
 
         # LOAD SETTINGS
         # ///////////////////////////////////////////////////////////////
-        settings = Settings()
+        settings = Settings(self.settings_path)
         self.settings = settings.items
 
         # SETUP MAIN WINDOW
@@ -257,9 +268,14 @@ if __name__ == "__main__":
 
     # APPLICATION
     # ///////////////////////////////////////////////////////////////
-    app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon("icon.ico"))
-    window = MainWindow()
+    app_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+    app = QApplication([]) # ignore sys.argv
+    app.setWindowIcon(QIcon(os.path.normpath(os.path.join(app_path, "icon.ico"))))
+
+    # MAINWINDOW
+    # ///////////////////////////////////////////////////////////////
+    workspace = sys.argv[1] if len(sys.argv) > 1 else None
+    window = MainWindow(workspace)
 
     # EXEC APP
     # ///////////////////////////////////////////////////////////////

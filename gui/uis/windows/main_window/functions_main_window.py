@@ -339,14 +339,10 @@ class MainFunctions():
         if directory == '':
             print("No folder selected")
             return None
-        from gui.core.json_settings import Settings
-        settings = Settings()
-        with open(settings.settings_path, 'r+', encoding='utf-8') as f:
-            self.settings = json.load(f)
-            self.settings['image_path'] = directory
-            f.seek(0)
-            f.truncate()
-            f.write(json.dumps(self.settings, indent=4, ensure_ascii=False))
+        # UPDATE SETTINGS JSON FILE
+        self.settings['image_path'] = directory
+        with open(self.settings_path, "w", encoding='utf-8') as write:
+            json.dump(self.settings, write, indent=4, ensure_ascii=False)
         self.ui.credits.copyright_label.setText("选择文件夹：{}".format(directory))
         return directory
     
