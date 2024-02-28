@@ -9,7 +9,7 @@ def load_json(jsonfile):
     return images
 
 
-def write_json(person_dict):
+def write_json(person_dict, filepath = "output.json"):
     """
         Input  format: {"name1": [path11, path12, ...], "name2": [path21, path22, ...], ...}
         Output format: [{"person": xxx, "pic_name": yyy}, {...}]
@@ -22,7 +22,7 @@ def write_json(person_dict):
             } for path in paths
         ])
     images.sort(key=lambda x: x['person'])
-    with open('output.json', 'w', encoding='utf-8') as f:
+    with open(filepath, 'w', encoding='utf-8') as f:
         f.write(json.dumps(images, indent=4, ensure_ascii=False, sort_keys=True))
 
 
@@ -50,11 +50,10 @@ def update_group_name(name_new, name_old, person_dict):
     return person_dict
 
 
-def edit_single_image_label(new_group_name, path, dict_or_file = "output.json"):
-    if isinstance(dict_or_file, dict):
-        person_dict = dict_or_file
-    else:
-        person_dict = load_person_dict(dict_or_file)
+def edit_single_image_label(
+        new_group_name, path, filepath: str = "output.json", person_dict: dict = None):
+    if person_dict is None:
+        person_dict = load_person_dict(filepath)
     name_to_delete = []
     for name, paths in person_dict.items():
         if path in paths:
@@ -71,7 +70,7 @@ def edit_single_image_label(new_group_name, path, dict_or_file = "output.json"):
         person_dict[new_group_name].append(path)
     else:
         person_dict[new_group_name] = [path]
-    write_json(person_dict)
+    write_json(person_dict, filepath)
     return person_dict
 
 
@@ -93,13 +92,5 @@ def delete_images(target_paths, filepath = "output.json"):
             empty_names.append(name)
     for name in empty_names:
         person_dict.pop(name)
-    write_json(person_dict)
+    write_json(person_dict, filepath)
     return person_dict
-
-
-if __name__ == "__main__":
-    jsonfile = 'output.json'
-    person_dict = load_person_dict(jsonfile)
-    #print(person_dict)
-    #write_json(person_dict)
-    persons_dict = edit_single_image_label("Person 46", "./image\\08.jpg", person_dict)

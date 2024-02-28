@@ -85,7 +85,7 @@ class FakeBackend(IBackend):
                 persons[u"未命名"] = image_paths
             else:
                 persons[u"未命名"].extend(image_paths)
-            write_json(persons)
+            write_json(persons, main_window.settings["output_path"])
             return {u"未命名": image_paths} # just do nothing
 
         def fake_image_search(image_args):

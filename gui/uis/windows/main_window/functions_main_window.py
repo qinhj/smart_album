@@ -212,7 +212,7 @@ class MainFunctions():
 
     def update_left_column_menu1(self):
         """ Reload person/face cluster info. """
-        self.person_dict = load_person_dict('output.json')
+        self.person_dict = load_person_dict(self.settings["output_path"])
 
         # Move label "unknown" to the bottom of the item keys.
         if u'未命名' in self.person_dict:
@@ -340,7 +340,7 @@ class MainFunctions():
             print("No folder selected")
             return None
         # UPDATE SETTINGS JSON FILE
-        self.settings['image_path'] = directory
+        self.settings['image_path'] = os.path.normpath(directory)
         with open(self.settings_path, "w", encoding='utf-8') as write:
             json.dump(self.settings, write, indent=4, ensure_ascii=False)
         self.ui.credits.copyright_label.setText("选择文件夹：{}".format(directory))
@@ -476,7 +476,7 @@ class MainFunctions():
         for image_page in image_page_to_delete:
             self.image_similarity_pages.remove(image_page)
         print(image_path_to_delete)
-        _ = delete_images(image_path_to_delete, "output.json")
+        _ = delete_images(image_path_to_delete, self.settings["output_path"])
         MainFunctions.update_left_column_menu1(self)
         self.image_page_dict_person = {}
 
@@ -510,7 +510,8 @@ class MainFunctions():
         if new_name in self.image_page_dict_person.keys():
             _ = self.image_page_dict_person.pop(new_name)
 
-        _ = edit_single_image_label(new_name, image_path, self.person_dict)
+        _ = edit_single_image_label(
+                new_name, image_path, self.settings["output_path"], self.person_dict)
 
         # update person image menu(list button)
         MainFunctions.update_left_column_menu1(self)
@@ -542,7 +543,7 @@ class MainFunctions():
                     _ = image_page_dict.pop(name_old)
                 if name_new in image_page_dict.keys():
                     _ = image_page_dict.pop(name_new)
-            write_json(image_dict)
+            write_json(image_dict, self.settings["output_path"])
             # reload person since person groups have changed
             MainFunctions.update_left_column_menu1(self)
             # reload person image page of new name

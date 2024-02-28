@@ -43,6 +43,11 @@ class Settings(object):
         # DESERIALIZE
         self.deserialize()
 
+        # UPDATE OUTPUT JSONFILE PATH
+        if settings_path:
+            workspace = os.path.dirname(os.path.realpath(settings_path))
+            self.items["output_path"] = os.path.normpath(os.path.join(workspace, self.items["output_path"]))
+
     # SERIALIZE JSON
     # ///////////////////////////////////////////////////////////////
     def serialize(self):
