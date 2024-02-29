@@ -28,6 +28,9 @@ function copy_install_to_desktop() {
   if [[ ! -f ${curFileName}/.config/${entry_point}/settings.json ]]; then
     cp -rf /usr/share/${entry_point}/settings.json ${curFileName}/.config/${entry_point}/settings.json
   fi
+  if [[ ! -d ${curFileName}/.config/${entry_point}/assets ]]; then
+    cp -rf /usr/share/${entry_point}/assets ${curFileName}/.config/${entry_point}/
+  fi
   if [[ ! -f ${curFileName}/.config/${entry_point}/output.json ]]; then
     echo "[]" > ${curFileName}/.config/${entry_point}/output.json
   fi

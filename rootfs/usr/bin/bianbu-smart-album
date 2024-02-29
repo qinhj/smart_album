@@ -50,6 +50,9 @@ function auto_desktop() {
   if [[ ! -f ${XDG_CONFIG_HOME:-~/.config}/${entry_point}/settings.json ]]; then
     cp -rf /usr/share/${entry_point}/settings.json ${XDG_CONFIG_HOME:-~/.config}/${entry_point}/settings.json
   fi
+  if [[ ! -f ${XDG_CONFIG_HOME:-~/.config}/${entry_point}/assets ]]; then
+    cp -rf /usr/share/${entry_point}/assets ${XDG_CONFIG_HOME:-~/.config}/${entry_point}/
+  fi
   if [[ ! -f ${XDG_CONFIG_HOME:-~/.config}/${entry_point}/output.json ]]; then
     echo "[]" > ${XDG_CONFIG_HOME:-~/.config}/${entry_point}/output.json
   fi

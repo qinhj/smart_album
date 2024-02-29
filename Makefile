@@ -29,6 +29,7 @@ install_post:
 install: clean all
 	mkdir -p $(DESTDIR)
 	cp -rdf rootfs/* $(DESTDIR)/
+	cp -rdf assets $(DESTDIR)/usr/share/bianbu-smart-album/
 	mkdir -p $(DESTDIR)/usr/bin/bianbu-smart-album-${BACKEND}
 	cp -rdf assets $(DESTDIR)/usr/bin/bianbu-smart-album-${BACKEND}
 	cp -rdf backend $(DESTDIR)/usr/bin/bianbu-smart-album-${BACKEND}

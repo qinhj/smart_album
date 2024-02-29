@@ -36,7 +36,13 @@ class FakeBackend(IBackend):
 
     def __init__(self, main_window: QMainWindow):
         super().__init__(main_window)
-        self._image_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "assets", "obama")
+        if main_window.workspace:
+            # use customer assets
+            self._image_dir = os.path.join(main_window.workspace, "assets", "obama")
+        else:
+            # use default assets of package
+            self._image_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "assets", "obama")
+        self._image_dir = os.path.normpath(self._image_dir)
 
         def fake_smart_album(image_dir):
             print("[WARN] fake smart album will ignore input image directory!")
