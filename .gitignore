@@ -144,7 +144,7 @@ temp/
 # Sorted pictures
 
 #image
-
+assets/
 
 
 __pycache__/

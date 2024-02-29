@@ -483,8 +483,18 @@ class MainFunctions():
         # remove empty image page from page5
         for image_page in image_page_to_delete:
             self.image_similarity_pages.remove(image_page)
-        print(image_path_to_delete)
+        print("[DEBUG] images to remove:", image_path_to_delete)
+        if len(self.image_similarity_pages) == 0:
+            self.commit_delete_button.hide()
+            self.ui.credits.copyright_label.setText(u"未发现相似图片")
         _ = delete_images(image_path_to_delete, self.settings["output_path"])
+        # update image similarity result
+        for images in self.image_similarity_result[::-1]:
+            for path in image_path_to_delete:
+                if path in images:
+                    images.remove(path)
+            if len(images) < 2:
+                self.image_similarity_result.remove(images)
         MainFunctions.update_left_column_menu1(self)
         self.image_page_dict_person = {}
 

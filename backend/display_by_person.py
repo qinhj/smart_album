@@ -77,20 +77,23 @@ def edit_single_image_label(
 def delete_images(target_paths, filepath = "output.json"):
     person_dict = load_person_dict(filepath)
     empty_names = []
+    # update output json
     for name, paths in person_dict.items():
         for path in target_paths[::-1]:
             if path in paths:
-                target_paths.remove(path)
                 paths.remove(path)
-                try:
-                    os.remove(path)
-                except FileNotFoundError:
-                    print("Not Found: {}".format(path))
-                    pass
         person_dict[name] = paths
         if len(paths) == 0:
             empty_names.append(name)
     for name in empty_names:
         person_dict.pop(name)
     write_json(person_dict, filepath)
+    # remove selected images
+    for path in target_paths:
+        try:
+            os.remove(path)
+            print("[INFO] Image {} has been removed".format(path))
+        except FileNotFoundError:
+            print("[ERROR] Image {} not found!".format(path))
+            pass
     return person_dict

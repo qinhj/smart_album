@@ -44,25 +44,36 @@ class FakeBackend(IBackend):
             self._image_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "assets", "obama")
         self._image_dir = os.path.normpath(self._image_dir)
 
+        def image_exist_filter(images: list):
+            if images is None or len(images) == 0:
+                return []
+            for path in images[::-1]:
+                if not os.path.isfile(path):
+                    images.remove(path)
+            return images
+
         def fake_smart_album(image_dir):
             print("[WARN] fake smart album will ignore input image directory!")
             fake_result = [
                 {
                     "name" : "Obama_00",
-                    "images": [
+                    "images": image_exist_filter([
                         os.path.normpath(os.path.join(self._image_dir, "Obama_00.jpg")),
                         os.path.normpath(os.path.join(self._image_dir, "Obama_00.copy.jpg")),
-                    ]
+                    ])
                 },
                 {
                     "name" : "Obama_01",
-                    "images": [
+                    "images": image_exist_filter([
                         os.path.normpath(os.path.join(self._image_dir, "Obama_01.jpg")),
                         os.path.normpath(os.path.join(self._image_dir, "copy_01.jpg")),
                         os.path.normpath(os.path.join(self._image_dir, "copy_02.jpg")),
-                    ]
+                    ])
                 },
             ]
+            for album in fake_result[::-1]:
+                if len(album["images"]) < 2:
+                    fake_result.remove(album)
             return fake_result
 
         def fake_face_cluster(image_dir):
@@ -103,7 +114,7 @@ class FakeBackend(IBackend):
 
         def fake_image_similarity(image_dir):
             print("[WARN] fake image similarity will ignore input image directory!")
-            fake_result = [
+            fake_group = [
                 [
                     os.path.normpath(os.path.join(self._image_dir, "Obama_00.jpg")),
                     os.path.normpath(os.path.join(self._image_dir, "Obama_00.copy.jpg")),
@@ -114,6 +125,11 @@ class FakeBackend(IBackend):
                     os.path.normpath(os.path.join(self._image_dir, "copy_02.jpg")),
                 ],
             ]
+            fake_result = []
+            for group in fake_group:
+                group = image_exist_filter(group)
+                if len(group) > 1:
+                    fake_result.append(group)
             return fake_result
 
         # create handler for supported task and thread worker

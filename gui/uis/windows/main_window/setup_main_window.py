@@ -167,7 +167,7 @@ class SetupMainWindow:
         self.search_text.setReadOnly(False)
         self.ui.title_bar.custom_buttons_layout.addWidget(self.search_text)
         def search_text_slot(text):
-            print("Input test: {}".format(self.search_text.text()))
+            print("[INFO] Input text: {}".format(self.search_text.text()))
             self.selected_image = text
             self.backend("image_search")
         self.search_text.returnPressed.connect(lambda: search_text_slot(self.search_text.text()))
