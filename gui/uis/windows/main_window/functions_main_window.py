@@ -380,7 +380,7 @@ class MainFunctions():
             self.ui.load_pages.search_target_text.hide()
             # update widget for input image
             if self.ui.load_pages.input_image_layout.count():
-                MainFunctions.delete_widget(self, self.ui.load_pages.input_image_layout, 1, 0)
+                MainFunctions.delete_widget(self, self.ui.load_pages.input_image_layout, 0, 1)
             _image_widget = PyImage(self.selected_image)
             _image_widget.checkbox.setCheckable(False)
             self.ui.load_pages.input_image_layout.addWidget(_image_widget)
