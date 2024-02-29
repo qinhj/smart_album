@@ -29,7 +29,7 @@ function ai_postrm_purge() {
         gDesktopName="Desktop"
       fi
     fi
-    # customer settings
+    # remove customer settings
     rm -rf ${FILENAME}/.config/${aiAppName}
   done
 }

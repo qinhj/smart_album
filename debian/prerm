@@ -45,6 +45,14 @@ function ai_prerm_uninstall_desktop() {
   done
 }
 
+function ai_prerm_remove() {
+  # Note: "__pycache__" should be remove during prerm, not postrm! 
+  find /usr/bin/bianbu-smart-album-* -name __pycache__ | xargs rm -rf
+
+  # Maybe remove desktop in postrm is better.
+  ai_prerm_uninstall_desktop
+}
+
 function ai_prerm_main() {
   if [ $# -eq 0 ]; then
     return;
@@ -52,7 +60,7 @@ function ai_prerm_main() {
 
   ai_prerm_init
   case $1 in
-    remove )            shift; ai_prerm_uninstall_desktop;;
+    remove )            shift; ai_prerm_remove;;
     upgrade )           shift;;
     failed-upgrade )    ;;
   esac
