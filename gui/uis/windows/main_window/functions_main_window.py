@@ -164,6 +164,9 @@ class MainFunctions():
             return None
         
         if len(self.smart_album_result) == 0:
+            # Delete previous smart album list widget
+            if self.ui.left_column.menus.menu_2_layout.count():
+                MainFunctions.delete_widget(self, self.ui.left_column.menus.menu_2_layout, 0, 1)
             MainFunctions.update_ui_credit_bar(self, copyright=u"未能生成智能影集")
             #self.ui.load_pages.scrollAreaWidgetContents_4.hide()
             return None
