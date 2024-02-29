@@ -9,7 +9,6 @@ function ai_prerm_init() {
 aiDesktop=(
   "smart-album.desktop"
 )
-aiAppName=bianbu-smart-album
 function ai_prerm_uninstall_desktop() {
   gDesktopName="桌面"
   if [ -d "/root/桌面" ]; then
@@ -43,7 +42,6 @@ function ai_prerm_uninstall_desktop() {
     for desktop in "${aiDesktop[@]}"; do
       rm -rf "${FILENAME}/${gDesktopName}/${desktop}"
     done
-    rm -rf ${FILENAME}/.config/${aiAppName}
   done
 }
 
@@ -54,7 +52,7 @@ function ai_prerm_main() {
 
   ai_prerm_init
   case $1 in
-    remove )            shift; ai_prerm_uninstall_desktop $@;;
+    remove )            shift; ai_prerm_uninstall_desktop;;
     upgrade )           shift;;
     failed-upgrade )    ;;
   esac

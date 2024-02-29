@@ -1,1 +1,52 @@
 #!/bin/bash
+
+export XDG_DATA_HOME=${XDG_DATA_HOME:-/usr/share/}
+
+function ai_postrm_init() {
+  set -e
+}
+
+aiAppName=bianbu-smart-album
+function ai_postrm_purge() {
+  gDesktopName="桌面"
+  if [ -d "/root/桌面" ]; then
+    gDesktopName="桌面"
+  elif [ -d "/root/Desktop" ]; then
+    gDesktopName="Desktop"
+  fi
+
+  for FILENAME in /home/*; do
+    if [ -f "${FILENAME}/.config/user-dirs.dirs" ]; then
+      source "${FILENAME}/.config/user-dirs.dirs"
+      if [ ! -d "${XDG_DESKTOP_DIR}" ]; then
+        mkdir -p "${XDG_DESKTOP_DIR}" >/dev/null 2>&1 || true
+      fi
+      gDesktopName="${XDG_DESKTOP_DIR//${HOME}\//}"
+    else
+      if [ -d "${FILENAME}/桌面" ]; then
+        gDesktopName="桌面"
+      elif [ -d "${FILENAME}/Desktop" ]; then
+        gDesktopName="Desktop"
+      fi
+    fi
+    # customer settings
+    rm -rf ${FILENAME}/.config/${aiAppName}
+  done
+}
+
+function ai_postrm_main() {
+  if [ $# -eq 0 ]; then
+    return;
+  fi
+
+  ai_postrm_init
+  case $1 in
+    remove )            shift;;
+    purge )             shift; ai_postrm_purge;;
+    upgrade )           shift;;
+    failed-upgrade )    ;;
+  esac
+}
+
+args="$@"
+ai_postrm_main $@
