@@ -33,7 +33,7 @@ install: clean all
 	mkdir -p $(DESTDIR)/usr/bin/bianbu-smart-album-${BACKEND}
 	cp -rdf assets $(DESTDIR)/usr/bin/bianbu-smart-album-${BACKEND}
 	cp -rdf backend $(DESTDIR)/usr/bin/bianbu-smart-album-${BACKEND}
-	if [[ "${BACKEND}" == "fake" ]]; then rm -rf $(DESTDIR)/usr/bin/bianbu-smart-album-${BACKEND}/backend/tiorb; fi
+	if [ "${BACKEND}" = "fake" ]; then rm -rf $(DESTDIR)/usr/bin/bianbu-smart-album-${BACKEND}/backend/tiorb; fi
 	cp -rdf gui $(DESTDIR)/usr/bin/bianbu-smart-album-${BACKEND}
 	cp -rdf resources $(DESTDIR)/usr/bin/bianbu-smart-album-${BACKEND}
 	cp -rdf icon.ico $(DESTDIR)/usr/bin/bianbu-smart-album-${BACKEND}
