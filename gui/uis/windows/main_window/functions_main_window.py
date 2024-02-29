@@ -204,7 +204,7 @@ class MainFunctions():
             btn.setCheckable(True)
             btn.setAutoExclusive(True)
             btn.clicked.connect(lambda: MainFunctions.load_images_of_checked_button(
-                self, image_dict=self.smart_album_dict, btn_group=self.smart_album_list_btn_group,
+                self, image_dict=self.smart_album_dict, btn_group=self.smart_album_list_btn_group, read_only=True,
                 layout=self.ui.load_pages.scrollArea_4_layout, image_page_dict=self.smart_album_image_page))
             self.smart_album_list_layout.addWidget(btn)
             self.smart_album_list_btn_group.addButton(btn)
@@ -244,7 +244,7 @@ class MainFunctions():
             btn.setCheckable(True)
             btn.setAutoExclusive(True)
             btn.clicked.connect(lambda: MainFunctions.load_images_of_checked_button(
-                self, image_dict=self.person_dict, btn_group=self.person_list_btn_group,
+                self, image_dict=self.person_dict, btn_group=self.person_list_btn_group, read_only=False,
                 layout=self.ui.load_pages.gridLayout_2, image_page_dict=self.image_page_dict_person))
             btn.DoubleClickSig.connect(lambda: MainFunctions.update_image_group_name(
                 self, image_dict=self.person_dict, btn_group=self.person_list_btn_group,
@@ -261,7 +261,7 @@ class MainFunctions():
         assert(self.ui.left_column.menus.menu_1_layout.count() == 1)
 
     def load_images_of_checked_button(
-            self, image_dict: dict, btn_group, layout, image_page_dict, index = 0, count = 1):
+            self, image_dict: dict, btn_group, layout, image_page_dict, index = 0, count = 1, read_only = False):
         MainFunctions.update_ui_credit_bar(
             self, read_only=False, copyright=u"正在加载图片，请稍后")
         QApplication.processEvents()
@@ -270,12 +270,12 @@ class MainFunctions():
             # Maybe trigged by Double Click Event
             return
         MainFunctions.update_layout_with_images(
-            self, layout, image_page_dict, btn_group, _btn.text(), image_dict[_btn.text()], index, count)
+            self, layout, image_page_dict, btn_group, _btn.text(), image_dict[_btn.text()], index, count, read_only)
         self.ui.credits.person_name.setText(_btn.text())
         QApplication.processEvents()
 
     def update_layout_with_images(
-            self, layout: QLayout, image_page_dict: dict, btn_group, name, images, index = 0, count = 1):
+            self, layout: QLayout, image_page_dict: dict, btn_group, name, images, index = 0, count = 1, read_only = False):
         if layout.count():
             MainFunctions.delete_widget(self, layout, index, count)
         # Create new image page if not exist
@@ -286,7 +286,7 @@ class MainFunctions():
         if image_count == 0:
             for image in images:
                 image_box = PyImage(image)
-                image_box.checkbox.stateChanged.connect(lambda: MainFunctions.get_checked_button(self, image_page))
+                image_box.checkbox.stateChanged.connect(lambda: MainFunctions.get_checked_button(self, image_page, read_only))
                 image_page.flow_layout.addWidget(image_box)
                 image_page.btn_group.addButton(image_box.checkbox)
                 image_page.flow_layout.update()
