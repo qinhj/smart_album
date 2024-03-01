@@ -11,20 +11,18 @@ import json
 
 from backend.run import run_subprocess
 
-parent = os.path.dirname(os.path.realpath(__file__))
-default_bin = os.path.normpath(os.path.join(parent, "Linux_similar"))
-default_model = os.path.normpath(os.path.join(parent, "models", "similar"))
-default_threads = "4"
-default_workspace = os.path.normpath(os.path.join(parent, "temp", "similar"))
+def tiorb_image_similarity(image_dir, *args, **kwargs):
+    result_file = os.path.normpath(os.path.join(kwargs["workspace"], "tiorb_similar.json"))
+    args = ["/usr/bin/tiorb", "similar", image_dir, result_file]
+    try:
+        cp = run_subprocess(["mkdir -p {}".format(kwargs["workspace"])], shell=True)
+        cp = run_subprocess(args, dll_path=None, shell=False)
+        #print(cp)
+    except Exception:
+        import traceback
+        traceback.print_exc()
+        return []
 
-def tiorb_image_similarity(image_dir, model_dir = default_model, output_dir = default_workspace,
-                  thread_num: str = default_threads, use_gpu: str = "0"):
-    args = [default_bin, thread_num, model_dir, image_dir, output_dir, use_gpu]
-    cp = run_subprocess(["mkdir -p {}".format(output_dir)], shell=True)
-    cp = run_subprocess(args, dll_path=parent, shell=False)
-    #print(cp)
-
-    result_file = os.path.normpath(os.path.join(output_dir, "result.json"))
     with open(result_file, 'r', encoding='utf-8') as fin:
         result_info = json.load(fin)
     # convert {"path": "label"} => {"label": ["path", ...]}
@@ -40,4 +38,4 @@ def tiorb_image_similarity(image_dir, model_dir = default_model, output_dir = de
 
 
 if __name__ == "__main__":
-    tiorb_image_similarity(os.path.realpath("data/images"))
+    tiorb_image_similarity(os.path.realpath("data/images"), workspace="/tmp")
