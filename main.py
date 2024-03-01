@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # ///////////////////////////////////////////////////////////////
 #
 # BY: WANDERSON M.PIMENTA
@@ -14,12 +16,23 @@
 #
 # ///////////////////////////////////////////////////////////////
 
+# Shell Code
+#"""eval" set -xe """#"
+
+# Set Virtual Env
+#"""eval" export WORKSPACE=$(readlink -f $(dirname $0)/..) """#"
+#"""eval" export PATH=$WORKSPACE/bin:$PATH """#"
+#"""eval" export PYTHONPATH=$WORKSPACE/lib/$(readlink $WORKSPACE/bin/python)/site-packages:${PYTHONPATH} """#"
+
+# Python Code
+magic='--calling-python-from-/bin/bash--'
+"""exec" $([[ $* =~ --gdb ]] && echo "gdb --args") python3 "$0" "$@" """#$magic"
+
 # IMPORT PACKAGES AND MODULES
 # ///////////////////////////////////////////////////////////////
 from gui.uis.windows.main_window.functions_main_window import *
 import sys
 import os
-import time
 
 # IMPORT QT CORE
 # ///////////////////////////////////////////////////////////////
@@ -46,10 +59,21 @@ os.environ["QT_FONT_DPI"] = "96"
 # MAIN WINDOW
 # ///////////////////////////////////////////////////////////////
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, workspace: str = None):
         super().__init__()
 
-        # SETUP MAIN WINDOw
+        self.app_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+        self.workspace = workspace
+
+        # SETUP SETTINGS PATH
+        # ///////////////////////////////////////////////////////////////
+        self.settings_path = os.path.normpath(os.path.join(self.app_path, f"resources/settings.json"))
+        if self.workspace:
+            settings_path = os.path.normpath(os.path.join(self.workspace, "settings.json"))
+            if os.path.isfile(settings_path):
+                self.settings_path = settings_path
+
+        # SETUP MAIN WINDOW
         # Load widgets from "gui\uis\main_window\ui_main.py"
         # ///////////////////////////////////////////////////////////////
         self.ui = UI_MainWindow()
@@ -57,7 +81,7 @@ class MainWindow(QMainWindow):
 
         # LOAD SETTINGS
         # ///////////////////////////////////////////////////////////////
-        settings = Settings()
+        settings = Settings(self.settings_path)
         self.settings = settings.items
 
         # SETUP MAIN WINDOW
@@ -130,6 +154,7 @@ class MainWindow(QMainWindow):
                 title = btn.text(),
                 icon_path = btn._icon_path
             )
+            MainFunctions.update_ui_credit_bar(self)
 
         # OPEN PAGE 4
         if btn.objectName() == 'btn_page_image_search':
@@ -237,12 +262,24 @@ class MainWindow(QMainWindow):
 # Set the initial class and also additional parameters of the "QApplication" class
 # ///////////////////////////////////////////////////////////////
 if __name__ == "__main__":
+    import re
+    if sys.argv[-1] == '#%s' % magic:
+        del sys.argv[-1]
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+
     # APPLICATION
     # ///////////////////////////////////////////////////////////////
-    app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon("icon.ico"))
-    window = MainWindow()
+    app_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+    app = QApplication([]) # ignore sys.argv
+    app.setWindowIcon(QIcon(os.path.normpath(os.path.join(app_path, "icon.ico"))))
+
+    # MAINWINDOW
+    # ///////////////////////////////////////////////////////////////
+    workspace = sys.argv[1] if len(sys.argv) > 1 else None
+    window = MainWindow(workspace)
 
     # EXEC APP
     # ///////////////////////////////////////////////////////////////
     sys.exit(app.exec_())
+
+del magic

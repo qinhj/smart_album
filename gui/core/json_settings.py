@@ -17,23 +17,24 @@
 # IMPORT PACKAGES AND MODULES
 # ///////////////////////////////////////////////////////////////
 import json
-import os
+import os, sys
 
 # APP SETTINGS
 # ///////////////////////////////////////////////////////////////
 class Settings(object):
-    # APP PATH
-    # ///////////////////////////////////////////////////////////////
-    json_file = f"resources/settings.json"
-    app_path = os.path.abspath(os.getcwd())
-    settings_path = os.path.normpath(os.path.join(app_path, json_file))
-    if not os.path.isfile(settings_path):
-        print(f"WARNING: \"resources/settings.json\" not found! check in the folder {settings_path}")
-    
+
     # INIT SETTINGS
     # ///////////////////////////////////////////////////////////////
-    def __init__(self):
+    def __init__(self, settings_path: str = None):
         super(Settings, self).__init__()
+
+        # APP PATH
+        # ///////////////////////////////////////////////////////////////
+        json_file = settings_path if settings_path else f"resources/settings.json"
+        app_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+        self.settings_path = os.path.normpath(os.path.join(app_path, json_file))
+        if not os.path.isfile(self.settings_path):
+            print("WARNING: settings json file not found! check in the folder {}".format(self.settings_path))
 
         # DICTIONARY WITH SETTINGS
         # Just to have objects references
@@ -41,6 +42,11 @@ class Settings(object):
 
         # DESERIALIZE
         self.deserialize()
+
+        # UPDATE OUTPUT JSONFILE PATH
+        if settings_path:
+            workspace = os.path.dirname(os.path.realpath(settings_path))
+            self.items["output_path"] = os.path.normpath(os.path.join(workspace, self.items["output_path"]))
 
     # SERIALIZE JSON
     # ///////////////////////////////////////////////////////////////

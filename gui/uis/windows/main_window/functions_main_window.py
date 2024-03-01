@@ -150,7 +150,7 @@ class MainFunctions():
     # CUSTOM FUNCTIONS
     # ///////////////////////////////////////////////////////////////
     def delete_widget(self, layout: QLayout, index: int = 0, count: int = 1):
-        assert(layout.count() == count)
+        assert(layout.count() == count), "layout count {} != expected count {}".format(layout.count(), count)
         _target_widget = layout.itemAt(index).widget()
         _target_widget.setParent(None)
         layout.removeWidget(_target_widget)
@@ -164,10 +164,16 @@ class MainFunctions():
             return None
         
         if len(self.smart_album_result) == 0:
+            # Delete previous smart album list widget
+            if self.ui.left_column.menus.menu_2_layout.count():
+                MainFunctions.delete_widget(self, self.ui.left_column.menus.menu_2_layout, 0, 1)
             MainFunctions.update_ui_credit_bar(self, copyright=u"未能生成智能影集")
             #self.ui.load_pages.scrollAreaWidgetContents_4.hide()
             return None
+
         #print(self.smart_album_result)
+        MainFunctions.update_ui_credit_bar(
+            self, copyright=u"影集数量：{}".format(len(self.smart_album_result)))
 
         if len(self.smart_album_image_page):
             return # no change
@@ -201,7 +207,7 @@ class MainFunctions():
             btn.setCheckable(True)
             btn.setAutoExclusive(True)
             btn.clicked.connect(lambda: MainFunctions.load_images_of_checked_button(
-                self, image_dict=self.smart_album_dict, btn_group=self.smart_album_list_btn_group,
+                self, image_dict=self.smart_album_dict, btn_group=self.smart_album_list_btn_group, read_only=True,
                 layout=self.ui.load_pages.scrollArea_4_layout, image_page_dict=self.smart_album_image_page))
             self.smart_album_list_layout.addWidget(btn)
             self.smart_album_list_btn_group.addButton(btn)
@@ -212,7 +218,7 @@ class MainFunctions():
 
     def update_left_column_menu1(self):
         """ Reload person/face cluster info. """
-        self.person_dict = load_person_dict('output.json')
+        self.person_dict = load_person_dict(self.settings["output_path"])
 
         # Move label "unknown" to the bottom of the item keys.
         if u'未命名' in self.person_dict:
@@ -241,7 +247,7 @@ class MainFunctions():
             btn.setCheckable(True)
             btn.setAutoExclusive(True)
             btn.clicked.connect(lambda: MainFunctions.load_images_of_checked_button(
-                self, image_dict=self.person_dict, btn_group=self.person_list_btn_group,
+                self, image_dict=self.person_dict, btn_group=self.person_list_btn_group, read_only=False,
                 layout=self.ui.load_pages.gridLayout_2, image_page_dict=self.image_page_dict_person))
             btn.DoubleClickSig.connect(lambda: MainFunctions.update_image_group_name(
                 self, image_dict=self.person_dict, btn_group=self.person_list_btn_group,
@@ -258,7 +264,7 @@ class MainFunctions():
         assert(self.ui.left_column.menus.menu_1_layout.count() == 1)
 
     def load_images_of_checked_button(
-            self, image_dict: dict, btn_group, layout, image_page_dict, index = 0, count = 1):
+            self, image_dict: dict, btn_group, layout, image_page_dict, index = 0, count = 1, read_only = False):
         MainFunctions.update_ui_credit_bar(
             self, read_only=False, copyright=u"正在加载图片，请稍后")
         QApplication.processEvents()
@@ -267,12 +273,12 @@ class MainFunctions():
             # Maybe trigged by Double Click Event
             return
         MainFunctions.update_layout_with_images(
-            self, layout, image_page_dict, btn_group, _btn.text(), image_dict[_btn.text()], index, count)
+            self, layout, image_page_dict, btn_group, _btn.text(), image_dict[_btn.text()], index, count, read_only)
         self.ui.credits.person_name.setText(_btn.text())
         QApplication.processEvents()
 
     def update_layout_with_images(
-            self, layout: QLayout, image_page_dict: dict, btn_group, name, images, index = 0, count = 1):
+            self, layout: QLayout, image_page_dict: dict, btn_group, name, images, index = 0, count = 1, read_only = False):
         if layout.count():
             MainFunctions.delete_widget(self, layout, index, count)
         # Create new image page if not exist
@@ -283,7 +289,7 @@ class MainFunctions():
         if image_count == 0:
             for image in images:
                 image_box = PyImage(image)
-                image_box.checkbox.stateChanged.connect(lambda: MainFunctions.get_checked_button(self, image_page))
+                image_box.checkbox.stateChanged.connect(lambda: MainFunctions.get_checked_button(self, image_page, read_only))
                 image_page.flow_layout.addWidget(image_box)
                 image_page.btn_group.addButton(image_box.checkbox)
                 image_page.flow_layout.update()
@@ -336,15 +342,13 @@ class MainFunctions():
     def select_image_directory(self):
         """ 选择文件夹 """
         directory = QFileDialog.getExistingDirectory(None)
-        with open('resources/settings.json', 'r+', encoding='utf-8') as f:
-            if directory == '':
-                print("No folder selected")
-                return None
-            self.settings = json.load(f)
-            self.settings['image_path'] = directory
-            f.seek(0)
-            f.truncate()
-            f.write(json.dumps(self.settings, indent=4, ensure_ascii=False))
+        if directory == '':
+            print("No folder selected")
+            return None
+        # UPDATE SETTINGS JSON FILE
+        self.settings['image_path'] = os.path.normpath(directory)
+        with open(self.settings_path, "w", encoding='utf-8') as write:
+            json.dump(self.settings, write, indent=4, ensure_ascii=False)
         self.ui.credits.copyright_label.setText("选择文件夹：{}".format(directory))
         return directory
     
@@ -376,7 +380,7 @@ class MainFunctions():
             self.ui.load_pages.search_target_text.hide()
             # update widget for input image
             if self.ui.load_pages.input_image_layout.count():
-                MainFunctions.delete_widget(self, self.ui.load_pages.input_image_layout, 1, 0)
+                MainFunctions.delete_widget(self, self.ui.load_pages.input_image_layout, 0, 1)
             _image_widget = PyImage(self.selected_image)
             _image_widget.checkbox.setCheckable(False)
             self.ui.load_pages.input_image_layout.addWidget(_image_widget)
@@ -431,6 +435,11 @@ class MainFunctions():
             self.ui.credits.copyright_label.setText(u"未发现相似图片")
             return None
 
+        # REMOVE PREVIOUS WIDGET
+        _image_page_count = self.ui.load_pages.scrollArea_3_layout.count()
+        for index in range(_image_page_count-1, -1, -1):
+            MainFunctions.delete_widget(
+                self, self.ui.load_pages.scrollArea_3_layout, index, index+1)
         # ADD IMAGES
         for paths in self.image_similarity_result:
             image_page = PyImagePage()
@@ -477,8 +486,18 @@ class MainFunctions():
         # remove empty image page from page5
         for image_page in image_page_to_delete:
             self.image_similarity_pages.remove(image_page)
-        print(image_path_to_delete)
-        _ = delete_images(image_path_to_delete, "output.json")
+        print("[DEBUG] images to remove:", image_path_to_delete)
+        if len(self.image_similarity_pages) == 0:
+            self.commit_delete_button.hide()
+            self.ui.credits.copyright_label.setText(u"未发现相似图片")
+        _ = delete_images(image_path_to_delete, self.settings["output_path"])
+        # update image similarity result
+        for images in self.image_similarity_result[::-1]:
+            for path in image_path_to_delete:
+                if path in images:
+                    images.remove(path)
+            if len(images) < 2:
+                self.image_similarity_result.remove(images)
         MainFunctions.update_left_column_menu1(self)
         self.image_page_dict_person = {}
 
@@ -487,7 +506,11 @@ class MainFunctions():
 
         new_name = person_name_editer.text()
         # get old name
-        old_name = self.person_list_btn_group.checkedButton().text()
+        _btn = self.person_list_btn_group.checkedButton()
+        if _btn is None: # or _btn.text() not in self.image_page_dict_person.keys():
+            # Maybe trigged by Other Events
+            return
+        old_name = _btn.text()
         if new_name == old_name:
             print("[INFO] Ignore image label change since they're same!")
             return
@@ -512,7 +535,8 @@ class MainFunctions():
         if new_name in self.image_page_dict_person.keys():
             _ = self.image_page_dict_person.pop(new_name)
 
-        _ = edit_single_image_label(new_name, image_path, self.person_dict)
+        _ = edit_single_image_label(
+                new_name, image_path, self.settings["output_path"], self.person_dict)
 
         # update person image menu(list button)
         MainFunctions.update_left_column_menu1(self)
@@ -544,7 +568,7 @@ class MainFunctions():
                     _ = image_page_dict.pop(name_old)
                 if name_new in image_page_dict.keys():
                     _ = image_page_dict.pop(name_new)
-            write_json(image_dict)
+            write_json(image_dict, self.settings["output_path"])
             # reload person since person groups have changed
             MainFunctions.update_left_column_menu1(self)
             # reload person image page of new name

@@ -33,7 +33,6 @@ from gui.core.json_themes import Themes
 # IMPORT PY ONE DARK WIDGETS
 # ///////////////////////////////////////////////////////////////
 from gui.widgets import *
-from gui.widgets.py_table_widget import style
 
 # IMPORT SETUP MAIN WINDOW
 # ///////////////////////////////////////////////////////////////
@@ -60,12 +59,12 @@ class UI_MainWindow(object):
 
         # LOAD SETTINGS
         # ///////////////////////////////////////////////////////////////
-        settings = Settings()
+        settings = Settings(parent.settings_path)
         self.settings = settings.items
 
         # LOAD THEME COLOR
         # ///////////////////////////////////////////////////////////////
-        themes = Themes()
+        themes = Themes(parent.settings_path)
         self.themes = themes.items
 
         # SET INITIAL PARAMETERS

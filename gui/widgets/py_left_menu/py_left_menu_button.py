@@ -16,7 +16,7 @@
 
 # IMPORT PACKAGES AND MODULES
 # ///////////////////////////////////////////////////////////////
-import os
+import os, sys
 
 # IMPORT QT CORE
 # ///////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ class PyLeftMenuButton(QPushButton):
 
             # DRAW ACTIVE
             icon_path = self._icon_active_menu
-            app_path = os.path.abspath(os.getcwd())
+            app_path = os.path.dirname(os.path.realpath(sys.argv[0]))
             icon_path = os.path.normpath(os.path.join(app_path, icon_path))
             self._set_icon_color = self._icon_color_active
             self.icon_active(p, icon_path, self.width())
@@ -147,7 +147,7 @@ class PyLeftMenuButton(QPushButton):
 
             # DRAW ACTIVE
             icon_path = self._icon_active_menu
-            app_path = os.path.abspath(os.getcwd())
+            app_path = os.path.dirname(os.path.realpath(sys.argv[0]))
             icon_path = os.path.normpath(os.path.join(app_path, icon_path))
             self._set_icon_color = self._icon_color_active
             self.icon_active(p, icon_path, self.width())
