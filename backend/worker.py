@@ -15,13 +15,15 @@ from gui.core.qt_core import *
 
 class Worker(QThread):
     finished = Signal(object) # Signal(dict)
-    def __init__(self, handler, args):
+    def __init__(self, handler, arg, *args, **kwargs):
         super().__init__()
+        self._arg = arg
         self._args = args
+        self._kwargs = kwargs
         self._handler = handler
 
     def run(self):
-        result = self._handler(self._args)
+        result = self._handler(self._arg, *self._args, **self._kwargs)
         #print(result)
         self.finished.emit(result)
 
@@ -50,7 +52,7 @@ _TEXT_FILL_BLANK = "                                    "
 _TEXT_NEED_IMAGE_PATH = u"还未选择图片或输入文本，请先选择图片或输入文本后再执行"
 
 # Default worker for smart album task
-def create_worker_smart_album(main_window: QMainWindow, worker_handler, *args):
+def create_worker_smart_album(main_window: QMainWindow, worker_handler, *args, **kwargs):
     if worker_handler is None:
         raise RuntimeError("Input worker handler for smart album task is None!")
 
@@ -66,14 +68,14 @@ def create_worker_smart_album(main_window: QMainWindow, worker_handler, *args):
         main_window.smart_album_result = result
         QMessageBox.information(main_window, main_window.settings["app_name"], u"智能影集生成完毕{}".format(_TEXT_FILL_BLANK))
 
-    main_window.smart_album_worker = Worker(worker_handler, main_window.settings["image_path"])
+    main_window.smart_album_worker = Worker(worker_handler, main_window.settings["image_path"], *args, **kwargs)
     main_window.smart_album_worker.finished.connect(generate_finished)
     main_window.smart_album_worker.start()
     main_window.smart_album_image_page = {}
 
 
 # Default worker for face cluster task
-def create_worker_face_cluster(main_window: QMainWindow, worker_handler, *args):
+def create_worker_face_cluster(main_window: QMainWindow, worker_handler, *args, **kwargs):
     if worker_handler is None:
         raise RuntimeError("Input worker handler for face cluster task is None!")
 
@@ -89,13 +91,13 @@ def create_worker_face_cluster(main_window: QMainWindow, worker_handler, *args):
         main_window.face_cluster_result = result
         QMessageBox.information(main_window, main_window.settings["app_name"], u"人脸聚类完成{}".format(_TEXT_FILL_BLANK))
 
-    main_window.face_cluster_worker = Worker(worker_handler, main_window.settings["image_path"])
+    main_window.face_cluster_worker = Worker(worker_handler, main_window.settings["image_path"], *args, **kwargs)
     main_window.face_cluster_worker.finished.connect(cluster_finished)
     main_window.face_cluster_worker.start()
 
 
 # Default worker for image search task
-def create_worker_image_search(main_window: QMainWindow, worker_handler, *args):
+def create_worker_image_search(main_window: QMainWindow, worker_handler, *args, **kwargs):
     if worker_handler is None:
         raise RuntimeError("Input worker handler for image search task is None!")
 
@@ -118,14 +120,14 @@ def create_worker_image_search(main_window: QMainWindow, worker_handler, *args):
 
     # TODO: decouple with input main_window?
     main_window.image_search_changed = True
-    main_window.image_search_worker = Worker(worker_handler, [main_window.settings["image_path"], main_window.selected_image])
+    main_window.image_search_worker = Worker(worker_handler, [main_window.settings["image_path"], main_window.selected_image], *args, **kwargs)
     main_window.image_search_worker.finished.connect(search_finished)
     main_window.image_search_worker.start()
     main_window.image_search_done = True
 
 
 # Default worker for image similarity task
-def create_worker_image_similarity(main_window: QMainWindow, worker_handler, *args):
+def create_worker_image_similarity(main_window: QMainWindow, worker_handler, *args, **kwargs):
     if worker_handler is None:
         raise RuntimeError("Input worker handler for image similarity task is None!")
 
@@ -142,7 +144,7 @@ def create_worker_image_similarity(main_window: QMainWindow, worker_handler, *ar
         main_window.image_similarity_pages = [] # reset PyImagePage list
         QMessageBox.information(main_window, main_window.settings["app_name"], u"智能筛重完成{}".format(_TEXT_FILL_BLANK))
 
-    main_window.image_similarity_worker = Worker(worker_handler, main_window.settings['image_path'])
+    main_window.image_similarity_worker = Worker(worker_handler, main_window.settings['image_path'], *args, **kwargs)
     main_window.image_similarity_worker.finished.connect(similarity_finished)
     main_window.image_similarity_worker.start()
     main_window.image_similarity_done = True

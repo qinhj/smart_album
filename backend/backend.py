@@ -19,7 +19,7 @@ from gui.core.qt_core import *
 
 # pylint: disable=unused-argument
 
-def _not_implemented(*args):
+def _not_implemented(*args, **kwargs):
     raise NotImplementedError("Sorry, not implement yet.")
 
 
@@ -28,8 +28,8 @@ class IBackend(ABC):
     def __init__(self, main_window: QMainWindow):
         self._main_window = main_window
 
-    def __call__(self, cmd: str, *args):
-        return _not_implemented(*args)
+    def __call__(self, cmd: str, *args, **kwargs):
+        return _not_implemented(*args, **kwargs)
 
 
 class FakeBackend(IBackend):
@@ -52,7 +52,7 @@ class FakeBackend(IBackend):
                     images.remove(path)
             return images
 
-        def fake_smart_album(image_dir):
+        def fake_smart_album(image_dir, *args, **kwargs):
             print("[WARN] fake smart album will ignore input image directory!")
             fake_result = [
                 {
@@ -76,7 +76,7 @@ class FakeBackend(IBackend):
                     fake_result.remove(album)
             return fake_result
 
-        def fake_face_cluster(image_dir):
+        def fake_face_cluster(image_dir, *args, **kwargs):
             persons = {}
             copyright_label = self._main_window.ui.credits.copyright_label
 
@@ -105,14 +105,14 @@ class FakeBackend(IBackend):
             write_json(persons, main_window.settings["output_path"])
             return {u"未命名": image_paths} # just do nothing
 
-        def fake_image_search(image_args):
+        def fake_image_search(image_args, *args, **kwargs):
             print("[WARN] fake image search will ignore input images!")
             # always reset settings['image_path'] as test data dir
             main_window.settings['image_path'] = self._image_dir
             from backend.utils import get_image_paths
             return {"obama": get_image_paths(self._image_dir)}
 
-        def fake_image_similarity(image_dir):
+        def fake_image_similarity(image_dir, *args, **kwargs):
             print("[WARN] fake image similarity will ignore input image directory!")
             fake_group = [
                 [
@@ -140,10 +140,10 @@ class FakeBackend(IBackend):
             "image_similarity" : [create_worker_image_similarity, fake_image_similarity],
         }
 
-    def __call__(self, cmd: str, *args):
+    def __call__(self, cmd: str, *args, **kwargs):
         if cmd in self._task_handler.keys():
             worker, handler = self._task_handler[cmd]
-            worker(self._main_window, handler, *args)
+            worker(self._main_window, handler, *args, **kwargs)
         else:
             raise RuntimeError("Unsupported command {}".format(cmd))
 
