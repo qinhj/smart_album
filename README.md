@@ -36,6 +36,14 @@ python3 -m pip install pyside6 -i https://pypi.tuna.tsinghua.edu.cn/simple/
 python3 main.py
 ```
 
+## Quick Debian
+
+```bash
+# Usage: bash scripts/debian.sh [ARCH] [BACKEND]
+bash scripts/debian.sh amd64 tiorb  # fake
+bash scripts/debian.sh riscv64 fake # tiorb
+```
+
 ## Quick Note
 
 1. `PySide2.QtWidgets.QApplication` object has no attribute 'exec', try 'exec_' plz.
