@@ -15,7 +15,18 @@ from tensorflow.keras.models import load_model
 default_model = None
 default_model_detector = None
 
-def sorter_main(image_paths):
+def sort_by_person(images):
+    #输入[{"person":name,"pic_name":path}]形式的列表，返回{name:[paths]}形式的字典
+    persons = {}
+    for image in images:
+        path = image['pic_name']
+        name = image['person']
+        if name not in persons:
+            persons[name] = []
+        persons[name].append(path)
+    return persons
+
+def sorter_main(image_paths, *args, **kwargs):
     t0 = time.time()
     if embedder(image_paths):
         sort_images()
@@ -46,9 +57,11 @@ def get_image_folder():
 
 ######################################################################
 # 人脸搜索接口
-def search_person_pics(path, model = None, model_detector = None):
+def search_person_pics(path, *args, **kwargs):
     global default_model
     global default_model_detector
+    model = kwargs.setdefault("model", None)
+    model_detector = kwargs.setdefault("model_detector", None)
     try:
         if model is None:
             if default_model is None:
@@ -107,7 +120,7 @@ if __name__ == '__main__':
     #print(select_image_folder())
     #print(get_image_folder())
     '''
-    #persons = edit_single_group_name("妹妹","./additional\\122.jpg",persons)
+    #persons = edit_single_image_label("妹妹", "./additional\\122.jpg", person_dict=persons)
     print(time.time()-t0)
     print_by_person(persons)
     print(time.time()-t0)

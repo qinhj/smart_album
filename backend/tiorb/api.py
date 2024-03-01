@@ -32,11 +32,16 @@ class TiorbBackend(IBackend):
             "image_search" : [create_worker_image_search, tiorb_image_search],
             "image_similarity" : [create_worker_image_similarity, tiorb_image_similarity],
         }
+        self._workspace = main_window.workspace
+        if self._workspace is None:
+            self._workspace = "/tmp"
 
-    def __call__(self, cmd: str, *args):
+    def __call__(self, cmd: str, *args, **kwargs):
         if cmd in self._task_handler.keys():
+            # add workspace to input kwargs
+            kwargs["workspace"] = self._workspace
             worker, handler = self._task_handler[cmd]
-            worker(self._main_window, handler, *args)
+            worker(self._main_window, handler, *args, **kwargs)
         else:
             raise RuntimeError("Unsupported command {}".format(cmd))
 

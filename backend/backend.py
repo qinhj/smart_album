@@ -19,7 +19,7 @@ from gui.core.qt_core import *
 
 # pylint: disable=unused-argument
 
-def _not_implemented(*args):
+def _not_implemented(*args, **kwargs):
     raise NotImplementedError("Sorry, not implement yet.")
 
 
@@ -28,38 +28,55 @@ class IBackend(ABC):
     def __init__(self, main_window: QMainWindow):
         self._main_window = main_window
 
-    def __call__(self, cmd: str, *args):
-        return _not_implemented(*args)
+    def __call__(self, cmd: str, *args, **kwargs):
+        return _not_implemented(*args, **kwargs)
 
 
 class FakeBackend(IBackend):
 
     def __init__(self, main_window: QMainWindow):
         super().__init__(main_window)
-        self._image_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "assets", "obama")
+        if main_window.workspace:
+            # use customer assets
+            self._image_dir = os.path.join(main_window.workspace, "assets", "obama")
+        else:
+            # use default assets of package
+            self._image_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "assets", "obama")
+        self._image_dir = os.path.normpath(self._image_dir)
 
-        def fake_smart_album(image_dir):
+        def image_exist_filter(images: list):
+            if images is None or len(images) == 0:
+                return []
+            for path in images[::-1]:
+                if not os.path.isfile(path):
+                    images.remove(path)
+            return images
+
+        def fake_smart_album(image_dir, *args, **kwargs):
             print("[WARN] fake smart album will ignore input image directory!")
             fake_result = [
                 {
                     "name" : "Obama_00",
-                    "images": [
+                    "images": image_exist_filter([
                         os.path.normpath(os.path.join(self._image_dir, "Obama_00.jpg")),
                         os.path.normpath(os.path.join(self._image_dir, "Obama_00.copy.jpg")),
-                    ]
+                    ])
                 },
                 {
                     "name" : "Obama_01",
-                    "images": [
+                    "images": image_exist_filter([
                         os.path.normpath(os.path.join(self._image_dir, "Obama_01.jpg")),
                         os.path.normpath(os.path.join(self._image_dir, "copy_01.jpg")),
                         os.path.normpath(os.path.join(self._image_dir, "copy_02.jpg")),
-                    ]
+                    ])
                 },
             ]
+            for album in fake_result[::-1]:
+                if len(album["images"]) < 2:
+                    fake_result.remove(album)
             return fake_result
 
-        def fake_face_cluster(image_dir):
+        def fake_face_cluster(image_dir, *args, **kwargs):
             persons = {}
             copyright_label = self._main_window.ui.credits.copyright_label
 
@@ -85,19 +102,19 @@ class FakeBackend(IBackend):
                 persons[u"未命名"] = image_paths
             else:
                 persons[u"未命名"].extend(image_paths)
-            write_json(persons)
+            write_json(persons, main_window.settings["output_path"])
             return {u"未命名": image_paths} # just do nothing
 
-        def fake_image_search(image_args):
+        def fake_image_search(image_args, *args, **kwargs):
             print("[WARN] fake image search will ignore input images!")
             # always reset settings['image_path'] as test data dir
             main_window.settings['image_path'] = self._image_dir
             from backend.utils import get_image_paths
             return {"obama": get_image_paths(self._image_dir)}
 
-        def fake_image_similarity(image_dir):
+        def fake_image_similarity(image_dir, *args, **kwargs):
             print("[WARN] fake image similarity will ignore input image directory!")
-            fake_result = [
+            fake_group = [
                 [
                     os.path.normpath(os.path.join(self._image_dir, "Obama_00.jpg")),
                     os.path.normpath(os.path.join(self._image_dir, "Obama_00.copy.jpg")),
@@ -108,6 +125,11 @@ class FakeBackend(IBackend):
                     os.path.normpath(os.path.join(self._image_dir, "copy_02.jpg")),
                 ],
             ]
+            fake_result = []
+            for group in fake_group:
+                group = image_exist_filter(group)
+                if len(group) > 1:
+                    fake_result.append(group)
             return fake_result
 
         # create handler for supported task and thread worker
@@ -118,10 +140,10 @@ class FakeBackend(IBackend):
             "image_similarity" : [create_worker_image_similarity, fake_image_similarity],
         }
 
-    def __call__(self, cmd: str, *args):
+    def __call__(self, cmd: str, *args, **kwargs):
         if cmd in self._task_handler.keys():
             worker, handler = self._task_handler[cmd]
-            worker(self._main_window, handler, *args)
+            worker(self._main_window, handler, *args, **kwargs)
         else:
             raise RuntimeError("Unsupported command {}".format(cmd))
 

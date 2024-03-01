@@ -20,7 +20,7 @@ def get_image_paths(root_dir):
         image_list : list containing paths of the images in the directory
     """
     if not os.path.exists(root_dir):
-        print("Directory not found, please enter valid directory..")
+        print("Directory {} not found, please enter valid directory!".format(root_dir))
         sys.exit(1)
     image_list = []
     for dirpath, dirnames, filenames in os.walk(root_dir):

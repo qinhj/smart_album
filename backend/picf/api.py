@@ -20,7 +20,7 @@ from backend.picf.utils import embedder as EMBEDDER
 from gui.core.qt_core import *
 
 
-def get_duplicate_pics(image_dir):
+def get_duplicate_pics(image_dir, *args, **kwargs):
     """ 相似性筛查 """
     from . imagededup.methods import PHash
     phasher = PHash()
@@ -81,7 +81,7 @@ class TimerLabelPicf(TimerLabel):
 
 
 # Default worker for face cluster task
-def create_worker_face_cluster_picf(main_window: QMainWindow, worker_handler, *args):
+def create_worker_face_cluster_picf(main_window: QMainWindow, worker_handler, *args, **kwargs):
     if worker_handler is None:
         raise RuntimeError("Input worker handler for face cluster task is None!")
 
@@ -108,7 +108,7 @@ def create_worker_face_cluster_picf(main_window: QMainWindow, worker_handler, *a
         main_window.face_cluster_result = result
         QMessageBox.information(main_window, main_window.settings["app_name"], u"人脸聚类完成{}".format(_TEXT_FILL_BLANK))
 
-    main_window.face_cluster_worker = Worker(worker_handler, main_window.settings["image_path"])
+    main_window.face_cluster_worker = Worker(worker_handler, main_window.settings["image_path"], *args, **kwargs)
     main_window.face_cluster_worker.finished.connect(cluster_finished)
     main_window.face_cluster_worker.start()
 
@@ -124,10 +124,10 @@ class PicfBackend(IBackend):
             "image_similarity" : [create_worker_image_similarity, get_duplicate_pics],
         }
 
-    def __call__(self, cmd: str, *args):
+    def __call__(self, cmd: str, *args, **kwargs):
         if cmd in self._task_handler.keys():
             worker, handler = self._task_handler[cmd]
-            worker(self._main_window, handler, *args)
+            worker(self._main_window, handler, *args, **kwargs)
         else:
             raise RuntimeError("Unsupported command {}".format(cmd))
 
