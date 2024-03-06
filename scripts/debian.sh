@@ -38,6 +38,8 @@ function make_deb_via_dpkg() {
   pushd ${REPO_DIR}
   make install DESTDIR=${INSTALL_LOCAL} BACKEND=${BACKEND}
   popd
+  # patch for unexpected `__pycache__`
+  find ${INSTALL_LOCAL} -name "__pycache__" | xargs rm -rf
 
   # add debian resources
   cp -rf ${REPO_DIR}/debian ${INSTALL_LOCAL}/DEBIAN
