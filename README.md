@@ -51,3 +51,4 @@ bash scripts/debian.sh riscv64 fake # tiorb
 ## Quick TODO
 
 1. fix app with pyqt5
+2. add demo/task ui png to assets
