@@ -91,5 +91,5 @@ else
   # reset workspace which should contain "settings.json"
   workspace=${CONFIG_HOME}/${entry_point}
   # cmd should be the backend name
-  python3 /usr/bin/${entry_point}-$cmd/main.py $workspace
+  python3 /usr/src/${entry_point}-$cmd/main.py $workspace
 fi
