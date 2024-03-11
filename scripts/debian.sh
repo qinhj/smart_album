@@ -20,21 +20,14 @@ function check() {
 
 # make debian package
 function make_deb_via_dpkg() {
-  check dpkg
+  check dpkg-buildpackage # dpkg
 
-  # get architecture
-  ARCH=${1:-"riscv64"}
-  # update architecture for Debian && Ubuntu
-  if [[ "$ARCH" == "x86_64" ]]; then
-    ARCH="amd64"
-  fi
   # get backend
-  BACKEND=${2:-"fake"}
-  # get version
-  VER=$(cat ${REPO_DIR}/VERSION_NUMBER)
+  BACKEND=${1:-"fake"}
 
   # make install
   INSTALL_LOCAL=${REPO_DIR}/install
+  rm -rf ${INSTALL_LOCAL} && mkdir -p ${INSTALL_LOCAL}
   pushd ${REPO_DIR}
   make install DESTDIR=${INSTALL_LOCAL} BACKEND=${BACKEND}
   popd
@@ -42,21 +35,23 @@ function make_deb_via_dpkg() {
   find ${INSTALL_LOCAL} -name "__pycache__" | xargs rm -rf
 
   # add debian resources
-  cp -rf ${REPO_DIR}/debian ${INSTALL_LOCAL}/DEBIAN
-  eval sed -i "s/@BACKEND/${BACKEND}/g" ${INSTALL_LOCAL}/DEBIAN/control
-  eval sed -i "s/@VERSION_NUMBER/${VER}/g" ${INSTALL_LOCAL}/DEBIAN/control
-  eval sed -i "s/@ARCH/${ARCH}/g" ${INSTALL_LOCAL}/DEBIAN/control
+  debian=debian # "DEBIAN" for `dpkg -b`
+  cp -rf ${REPO_DIR}/debian ${INSTALL_LOCAL}/${debian}
+  eval sed -i "s/@BACKEND/${BACKEND}/g" ${INSTALL_LOCAL}/${debian}/control
+  eval sed -i "s/@BACKEND/${BACKEND}/g" ${INSTALL_LOCAL}/${debian}/rules
   if [[ $BACKEND == "fake" ]]; then
-    eval sed -i "s/@DEP//g" ${INSTALL_LOCAL}/DEBIAN/control
-    eval sed -i "s/@CON/bianbu-smart-album-tiorb/g" ${INSTALL_LOCAL}/DEBIAN/control
+    eval sed -i "s/@DEP//g" ${INSTALL_LOCAL}/${debian}/control
+    eval sed -i "s/@CON/bianbu-smart-album-tiorb/g" ${INSTALL_LOCAL}/${debian}/control
   elif [[ $BACKEND == "tiorb" ]]; then
-    eval sed -i "s/@DEP/tiorb,/g" ${INSTALL_LOCAL}/DEBIAN/control
-    eval sed -i "s/@CON/bianbu-smart-album-fake/g" ${INSTALL_LOCAL}/DEBIAN/control
+    eval sed -i "s/@DEP/tiorb,/g" ${INSTALL_LOCAL}/${debian}/control
+    eval sed -i "s/@CON/bianbu-smart-album-fake/g" ${INSTALL_LOCAL}/${debian}/control
   else
     : # not supported yet
   fi
 
   # create debian package
-  dpkg -b ${INSTALL_LOCAL} bianbu-smart-album-${BACKEND}_${VER}_${ARCH}.deb
+  pushd ${INSTALL_LOCAL}
+  dpkg-buildpackage -b -uc -us --no-pre-clean --no-post-clean # -tc
+  popd
 }
 make_deb_via_dpkg $@ # riscv64 fake
