@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+# You must remove unused comment lines for the released package.
+#export DH_VERBOSE = 1
+#export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+#export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+#export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+
+install:
+	dh $@
+	# copy resources
+	cp -rf $(CURDIR)/etc $(CURDIR)/debian/bianbu-smart-album-@BACKEND/
+	cp -rf $(CURDIR)/usr $(CURDIR)/debian/bianbu-smart-album-@BACKEND/
+
+%:
+	dh $@
+
+override_dh_shlibdeps:
+	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info

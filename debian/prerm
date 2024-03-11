@@ -10,7 +10,7 @@ function prerm_init() {
 
 function prerm_remove() {
   # Note: "__pycache__" should be remove during prerm, not postrm! 
-  find /usr/bin/bianbu-smart-album-* -name __pycache__ | xargs rm -rf
+  find /usr/src/bianbu-smart-album-* -name __pycache__ | xargs rm -rf
 }
 
 function prerm_upgrade() {
