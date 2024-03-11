@@ -1,70 +1,34 @@
 #!/bin/bash
 
-export XDG_DATA_HOME=${XDG_DATA_HOME:-/usr/share/}
+set -eu
+#set -x
 
-function ai_prerm_init() {
-  set -e
+function prerm_init() {
+  export APP_NAME=bianbu-smart-album
+  export APP_DATA=/usr/share/applications
 }
 
-aiDesktop=(
-  "smart-album.desktop"
-)
-function ai_prerm_uninstall_desktop() {
-  gDesktopName="桌面"
-  if [ -d "/root/桌面" ]; then
-    gDesktopName="桌面"
-  elif [ -d "/root/Desktop" ]; then
-    gDesktopName="Desktop"
-  fi
-
-  #desktop
-  if [ -d "/root/${gDesktopName}" ]; then
-    for desktop in "${aiDesktop[@]}"; do
-      rm -rf /root/${gDesktopName}/${desktop}
-    done
-  fi
-
-  for FILENAME in /home/*; do
-    if [ -f "${FILENAME}/.config/user-dirs.dirs" ]; then
-      source "${FILENAME}/.config/user-dirs.dirs"
-      if [ ! -d "${XDG_DESKTOP_DIR}" ]; then
-        mkdir -p "${XDG_DESKTOP_DIR}" >/dev/null 2>&1 || true
-      fi
-      gDesktopName="${XDG_DESKTOP_DIR//${HOME}\//}"
-    else
-      if [ -d "${FILENAME}/桌面" ]; then
-        gDesktopName="桌面"
-      elif [ -d "${FILENAME}/Desktop" ]; then
-        gDesktopName="Desktop"
-      fi
-    fi
-
-    for desktop in "${aiDesktop[@]}"; do
-      rm -rf "${FILENAME}/${gDesktopName}/${desktop}"
-    done
-  done
-}
-
-function ai_prerm_remove() {
+function prerm_remove() {
   # Note: "__pycache__" should be remove during prerm, not postrm! 
   find /usr/bin/bianbu-smart-album-* -name __pycache__ | xargs rm -rf
-
-  # Maybe remove desktop in postrm is better.
-  ai_prerm_uninstall_desktop
 }
 
-function ai_prerm_main() {
+function prerm_upgrade() {
+  :
+}
+
+function prerm_main() {
   if [ $# -eq 0 ]; then
     return;
   fi
 
-  ai_prerm_init
+  prerm_init
   case $1 in
-    remove )            shift; ai_prerm_remove;;
-    upgrade )           shift;;
+    remove )            shift; prerm_remove $@;;
+    upgrade )           shift; prerm_upgrade $@;;
     failed-upgrade )    ;;
   esac
 }
 
 args="$@"
-ai_prerm_main $@
+prerm_main $@

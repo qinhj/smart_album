@@ -1,52 +1,73 @@
 #!/bin/bash
 
-export XDG_DATA_HOME=${XDG_DATA_HOME:-/usr/share/}
+set -e
+#set -x
 
-function ai_postrm_init() {
-  set -e
-}
+aiDesktop=(
+  "smart-album.desktop"
+)
 
-aiAppName=bianbu-smart-album
-function ai_postrm_purge() {
-  gDesktopName="桌面"
-  if [ -d "/root/桌面" ]; then
-    gDesktopName="桌面"
-  elif [ -d "/root/Desktop" ]; then
-    gDesktopName="Desktop"
+function remove_desktop_shortcut() {
+  if [ $# -ne 1 ]; then
+    return;
   fi
+  local curFileName=$1
 
-  for FILENAME in /home/*; do
-    if [ -f "${FILENAME}/.config/user-dirs.dirs" ]; then
-      source "${FILENAME}/.config/user-dirs.dirs"
-      if [ ! -d "${XDG_DESKTOP_DIR}" ]; then
-        mkdir -p "${XDG_DESKTOP_DIR}" >/dev/null 2>&1 || true
-      fi
-      gDesktopName="${XDG_DESKTOP_DIR//${HOME}\//}"
+  for desktop in "${aiDesktop[@]}"; do
+    local initSetup="${curFileName}/.config/${APP_NAME}/applications/${desktop%.desktop}-initial-setup-done"
+    if [ ! -f ${initSetup} ]; then
+      echo "[WARN] ${APP_NAME}: setup file for ${desktop} not found!"
     else
-      if [ -d "${FILENAME}/桌面" ]; then
-        gDesktopName="桌面"
-      elif [ -d "${FILENAME}/Desktop" ]; then
-        gDesktopName="Desktop"
-      fi
+      # remove all desktop shortcuts of different languages
+      while IFS= read -r line; do
+        # line format: </path/to/desktop/shortcut> [date]
+        rm -rf $(echo $line | awk '{print $1}')
+      done < ${initSetup}
     fi
-    # remove customer settings
-    rm -rf ${FILENAME}/.config/${aiAppName}
   done
 }
 
-function ai_postrm_main() {
-  if [ $# -eq 0 ]; then
+function remove_config() {
+  remove_desktop_shortcut "/root"
+  rm -rf /root/.config/${APP_NAME}
+
+  for FILENAME in /home/*; do
+    # remove desktop shortcut
+    remove_desktop_shortcut ${FILENAME}
+    # remove user config of application
+    rm -rf ${FILENAME}/.config/${APP_NAME}
+  done
+}
+
+## ------------------------- ##
+
+function postrm_init() {
+  export APP_NAME=bianbu-smart-album
+  export APP_DATA=/usr/share/applications
+}
+
+function postrm_remove_upgrade() {
+  :
+}
+
+function postrm_purge() {
+  remove_config
+}
+
+function postrm_main() {
+  if [ $# -eq 0 ] ; then
     return;
   fi
 
-  ai_postrm_init
+  postrm_init
   case $1 in
-    remove )            shift;;
-    purge )             shift; ai_postrm_purge;;
-    upgrade )           shift;;
+    remove | upgrade )  shift; postrm_remove_upgrade $@;;
+    purge )             shift; postrm_purge $@;;
+    abort-install )     ;;
+    abort-upgrade )     ;;
     failed-upgrade )    ;;
   esac
 }
 
 args="$@"
-ai_postrm_main $@
+postrm_main $@
