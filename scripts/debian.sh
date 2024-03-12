@@ -51,7 +51,9 @@ function make_deb_via_dpkg() {
 
   # create debian package
   pushd ${INSTALL_LOCAL}
-  dpkg-buildpackage -b -uc -us --no-pre-clean --no-post-clean # -tc
+  # Note: "--no-post-clean" requires dpkg-buildpackage version >= 1.21.0(maybe)
+  # At least, for version <= 1.19.0.5 it's not available.
+  dpkg-buildpackage -b -uc -us --no-pre-clean #--no-post-clean #-tc
   popd
 }
 make_deb_via_dpkg $@ # riscv64 fake
