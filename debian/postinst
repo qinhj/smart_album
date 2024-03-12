@@ -78,6 +78,14 @@ function config_desktop_shortcut() {
     fi
     copy_install_to_desktop ${curFileName} ${desktop} ${curUserName} ${initSetup} ${action}
   done
+  # update mime database
+  if [ -x /usr/bin/update-mime-database ] ; then
+    : #update-mime-database "/usr/share/mime"
+  fi
+  # update desktop database
+  if [ -x /usr/bin/update-desktop-database ] ; then
+    update-desktop-database -q "${APP_DATA}"
+  fi
 }
 
 function config_desktop_all() {
