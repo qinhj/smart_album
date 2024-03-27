@@ -28,9 +28,7 @@ function remove_desktop_shortcut() {
 }
 
 function remove_config() {
-  remove_desktop_shortcut "/root"
   rm -rf /root/.config/${APP_NAME}
-
   for FILENAME in /home/*; do
     # remove desktop shortcut
     remove_desktop_shortcut ${FILENAME}
@@ -46,8 +44,18 @@ function postrm_init() {
   export APP_DATA=/usr/share/applications
 }
 
-function postrm_remove_upgrade() {
+function postrm_upgrade() {
   :
+}
+
+function postrm_remove() {
+  # remove desktop shortcut
+  remove_desktop_shortcut "/root"
+  for FILENAME in /home/*; do
+    remove_desktop_shortcut ${FILENAME}
+  done
+
+  postrm_upgrade
 }
 
 function postrm_purge() {
@@ -61,7 +69,8 @@ function postrm_main() {
 
   postrm_init
   case $1 in
-    remove | upgrade )  shift; postrm_remove_upgrade $@;;
+    remove )            shift; postrm_remove $@;;
+    upgrade )           shift; postrm_upgrade $@;;
     purge )             shift; postrm_purge $@;;
     abort-install )     ;;
     abort-upgrade )     ;;
