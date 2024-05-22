@@ -1,3 +1,9 @@
+bianbu-smart-album (2.0.3.2) mantic-customization; urgency=medium
+
+  * Initial for bianbu-23.10
+
+ -- qinhongjie <hongjie.qin@spacemit.com>  Wed, 22 May 2024 20:42:33 +0800
+
 bianbu-smart-album (2.0.3.1) mantic-spacemit; urgency=medium
 
   * Initial for bianbu-23.10
