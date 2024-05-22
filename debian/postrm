@@ -30,8 +30,6 @@ function remove_desktop_shortcut() {
 function remove_config() {
   rm -rf /root/.config/${APP_NAME}
   for FILENAME in /home/*; do
-    # remove desktop shortcut
-    remove_desktop_shortcut ${FILENAME}
     # remove user config of application
     rm -rf ${FILENAME}/.config/${APP_NAME}
   done
