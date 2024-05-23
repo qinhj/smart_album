@@ -1,6 +1,6 @@
 {
     "app_name": "Smart Album",
-    "version": "v2.0.0",
+    "version": "v2.0.4",
     "copyright": "",
     "year": 2024,
     "theme_name": "default",
@@ -33,6 +33,6 @@
         "text_size": 10
     },
     "backend": "fake",
-    "output_path": "output.json",
-    "image_path": ""
+    "output_path": "D:\\workspace\\Picf\\resources\\output.json",
+    "image_path": "D:\\workspace\\Picf\\assets\\face"
 }
