@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Usage:
-# $ bash debian.sh [arch [backend]]
+# $ bash debian.sh
 
 set -e
 
@@ -22,38 +22,20 @@ function check() {
 function make_deb_via_dpkg() {
   check dpkg-buildpackage # dpkg
 
-  # get backend
-  BACKEND=${1:-"fake"}
-
-  # make install
-  INSTALL_LOCAL=${REPO_DIR}/install
-  rm -rf ${INSTALL_LOCAL} && mkdir -p ${INSTALL_LOCAL}
   pushd ${REPO_DIR}
-  make install DESTDIR=${INSTALL_LOCAL} BACKEND=${BACKEND}
-  popd
-  # patch for unexpected `__pycache__`
-  find ${INSTALL_LOCAL} -name "__pycache__" | xargs rm -rf
 
-  # add debian resources
-  debian=debian # "DEBIAN" for `dpkg -b`
-  cp -rf ${REPO_DIR}/debian ${INSTALL_LOCAL}/${debian}
-  eval sed -i "s/@BACKEND/${BACKEND}/g" ${INSTALL_LOCAL}/${debian}/control
-  eval sed -i "s/@BACKEND/${BACKEND}/g" ${INSTALL_LOCAL}/${debian}/rules
-  if [[ $BACKEND == "fake" ]]; then
-    eval sed -i "s/@DEP//g" ${INSTALL_LOCAL}/${debian}/control
-    eval sed -i "s/@CON/bianbu-smart-album-tiorb/g" ${INSTALL_LOCAL}/${debian}/control
-  elif [[ $BACKEND == "tiorb" ]]; then
-    eval sed -i "s/@DEP/tiorb,/g" ${INSTALL_LOCAL}/${debian}/control
-    eval sed -i "s/@CON/bianbu-smart-album-fake/g" ${INSTALL_LOCAL}/${debian}/control
-  else
-    : # not supported yet
-  fi
+  # patch for unexpected `__pycache__`
+  find ${REPO_DIR} -name "__pycache__" | xargs rm -rf
 
   # create debian package
-  pushd ${INSTALL_LOCAL}
   # Note: "--no-post-clean" requires dpkg-buildpackage version >= 1.21.0(maybe)
-  # At least, for version <= 1.19.0.5 it's not available.
-  dpkg-buildpackage -b -uc -us --no-pre-clean #--no-post-clean #-tc
+  # At least, for version <= 1.19.0.5 it's not available. Options:
+  # -b, --build=binary          binary-only, no source files.
+  # -uc, --unsigned-changes     unsigned .buildinfo and .changes file.
+  # -us, --unsigned-source      unsigned source package.
+  # -nc, --no-pre-clean         do not pre clean source tree (implies -b).
+  dpkg-buildpackage -uc -us --no-pre-clean #--no-post-clean #-tc
+
   popd
 }
-make_deb_via_dpkg $@ # riscv64 fake
+make_deb_via_dpkg $@
