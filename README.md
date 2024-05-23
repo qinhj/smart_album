@@ -36,12 +36,17 @@ python3 -m pip install pyside6 -i https://pypi.tuna.tsinghua.edu.cn/simple/
 python3 main.py
 ```
 
+## Quick UI
+
+```bash
+cd gui/uis/pages
+pyside6-uic main_pages.ui -o main_pages.py
+```
+
 ## Quick Debian
 
 ```bash
-# Usage: bash scripts/debian.sh [ARCH] [BACKEND]
-bash scripts/debian.sh amd64 tiorb  # fake
-bash scripts/debian.sh riscv64 fake # tiorb
+bash scripts/debian.sh
 ```
 
 ## Quick Note
