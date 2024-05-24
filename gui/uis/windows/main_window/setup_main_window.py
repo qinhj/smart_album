@@ -161,6 +161,7 @@ class SetupMainWindow:
 
         # TITLE BAR / ADD EXTRA BUTTONS
         # ///////////////////////////////////////////////////////////////
+        """
         # ADD LINE EDIT TO MENU FOR CUSTOM SEARCH
         self.search_text = PyLineEdit(place_holder_text = u"文搜图")
         self.search_text.setAlignment(Qt.AlignLeft)
@@ -173,6 +174,7 @@ class SetupMainWindow:
         self.search_text.returnPressed.connect(lambda: search_text_slot(self.search_text.text()))
         # ADD MENUS
         self.ui.title_bar.add_menus(SetupMainWindow.add_title_bar_menus)
+        """
 
         # SET SIGNALS
         self.ui.title_bar.clicked.connect(self.btn_clicked)
