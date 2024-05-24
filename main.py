@@ -119,8 +119,8 @@ class MainWindow(QMainWindow):
         if btn.objectName() == 'btn_page_smart_album':
             # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
-            # Always Show Left Column
-            if not MainFunctions.left_column_is_visible(self):
+            # Always Close Left Column
+            if MainFunctions.left_column_is_visible(self):
                 MainFunctions.toggle_left_column(self)
             # Load Page 2
             MainFunctions.set_page(self, self.ui.load_pages.page_2)
@@ -139,8 +139,8 @@ class MainWindow(QMainWindow):
         if btn.objectName() == 'btn_page_face_cluster':
             # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
-            # Always Show Left Column
-            if not MainFunctions.left_column_is_visible(self):
+            # Always Close Left Column
+            if MainFunctions.left_column_is_visible(self):
                 MainFunctions.toggle_left_column(self)
             # Load Page 3
             MainFunctions.set_page(self, self.ui.load_pages.page_3)
