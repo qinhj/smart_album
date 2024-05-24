@@ -264,8 +264,10 @@ class SetupMainWindow:
         # ///////////////////////////////////////////////////////////////
 
         # ///////////////////////////////////////////////////////////////
-        # PAGE 1 - ADD BUTTON FOR "人脸分类"
+        # PAGE 3 - ADD BUTTON FOR "人脸分类"
         # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.page_3_widget_layout = QHBoxLayout(self.ui.load_pages.page_3_widget)
+
         self.func_btn_11 = PyPushButton(
             text = u"选择文件夹",
             radius = 8,
@@ -278,8 +280,7 @@ class SetupMainWindow:
         self.func_btn_11.setMinimumWidth(200)
         self.func_btn_11.setMinimumHeight(40)
         self.func_btn_11.clicked.connect(lambda: MainFunctions.select_image_directory(self))
-        self.ui.load_pages.func_1_frame_1_layout = QHBoxLayout(self.ui.load_pages.func_1_frame_1)
-        self.ui.load_pages.func_1_frame_1_layout.addWidget(self.func_btn_11, alignment=Qt.AlignCenter)
+        self.ui.load_pages.page_3_widget_layout.addWidget(self.func_btn_11, alignment=Qt.AlignCenter)
 
         self.func_btn_12 = PyPushButton(
             text = u"开始分类",
@@ -293,16 +294,7 @@ class SetupMainWindow:
         self.func_btn_12.setMinimumWidth(200)
         self.func_btn_12.setMinimumHeight(40)
         self.func_btn_12.clicked.connect(lambda: self.backend("face_cluster"))
-        self.ui.load_pages.func_1_frame_2_layout = QHBoxLayout(self.ui.load_pages.func_1_frame_2)
-        self.ui.load_pages.func_1_frame_2_layout.addWidget(self.func_btn_12, alignment=Qt.AlignCenter)
-
-        self.func_btn_13 = QFrame()
-        self.func_btn_13.setStyleSheet(u"background: transparent;")
-        self.func_btn_13.setMaximumWidth(200)
-        self.func_btn_13.setMinimumWidth(200)
-        self.func_btn_13.setMinimumHeight(40)
-        self.ui.load_pages.func_1_frame_3_layout = QHBoxLayout(self.ui.load_pages.func_1_frame_3)
-        self.ui.load_pages.func_1_frame_3_layout.addWidget(self.func_btn_13, alignment=Qt.AlignCenter)
+        self.ui.load_pages.page_3_widget_layout.addWidget(self.func_btn_12, alignment=Qt.AlignCenter)
 
         # ///////////////////////////////////////////////////////////////
         # PAGE 1 - ADD BUTTON FOR "以图搜图"
@@ -428,10 +420,10 @@ class SetupMainWindow:
 
         # SET GRID LAYOUT FOR PAGE3 ("人物列表")
         # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.gridLayout_2 = QGridLayout(self.ui.load_pages.page_3_scrollAreaWidgetContents)
-        self.ui.load_pages.gridLayout_2.setSpacing(0)
-        self.ui.load_pages.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.ui.load_pages.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.ui.load_pages.scrollArea_layout_human = QGridLayout(self.ui.load_pages.page_3_scrollAreaWidgetContents)
+        self.ui.load_pages.scrollArea_layout_human.setSpacing(0)
+        self.ui.load_pages.scrollArea_layout_human.setObjectName(u"scrollArea_layout_human")
+        self.ui.load_pages.scrollArea_layout_human.setContentsMargins(0, 0, 0, 0)
 
         # SET VERTICAL LAYOUT FOR PAGE4 ("智能搜图")
         # ///////////////////////////////////////////////////////////////

@@ -248,10 +248,10 @@ class MainFunctions():
             btn.setAutoExclusive(True)
             btn.clicked.connect(lambda: MainFunctions.load_images_of_checked_button(
                 self, image_dict=self.person_dict, btn_group=self.person_list_btn_group, read_only=False,
-                layout=self.ui.load_pages.gridLayout_2, image_page_dict=self.image_page_dict_person))
+                layout=self.ui.load_pages.scrollArea_layout_human, image_page_dict=self.image_page_dict_person))
             btn.DoubleClickSig.connect(lambda: MainFunctions.update_image_group_name(
                 self, image_dict=self.person_dict, btn_group=self.person_list_btn_group,
-                layout=self.ui.load_pages.gridLayout_2, image_page_dict=self.image_page_dict_person))
+                layout=self.ui.load_pages.scrollArea_layout_human, image_page_dict=self.image_page_dict_person))
             self.person_list_layout.addWidget(btn)
             self.person_list_btn_group.addButton(btn)
         self.person_list_layout.addStretch()
@@ -542,7 +542,7 @@ class MainFunctions():
         MainFunctions.update_left_column_menu1(self)
         # reload person image page of new name
         MainFunctions.update_layout_with_images(
-            self, layout=self.ui.load_pages.gridLayout_2,
+            self, layout=self.ui.load_pages.scrollArea_layout_human,
             image_page_dict=self.image_page_dict_person,
             btn_group=self.person_list_btn_group,
             name=new_name, images=self.person_dict[new_name])
