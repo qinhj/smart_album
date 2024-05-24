@@ -120,6 +120,8 @@ class SetupMainWindow:
             return self.ui.left_menu.sender()
         elif self.ui.left_column.sender() != None:
             return self.ui.left_column.sender()
+        elif self.ui.load_pages.page_3_left_column.menus.menu_1_layout.sender() != None:
+            return self.ui.load_pages.page_3_left_column.menus.menu_1_layout.sender()
         elif self.ui.left_column.menus.menu_1_layout.sender() != None:
             return self.ui.left_column.menus.menu_1_layout.sender()
         elif self.ui.left_column.menus.menu_2_layout.sender() != None:
@@ -266,9 +268,13 @@ class SetupMainWindow:
         # ///////////////////////////////////////////////////////////////
         # PAGE 3 - ADD BUTTON FOR "人脸分类"
         # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.page_3_widget_layout = QHBoxLayout(self.ui.load_pages.page_3_widget)
+        self.ui.load_pages.page_3_top_widget_layout = QHBoxLayout(self.ui.load_pages.page_3_top_widget)
 
-        self.func_btn_11 = PyPushButton(
+        self.page_3_func_label = QLabel("人脸聚类")
+        self.page_3_func_label.setObjectName("page_3_func_label")
+        self.ui.load_pages.page_3_top_widget_layout.addWidget(self.page_3_func_label, alignment=Qt.AlignCenter)
+
+        self.page_3_func_btn_select = PyPushButton(
             text = u"选择文件夹",
             radius = 8,
             color = self.themes["app_color"]["white"],
@@ -276,13 +282,13 @@ class SetupMainWindow:
             bg_color_hover = self.themes["app_color"]["orange"],
             bg_color_pressed = self.themes["app_color"]["orange"]
         )
-        self.func_btn_11.setMaximumWidth(200)
-        self.func_btn_11.setMinimumWidth(200)
-        self.func_btn_11.setMinimumHeight(40)
-        self.func_btn_11.clicked.connect(lambda: MainFunctions.select_image_directory(self))
-        self.ui.load_pages.page_3_widget_layout.addWidget(self.func_btn_11, alignment=Qt.AlignCenter)
+        self.page_3_func_btn_select.setMaximumWidth(200)
+        self.page_3_func_btn_select.setMinimumWidth(200)
+        self.page_3_func_btn_select.setMinimumHeight(40)
+        self.page_3_func_btn_select.clicked.connect(lambda: MainFunctions.select_image_directory(self))
+        self.ui.load_pages.page_3_top_widget_layout.addWidget(self.page_3_func_btn_select, alignment=Qt.AlignCenter)
 
-        self.func_btn_12 = PyPushButton(
+        self.page_3_func_btn_run = PyPushButton(
             text = u"开始分类",
             radius = 8,
             color = self.themes["app_color"]["white"],
@@ -290,11 +296,44 @@ class SetupMainWindow:
             bg_color_hover = self.themes["app_color"]["orange"],
             bg_color_pressed = self.themes["app_color"]["orange"]
         )
-        self.func_btn_12.setMaximumWidth(200)
-        self.func_btn_12.setMinimumWidth(200)
-        self.func_btn_12.setMinimumHeight(40)
-        self.func_btn_12.clicked.connect(lambda: self.backend("face_cluster"))
-        self.ui.load_pages.page_3_widget_layout.addWidget(self.func_btn_12, alignment=Qt.AlignCenter)
+        self.page_3_func_btn_run.setMaximumWidth(200)
+        self.page_3_func_btn_run.setMinimumWidth(200)
+        self.page_3_func_btn_run.setMinimumHeight(40)
+        self.page_3_func_btn_run.clicked.connect(lambda: self.backend("face_cluster"))
+        self.ui.load_pages.page_3_top_widget_layout.addWidget(self.page_3_func_btn_run, alignment=Qt.AlignCenter)
+
+        # PAGE 3 - ADD LAYOUT TO LEFT COLUMN
+        self.ui.load_pages.page_3_left_column_frame.setMaximumWidth(self.settings["left_column_size"]["maximum"])
+        self.ui.load_pages.page_3_left_column_frame.setMinimumWidth(self.settings["left_column_size"]["minimum"])
+        self.ui.load_pages.page_3_left_column_frame.setStyleSheet(f"background: {self.themes['app_color']['bg_two']}")
+        self.ui.load_pages.human_list_layout = QVBoxLayout(self.ui.load_pages.page_3_left_column_frame)
+        self.ui.load_pages.human_list_layout.setContentsMargins(0,0,0,0)
+
+        # ADD CUSTOM LEFT Column WIDGET
+        self.ui.load_pages.page_3_left_column = PyLeftColumn(
+            self.ui.load_pages.page_3_left_column_frame,
+            app_parent = self.ui.central_widget,
+            text_title = "人物列表",
+            text_title_size = self.settings["font"]["title_size"],
+            text_title_color = self.themes['app_color']['text_foreground'],
+            icon_path = Functions.set_svg_icon("icon_folder_open.svg"),
+            dark_one = self.themes['app_color']['dark_one'],
+            bg_color = self.themes['app_color']['bg_three'],
+            btn_color = self.themes['app_color']['bg_three'],
+            btn_color_hover = self.themes['app_color']['bg_two'],
+            btn_color_pressed = self.themes['app_color']['bg_one'],
+            icon_color = self.themes['app_color']['icon_color'],
+            icon_color_hover = self.themes['app_color']['icon_hover'],
+            context_color = self.themes['app_color']['context_color'],
+            icon_color_pressed = self.themes['app_color']['icon_pressed'],
+            icon_close_path = Functions.set_svg_icon("no_icon.svg")
+        )
+        self.ui.load_pages.page_3_left_column.icon_frame.hide()
+        self.ui.load_pages.page_3_left_column.btn_frame.hide()
+        self.ui.load_pages.human_list_layout.addWidget(self.ui.load_pages.page_3_left_column)
+
+        # ADD WIDGETS: Person List Placeholder
+        self.ui.load_pages.page_3_left_column.menus.menu_1_layout.addWidget(QWidget())
 
         # ///////////////////////////////////////////////////////////////
         # PAGE 1 - ADD BUTTON FOR "以图搜图"
@@ -400,7 +439,7 @@ class SetupMainWindow:
             _bg_color_hover = self.themes['app_color']['dark_one'],
             _bg_color_pressed = self.themes["app_color"]["orange"]
         )
-        self.ui.load_pages.page_3_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
+        self.ui.load_pages.page_3_right_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
         self.ui.load_pages.scrollArea_2.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
         self.ui.load_pages.scrollArea_3.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
 
@@ -420,7 +459,7 @@ class SetupMainWindow:
 
         # SET GRID LAYOUT FOR PAGE3 ("人物列表")
         # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.scrollArea_layout_human = QGridLayout(self.ui.load_pages.page_3_scrollAreaWidgetContents)
+        self.ui.load_pages.scrollArea_layout_human = QGridLayout(self.ui.load_pages.page_3_right_scrollAreaWidgetContents)
         self.ui.load_pages.scrollArea_layout_human.setSpacing(0)
         self.ui.load_pages.scrollArea_layout_human.setObjectName(u"scrollArea_layout_human")
         self.ui.load_pages.scrollArea_layout_human.setContentsMargins(0, 0, 0, 0)
