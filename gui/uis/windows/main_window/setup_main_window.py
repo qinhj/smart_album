@@ -408,7 +408,7 @@ class SetupMainWindow:
             _bg_color_hover = self.themes['app_color']['dark_one'],
             _bg_color_pressed = self.themes["app_color"]["orange"]
         )
-        self.ui.load_pages.scrollArea_1.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
+        self.ui.load_pages.page_3_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
         self.ui.load_pages.scrollArea_2.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
         self.ui.load_pages.scrollArea_3.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
 
@@ -428,7 +428,7 @@ class SetupMainWindow:
 
         # SET GRID LAYOUT FOR PAGE3 ("人物列表")
         # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.gridLayout_2 = QGridLayout(self.ui.load_pages.scrollAreaWidgetContents)
+        self.ui.load_pages.gridLayout_2 = QGridLayout(self.ui.load_pages.page_3_scrollAreaWidgetContents)
         self.ui.load_pages.gridLayout_2.setSpacing(0)
         self.ui.load_pages.gridLayout_2.setObjectName(u"gridLayout_2")
         self.ui.load_pages.gridLayout_2.setContentsMargins(0, 0, 0, 0)

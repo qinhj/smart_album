@@ -304,7 +304,10 @@
       </property>
       <layout class="QVBoxLayout" name="page_3_layout">
        <item>
-        <widget class="QScrollArea" name="scrollArea_1">
+        <widget class="QWidget" name="page_3_widget" native="true"/>
+       </item>
+       <item>
+        <widget class="QScrollArea" name="page_3_scrollArea">
          <property name="styleSheet">
           <string notr="true">background: transparent;</string>
          </property>
@@ -317,13 +320,13 @@
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
-         <widget class="QWidget" name="scrollAreaWidgetContents">
+         <widget class="QWidget" name="page_3_scrollAreaWidgetContents">
           <property name="geometry">
            <rect>
             <x>0</x>
             <y>0</y>
             <width>832</width>
-            <height>572</height>
+            <height>548</height>
            </rect>
           </property>
           <property name="styleSheet">
