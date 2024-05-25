@@ -68,24 +68,24 @@ class SetupMainWindow:
         {
             "btn_icon": "icon_folder_open.svg",
             "btn_id": "btn_page_face_cluster",
-            "btn_text": "人物列表",
-            "btn_tooltip": "人物列表",
+            "btn_text": "人脸聚类",
+            "btn_tooltip": "人脸聚类",
             "show_top": True,
             "is_active": False
         },
         {
             "btn_icon": "icon_search.svg",
             "btn_id": "btn_page_image_search",
-            "btn_text": "搜图结果",
-            "btn_tooltip": "搜图结果",
+            "btn_text": "智能搜图",
+            "btn_tooltip": "智能搜图",
             "show_top": True,
             "is_active": False
         },
         {
             "btn_icon": "icon_signal.svg",
             "btn_id": "btn_page_image_similarity",
-            "btn_text": "相似图片",
-            "btn_tooltip": "相似图片",
+            "btn_text": "智能筛重",
+            "btn_tooltip": "智能筛重",
             "show_top": True,
             "is_active": False
         },
