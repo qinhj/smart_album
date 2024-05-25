@@ -146,14 +146,8 @@ class MainWindow(QMainWindow):
             MainFunctions.set_page(self, self.ui.load_pages.page_3)
             if self.ui.load_pages.scrollArea_layout_human.count():
                 MainFunctions.delete_widget(self, self.ui.load_pages.scrollArea_layout_human, 0, 1)
-            # Load && Update Menu 1
-            MainFunctions.update_left_column_menu1(self)
-            MainFunctions.set_left_column_menu(
-                self,
-                menu = self.ui.left_column.menus.menu_1,
-                title = btn.text(),
-                icon_path = btn._icon_path
-            )
+            # Update Human List
+            MainFunctions.update_human_list(self)
             MainFunctions.update_ui_credit_bar(self)
 
         # OPEN PAGE 4

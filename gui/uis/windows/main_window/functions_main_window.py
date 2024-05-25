@@ -216,7 +216,7 @@ class MainFunctions():
         self.ui.left_column.menus.menu_2_layout.addWidget(self.smart_album_list_widget)
         assert(self.ui.left_column.menus.menu_2_layout.count() == 1)
 
-    def update_left_column_menu1(self):
+    def update_human_list(self):
         """ Reload person/face cluster info. """
         self.person_dict = load_person_dict(self.settings["output_path"])
 
@@ -257,11 +257,11 @@ class MainFunctions():
         self.person_list_layout.addStretch()
         self.person_list_layout.setSpacing(10)
         # Clear previous person image list widget.
-        if self.ui.left_column.menus.menu_1_layout.count():
-            MainFunctions.delete_widget(self, self.ui.left_column.menus.menu_1_layout, 0, 1)
+        if self.ui.load_pages.page_3_left_column.menus.menu_1_layout.count():
+            MainFunctions.delete_widget(self, self.ui.load_pages.page_3_left_column.menus.menu_1_layout, 0, 1)
         # Add latest person image list widget.
-        self.ui.left_column.menus.menu_1_layout.addWidget(self.person_list_widget)
-        assert(self.ui.left_column.menus.menu_1_layout.count() == 1)
+        self.ui.load_pages.page_3_left_column.menus.menu_1_layout.addWidget(self.person_list_widget)
+        assert(self.ui.load_pages.page_3_left_column.menus.menu_1_layout.count() == 1)
 
     def load_images_of_checked_button(
             self, image_dict: dict, btn_group, layout, image_page_dict, index = 0, count = 1, read_only = False):
@@ -498,7 +498,7 @@ class MainFunctions():
                     images.remove(path)
             if len(images) < 2:
                 self.image_similarity_result.remove(images)
-        MainFunctions.update_left_column_menu1(self)
+        MainFunctions.update_human_list(self)
         self.image_page_dict_person = {}
 
     def update_image_object_label(self, person_name_editer: PyLineEdit):
@@ -539,7 +539,7 @@ class MainFunctions():
                 new_name, image_path, self.settings["output_path"], self.person_dict)
 
         # update person image menu(list button)
-        MainFunctions.update_left_column_menu1(self)
+        MainFunctions.update_human_list(self)
         # reload person image page of new name
         MainFunctions.update_layout_with_images(
             self, layout=self.ui.load_pages.scrollArea_layout_human,
@@ -570,7 +570,7 @@ class MainFunctions():
                     _ = image_page_dict.pop(name_new)
             write_json(image_dict, self.settings["output_path"])
             # reload person since person groups have changed
-            MainFunctions.update_left_column_menu1(self)
+            MainFunctions.update_human_list(self)
             # reload person image page of new name
             MainFunctions.update_layout_with_images(
                 self, layout, image_page_dict, btn_group, name_new, image_dict[name_new])

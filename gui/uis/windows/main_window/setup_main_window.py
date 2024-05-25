@@ -122,8 +122,6 @@ class SetupMainWindow:
             return self.ui.left_column.sender()
         elif self.ui.load_pages.page_3_left_column.menus.menu_1_layout.sender() != None:
             return self.ui.load_pages.page_3_left_column.menus.menu_1_layout.sender()
-        elif self.ui.left_column.menus.menu_1_layout.sender() != None:
-            return self.ui.left_column.menus.menu_1_layout.sender()
         elif self.ui.left_column.menus.menu_2_layout.sender() != None:
             return self.ui.left_column.menus.menu_2_layout.sender()
 
@@ -258,9 +256,6 @@ class SetupMainWindow:
 
         # LEFT COLUMN
         # ///////////////////////////////////////////////////////////////
-
-        # ADD WIDGETS: Person List Placeholder
-        self.ui.left_column.menus.menu_1_layout.addWidget(QWidget())
 
         # PAGES
         # ///////////////////////////////////////////////////////////////
