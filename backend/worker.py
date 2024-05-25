@@ -12,6 +12,7 @@ import time
 # ///////////////////////////////////////////////////////////////
 from gui.core.qt_core import *
 
+from gui.uis.windows.main_window.functions_main_window import MainFunctions
 
 class Worker(QThread):
     finished = Signal(object) # Signal(dict)
@@ -67,6 +68,7 @@ def create_worker_smart_album(main_window: QMainWindow, worker_handler, *args, *
         timer.stop()
         main_window.smart_album_result = result
         QMessageBox.information(main_window, main_window.settings["app_name"], u"智能影集生成完毕{}".format(_TEXT_FILL_BLANK))
+        MainFunctions.update_album_list(main_window)
 
     main_window.smart_album_worker = Worker(worker_handler, main_window.settings["image_path"], *args, **kwargs)
     main_window.smart_album_worker.finished.connect(generate_finished)
@@ -90,6 +92,7 @@ def create_worker_face_cluster(main_window: QMainWindow, worker_handler, *args, 
         timer.stop()
         main_window.face_cluster_result = result
         QMessageBox.information(main_window, main_window.settings["app_name"], u"人脸聚类完成{}".format(_TEXT_FILL_BLANK))
+        MainFunctions.update_human_list(main_window)
 
     main_window.face_cluster_worker = Worker(worker_handler, main_window.settings["image_path"], *args, **kwargs)
     main_window.face_cluster_worker.finished.connect(cluster_finished)
@@ -117,6 +120,7 @@ def create_worker_image_search(main_window: QMainWindow, worker_handler, *args, 
         timer.stop()
         main_window.image_search_result = result
         QMessageBox.information(main_window, main_window.settings["app_name"], u"智能搜图完成{}".format(_TEXT_FILL_BLANK))
+        MainFunctions.load_image_search_result(main_window)
 
     # TODO: decouple with input main_window?
     main_window.image_search_changed = True
@@ -143,6 +147,7 @@ def create_worker_image_similarity(main_window: QMainWindow, worker_handler, *ar
         main_window.image_similarity_result = path
         main_window.image_similarity_pages = [] # reset PyImagePage list
         QMessageBox.information(main_window, main_window.settings["app_name"], u"智能筛重完成{}".format(_TEXT_FILL_BLANK))
+        MainFunctions.load_image_similarity_result(main_window)
 
     main_window.image_similarity_worker = Worker(worker_handler, main_window.settings['image_path'], *args, **kwargs)
     main_window.image_similarity_worker.finished.connect(similarity_finished)
