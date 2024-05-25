@@ -359,92 +359,50 @@
       </property>
       <layout class="QVBoxLayout" name="page_4_layout">
        <item>
-        <widget class="QScrollArea" name="scrollArea_2">
-         <property name="styleSheet">
-          <string notr="true">background: transparent;</string>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarAsNeeded</enum>
-         </property>
-         <property name="widgetResizable">
-          <bool>true</bool>
-         </property>
-         <widget class="QWidget" name="scrollAreaWidgetContents_2">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>832</width>
-            <height>572</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background: transparent;</string>
-          </property>
-          <layout class="QVBoxLayout" name="scrollArea_2_layout">
-           <property name="spacing">
-            <number>0</number>
+        <widget class="QWidget" name="page_4_top_widget" native="true"/>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QFrame" name="page_4_search_info">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
            </property>
-           <property name="leftMargin">
-            <number>0</number>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
            </property>
-           <property name="topMargin">
-            <number>0</number>
+          </widget>
+         </item>
+         <item>
+          <widget class="QScrollArea" name="page_4_scrollArea">
+           <property name="styleSheet">
+            <string notr="true">background: transparent;</string>
            </property>
-           <property name="rightMargin">
-            <number>0</number>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
            </property>
-           <property name="bottomMargin">
-            <number>0</number>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAsNeeded</enum>
            </property>
-           <item>
-            <widget class="QLabel" name="search_target_lable">
-             <property name="styleSheet">
-              <string notr="true">background: transparent;font-family:Microsoft Yahei;font-size: 14pt</string>
-             </property>
-             <property name="text">
-              <string>TextLabel</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="search_target_text">
-             <property name="styleSheet">
-              <string notr="true">background: transparent;font-family:Microsoft Yahei;font-size: 14pt</string>
-             </property>
-             <property name="text">
-              <string>TextLabel</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QWidget" name="input_image" native="true"/>
-           </item>
-           <item>
-            <widget class="QLabel" name="search_result_lable">
-             <property name="styleSheet">
-              <string notr="true">background: transparent;font-family:Microsoft Yahei;font-size: 14pt</string>
-             </property>
-             <property name="text">
-              <string>搜索结果</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </widget>
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="page_4_scrollAreaWidgetContents">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>830</width>
+              <height>548</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background: transparent;</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
