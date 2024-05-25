@@ -197,7 +197,11 @@ class MainWindow(QMainWindow):
         
         # TITLE BAR MENU
         # ///////////////////////////////////////////////////////////////
-        
+
+        # Hide Custom Title Bar For Some Btn Menu
+        self.ui.title_bar.set_custom_title_bar(
+            visible=btn.objectName() in ['btn_page_image_search', 'btn_search'])
+
         # SETTINGS TITLE BAR
         if btn.objectName() == "btn_top_settings":
             # Toogle Active

@@ -355,16 +355,16 @@ class MainFunctions():
     def load_image_search_result(self):
         if not self.image_search_done:
             MainFunctions.update_ui_credit_bar(self, copyright=u"还未选择图片")
-            self.ui.load_pages.scrollAreaWidgetContents_2.hide()
+            self.ui.load_pages.page_4_scrollAreaWidgetContents.hide()
             return None
         
         if len(self.image_search_result) == 0:
             MainFunctions.update_ui_credit_bar(self, copyright=u"未能找到相关图片")
-            self.ui.load_pages.scrollAreaWidgetContents_2.hide()
+            self.ui.load_pages.page_4_scrollAreaWidgetContents.hide()
             return None
         #print(self.image_search_result)
 
-        self.ui.load_pages.scrollAreaWidgetContents_2.show()
+        self.ui.load_pages.page_4_scrollAreaWidgetContents.show()
 
         name, paths = tuple(self.image_search_result.items())[0]
         MainFunctions.update_ui_credit_bar(
@@ -374,23 +374,17 @@ class MainFunctions():
             return None
 
         self.image_search_changed = False
+        # update widget for input image/text
+        if self.ui.load_pages.search_info_layout.count():
+            MainFunctions.delete_widget(self, self.ui.load_pages.search_info_layout, 0, 1)
         if os.path.exists(self.selected_image):
-            self.ui.load_pages.search_target_lable.setText(u"所选照片")
-            self.ui.load_pages.input_image.show()
-            self.ui.load_pages.search_target_text.hide()
-            # update widget for input image
-            if self.ui.load_pages.input_image_layout.count():
-                MainFunctions.delete_widget(self, self.ui.load_pages.input_image_layout, 0, 1)
             _image_widget = PyImage(self.selected_image)
             _image_widget.checkbox.setCheckable(False)
-            self.ui.load_pages.input_image_layout.addWidget(_image_widget)
-            self.ui.load_pages.input_image_layout.update()
+            self.ui.load_pages.search_info_layout.addWidget(_image_widget)
         else:
-            self.ui.load_pages.search_target_lable.setText(u"输入文本")
-            self.ui.load_pages.input_image.hide()
-            self.ui.load_pages.search_target_text.show()
-            self.ui.load_pages.search_target_text.setText(self.selected_image)
-        self.ui.load_pages.scrollArea_2_layout.update()
+            _label_widget = QLabel(self.selected_image)
+            self.ui.load_pages.search_info_layout.addWidget(_label_widget)
+        self.ui.load_pages.search_info_layout.update()
 
         MainFunctions.update_ui_credit_bar(self, copyright=u"正在加载图片")
         QApplication.processEvents()
@@ -398,8 +392,8 @@ class MainFunctions():
         # update widget for output images
         if self.image_search_pages:
             self.image_search_pages.setParent(None)
-            self.ui.load_pages.scrollArea_2_layout.removeWidget(self.image_search_pages)
-            self.ui.load_pages.scrollArea_2_layout.update()
+            self.ui.load_pages.scrollArea_layout_search.removeWidget(self.image_search_pages)
+            self.ui.load_pages.scrollArea_layout_search.update()
 
         self.image_search_pages = PyImagePage()
         for path in paths:
@@ -412,10 +406,8 @@ class MainFunctions():
             QApplication.processEvents()
         MainFunctions.update_ui_credit_bar(
             self, u"输入：", name, "", "", u"总数量：{}".format(len(paths)))
-        self.ui.load_pages.scrollArea_2_layout.addWidget(self.image_search_pages)
-        self.ui.load_pages.scrollArea_2_layout.addStretch()
-        self.ui.load_pages.scrollArea_2_layout.setSpacing(20)
-        self.ui.load_pages.scrollArea_2_layout.update()
+        self.ui.load_pages.scrollArea_layout_search.addWidget(self.image_search_pages)
+        self.ui.load_pages.scrollArea_layout_search.update()
 
     def load_image_similarity_result(self):
         if not self.image_similarity_done:

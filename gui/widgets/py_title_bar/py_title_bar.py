@@ -201,6 +201,14 @@ class PyTitleBar(QWidget):
             if self._is_custom_title_bar:
                 self.custom_buttons_layout.addWidget(self.div_3)
 
+    # SET BUTTONS PROPERTIES
+    # ///////////////////////////////////////////////////////////////
+    def set_custom_title_bar(self, visible: bool = True):
+        for i in range(self.custom_buttons_layout.count()):
+            widget = self.custom_buttons_layout.itemAt(i).widget()
+            if widget is not None:
+                widget.setVisible(visible)
+
     # TITLE BAR MENU EMIT SIGNALS
     # ///////////////////////////////////////////////////////////////
     def btn_clicked(self):
