@@ -161,22 +161,8 @@ class SetupMainWindow:
 
         # TITLE BAR / ADD EXTRA BUTTONS
         # ///////////////////////////////////////////////////////////////
-        # ADD LINE EDIT TO MENU FOR CUSTOM SEARCH
-        self.search_text = PyLineEdit(place_holder_text = u"文搜图")
-        self.search_text.setAlignment(Qt.AlignLeft)
-        self.search_text.setReadOnly(False)
-        self.ui.title_bar.custom_buttons_layout.addWidget(self.search_text)
-        def search_text_slot(text):
-            print("[INFO] Input text: {}".format(text))
-            self.selected_image = text
-            self.backend("image_search")
-            # TODO: FIXME
-            #self.search_text.setText(u"文搜图")
-        self.search_text.returnPressed.connect(lambda: search_text_slot(self.search_text.text()))
         # ADD MENUS
-        self.ui.title_bar.add_menus(SetupMainWindow.add_title_bar_menus)
-        # Hide Custom Title Bar
-        self.ui.title_bar.set_custom_title_bar(False)
+        #self.ui.title_bar.add_menus(SetupMainWindow.add_title_bar_menus)
 
         # SET SIGNALS
         self.ui.title_bar.clicked.connect(self.btn_clicked)
@@ -382,6 +368,22 @@ class SetupMainWindow:
         self.page_4_func_btn_run.setMinimumHeight(40)
         self.page_4_func_btn_run.clicked.connect(lambda: self.backend("image_search"))
         self.ui.load_pages.page_4_top_widget_layout.addWidget(self.page_4_func_btn_run, alignment=Qt.AlignCenter)
+
+        # ADD LINE EDIT TO TITLE BAR FOR CUSTOM SEARCH WITH TEXT
+        self.search_text = PyLineEdit(place_holder_text = u"文搜图")
+        self.search_text.setAlignment(Qt.AlignLeft)
+        self.search_text.setReadOnly(False)
+        self.ui.title_bar.custom_buttons_layout.addWidget(self.search_text)
+        self.search_text_div_3 = py_title_bar.py_div.PyDiv(self.themes["app_color"]["bg_three"])
+        self.ui.title_bar.custom_buttons_layout.addWidget(self.search_text_div_3)
+        def search_text_slot(text):
+            print("[INFO] Input text: {}".format(text))
+            self.selected_image = text
+            self.backend("image_search")
+            self.search_text.setText(u"")
+        self.search_text.returnPressed.connect(lambda: search_text_slot(self.search_text.text()))
+        # Hide Custom Title Bar
+        self.ui.title_bar.set_custom_title_bar(False)
 
         # ///////////////////////////////////////////////////////////////
         # PAGE 1 - ADD BUTTON FOR "智能分析"

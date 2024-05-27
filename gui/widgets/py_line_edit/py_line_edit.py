@@ -93,3 +93,9 @@ class PyLineEdit(QLineEdit):
             _context_color = context_color
         )
         self.setStyleSheet(style_format)
+
+    def setText(self, text):
+        super().setText(text)
+        font_metrics = QFontMetrics(self.font())
+        text_width = font_metrics.horizontalAdvance(self.text())
+        self.setMinimumWidth(text_width + 10)
