@@ -270,29 +270,17 @@ class SetupMainWindow:
         # ADD CUSTOM LEFT COLUMN WIDGET
         def add_left_column(layout: QBoxLayout, title: str):
             frame = layout.parentWidget()
-            left_column = PyLeftColumn(
+            left_column = PyLeftColumnInner(
                 parent = frame,
                 app_parent = self.ui.central_widget,
                 text_title = title,
                 text_title_size = self.settings["font"]["title_size"],
                 text_title_color = self.themes['app_color']['text_foreground'],
-                icon_path = Functions.set_svg_icon("icon_folder_open.svg"),
                 dark_one = self.themes['app_color']['dark_one'],
                 bg_color = self.themes['app_color']['bg_three'],
-                btn_color = self.themes['app_color']['bg_three'],
-                btn_color_hover = self.themes['app_color']['bg_two'],
-                btn_color_pressed = self.themes['app_color']['bg_one'],
-                icon_color = self.themes['app_color']['icon_color'],
-                icon_color_hover = self.themes['app_color']['icon_hover'],
                 context_color = self.themes['app_color']['context_color'],
-                icon_color_pressed = self.themes['app_color']['icon_pressed'],
-                icon_close_path = Functions.set_svg_icon("no_icon.svg")
             )
-            left_column.icon_frame.hide()
-            left_column.btn_frame.hide()
             layout.addWidget(left_column)
-            # Add Widget As Placeholder
-            left_column.menus.menu_1_layout.addWidget(QWidget())
             return left_column
 
         # ///////////////////////////////////////////////////////////////
@@ -403,7 +391,9 @@ class SetupMainWindow:
             _bg_color_pressed = self.themes["app_color"]["orange"]
         )
         self.ui.load_pages.page_2_right_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
+        self.ui.load_pages.page_2_left_column.scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
         self.ui.load_pages.page_3_right_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
+        self.ui.load_pages.page_3_left_column.scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
         self.ui.load_pages.page_4_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
         self.ui.load_pages.page_5_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
 

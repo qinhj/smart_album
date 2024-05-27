@@ -32,7 +32,7 @@ from . py_left_menu import PyLeftMenu
 
 # PY LEFT COLUMN
 # ///////////////////////////////////////////////////////////////
-from . py_left_column import PyLeftColumn
+from . py_left_column import PyLeftColumn, PyLeftColumnInner
 
 # PY TITLE BAR
 # ///////////////////////////////////////////////////////////////

@@ -165,8 +165,8 @@ class MainFunctions():
         
         if len(self.smart_album_result) == 0:
             # Delete previous smart album list widget
-            if self.ui.load_pages.page_2_left_column.menus.menu_1_layout.count():
-                MainFunctions.delete_widget(self, self.ui.load_pages.page_2_left_column.menus.menu_1_layout, 0, 1)
+            if self.ui.load_pages.page_2_left_column.scrollAreaLayout.count():
+                MainFunctions.delete_widget(self, self.ui.load_pages.page_2_left_column.scrollAreaLayout, 0, 1)
             MainFunctions.update_ui_credit_bar(self, copyright=u"未能生成智能影集")
             #self.ui.load_pages.page_2_right_scrollAreaWidgetContents.hide()
             return None
@@ -179,8 +179,8 @@ class MainFunctions():
             return # no change
 
         # Delete previous smart album list widget
-        if self.ui.load_pages.page_2_left_column.menus.menu_1_layout.count():
-            MainFunctions.delete_widget(self, self.ui.load_pages.page_2_left_column.menus.menu_1_layout, 0, 1)
+        if self.ui.load_pages.page_2_left_column.scrollAreaLayout.count():
+            MainFunctions.delete_widget(self, self.ui.load_pages.page_2_left_column.scrollAreaLayout, 0, 1)
 
         # Create a new widget to hold all buttons for quick replace/refresh
         # with latest smart album result.
@@ -213,8 +213,8 @@ class MainFunctions():
             self.smart_album_list_btn_group.addButton(btn)
         self.smart_album_list_layout.addStretch()
         self.smart_album_list_layout.setSpacing(10)
-        self.ui.load_pages.page_2_left_column.menus.menu_1_layout.addWidget(self.smart_album_list_widget)
-        assert(self.ui.load_pages.page_2_left_column.menus.menu_1_layout.count() == 1)
+        self.ui.load_pages.page_2_left_column.scrollAreaLayout.addWidget(self.smart_album_list_widget)
+        assert(self.ui.load_pages.page_2_left_column.scrollAreaLayout.count() == 1)
 
     def update_human_list(self):
         """ Reload person/face cluster info. """
@@ -257,11 +257,11 @@ class MainFunctions():
         self.person_list_layout.addStretch()
         self.person_list_layout.setSpacing(10)
         # Clear previous person image list widget.
-        if self.ui.load_pages.page_3_left_column.menus.menu_1_layout.count():
-            MainFunctions.delete_widget(self, self.ui.load_pages.page_3_left_column.menus.menu_1_layout, 0, 1)
+        if self.ui.load_pages.page_3_left_column.scrollAreaLayout.count():
+            MainFunctions.delete_widget(self, self.ui.load_pages.page_3_left_column.scrollAreaLayout, 0, 1)
         # Add latest person image list widget.
-        self.ui.load_pages.page_3_left_column.menus.menu_1_layout.addWidget(self.person_list_widget)
-        assert(self.ui.load_pages.page_3_left_column.menus.menu_1_layout.count() == 1)
+        self.ui.load_pages.page_3_left_column.scrollAreaLayout.addWidget(self.person_list_widget)
+        assert(self.ui.load_pages.page_3_left_column.scrollAreaLayout.count() == 1)
 
     def load_images_of_checked_button(
             self, image_dict: dict, btn_group, layout, image_page_dict, index = 0, count = 1, read_only = False):
