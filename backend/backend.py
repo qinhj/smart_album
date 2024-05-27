@@ -107,10 +107,10 @@ class FakeBackend(IBackend):
 
         def fake_image_search(image_args, *args, **kwargs):
             print("[WARN] fake image search will ignore input images!")
-            # always reset settings['image_path'] as test data dir
-            main_window.settings['image_path'] = self._image_dir
+            image_dir, image_or_text = image_args[:2]
+            main_window.settings['image_path'] = image_dir
             from backend.utils import get_image_paths
-            return {"obama": get_image_paths(self._image_dir)}
+            return {image_or_text: get_image_paths(image_dir)}
 
         def fake_image_similarity(image_dir, *args, **kwargs):
             print("[WARN] fake image similarity will ignore input image directory!")
