@@ -360,6 +360,7 @@ class SetupMainWindow:
         def search_text_slot(text):
             print("[INFO] Input text: {}".format(text))
             self.selected_image = text
+            MainFunctions.update_ui_credit_bar(self, u"输入：", text)
             self.backend("image_search")
             self.search_text.setText(u"")
         self.search_text.returnPressed.connect(lambda: search_text_slot(self.search_text.text()))

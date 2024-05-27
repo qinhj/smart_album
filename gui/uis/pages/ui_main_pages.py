@@ -160,6 +160,9 @@ class Ui_MainPages(object):
         self.pages.addWidget(self.page_1)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
+        self.page_2.setStyleSheet(u"QFrame {\n"
+"	font-size: 16pt;\n"
+"}")
         self.page_2_layout = QVBoxLayout(self.page_2)
         self.page_2_layout.setSpacing(5)
         self.page_2_layout.setObjectName(u"page_2_layout")
@@ -202,7 +205,9 @@ class Ui_MainPages(object):
 "	font-size: 16pt;\n"
 "}")
         self.page_3_layout = QVBoxLayout(self.page_3)
+        self.page_3_layout.setSpacing(5)
         self.page_3_layout.setObjectName(u"page_3_layout")
+        self.page_3_layout.setContentsMargins(5, 5, 5, 5)
         self.page_3_top_widget = QWidget(self.page_3)
         self.page_3_top_widget.setObjectName(u"page_3_top_widget")
 
@@ -225,7 +230,7 @@ class Ui_MainPages(object):
         self.page_3_right_scrollArea.setWidgetResizable(True)
         self.page_3_right_scrollAreaWidgetContents = QWidget()
         self.page_3_right_scrollAreaWidgetContents.setObjectName(u"page_3_right_scrollAreaWidgetContents")
-        self.page_3_right_scrollAreaWidgetContents.setGeometry(QRect(0, 0, 824, 554))
+        self.page_3_right_scrollAreaWidgetContents.setGeometry(QRect(0, 0, 832, 563))
         self.page_3_right_scrollAreaWidgetContents.setStyleSheet(u"background: transparent;")
         self.page_3_right_scrollArea.setWidget(self.page_3_right_scrollAreaWidgetContents)
 
@@ -241,7 +246,9 @@ class Ui_MainPages(object):
 "	font-size: 16pt;\n"
 "}")
         self.page_4_layout = QVBoxLayout(self.page_4)
+        self.page_4_layout.setSpacing(5)
         self.page_4_layout.setObjectName(u"page_4_layout")
+        self.page_4_layout.setContentsMargins(5, 5, 5, 5)
         self.page_4_top_widget = QWidget(self.page_4)
         self.page_4_top_widget.setObjectName(u"page_4_top_widget")
 
@@ -251,7 +258,7 @@ class Ui_MainPages(object):
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.page_4_search_info = QFrame(self.page_4)
         self.page_4_search_info.setObjectName(u"page_4_search_info")
-        self.page_4_search_info.setFrameShape(QFrame.StyledPanel)
+        self.page_4_search_info.setFrameShape(QFrame.NoFrame)
         self.page_4_search_info.setFrameShadow(QFrame.Raised)
 
         self.verticalLayout_4.addWidget(self.page_4_search_info)
@@ -264,7 +271,7 @@ class Ui_MainPages(object):
         self.page_4_scrollArea.setWidgetResizable(True)
         self.page_4_scrollAreaWidgetContents = QWidget()
         self.page_4_scrollAreaWidgetContents.setObjectName(u"page_4_scrollAreaWidgetContents")
-        self.page_4_scrollAreaWidgetContents.setGeometry(QRect(0, 0, 830, 548))
+        self.page_4_scrollAreaWidgetContents.setGeometry(QRect(0, 0, 838, 557))
         self.page_4_scrollAreaWidgetContents.setStyleSheet(u"background: transparent;")
         self.page_4_scrollArea.setWidget(self.page_4_scrollAreaWidgetContents)
 
@@ -280,7 +287,9 @@ class Ui_MainPages(object):
 "	font-size: 16pt;\n"
 "}")
         self.page_5_layout = QVBoxLayout(self.page_5)
+        self.page_5_layout.setSpacing(5)
         self.page_5_layout.setObjectName(u"page_5_layout")
+        self.page_5_layout.setContentsMargins(5, 5, 5, 5)
         self.page_5_top_widget = QWidget(self.page_5)
         self.page_5_top_widget.setObjectName(u"page_5_top_widget")
 
@@ -294,7 +303,7 @@ class Ui_MainPages(object):
         self.page_5_scrollArea.setWidgetResizable(True)
         self.page_5_scrollAreaWidgetContents = QWidget()
         self.page_5_scrollAreaWidgetContents.setObjectName(u"page_5_scrollAreaWidgetContents")
-        self.page_5_scrollAreaWidgetContents.setGeometry(QRect(0, 0, 832, 556))
+        self.page_5_scrollAreaWidgetContents.setGeometry(QRect(0, 0, 840, 565))
         self.page_5_scrollAreaWidgetContents.setStyleSheet(u"background: transparent;")
         self.page_5_scrollArea.setWidget(self.page_5_scrollAreaWidgetContents)
 

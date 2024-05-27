@@ -249,6 +249,11 @@
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
+      <property name="styleSheet">
+       <string notr="true">QFrame {
+	font-size: 16pt;
+}</string>
+      </property>
       <layout class="QVBoxLayout" name="page_2_layout">
        <property name="spacing">
         <number>5</number>
@@ -320,6 +325,21 @@
 }</string>
       </property>
       <layout class="QVBoxLayout" name="page_3_layout">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
+        <number>5</number>
+       </property>
        <item>
         <widget class="QWidget" name="page_3_top_widget" native="true"/>
        </item>
@@ -354,8 +374,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>824</width>
-              <height>554</height>
+              <width>832</width>
+              <height>563</height>
              </rect>
             </property>
             <property name="styleSheet">
@@ -375,6 +395,21 @@
 }</string>
       </property>
       <layout class="QVBoxLayout" name="page_4_layout">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
+        <number>5</number>
+       </property>
        <item>
         <widget class="QWidget" name="page_4_top_widget" native="true"/>
        </item>
@@ -383,7 +418,7 @@
          <item>
           <widget class="QFrame" name="page_4_search_info">
            <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
+            <enum>QFrame::NoFrame</enum>
            </property>
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
@@ -409,8 +444,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>830</width>
-              <height>548</height>
+              <width>838</width>
+              <height>557</height>
              </rect>
             </property>
             <property name="styleSheet">
@@ -430,6 +465,21 @@
 }</string>
       </property>
       <layout class="QVBoxLayout" name="page_5_layout">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
+        <number>5</number>
+       </property>
        <item>
         <widget class="QWidget" name="page_5_top_widget" native="true"/>
        </item>
@@ -452,8 +502,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>832</width>
-            <height>556</height>
+            <width>840</width>
+            <height>565</height>
            </rect>
           </property>
           <property name="styleSheet">
