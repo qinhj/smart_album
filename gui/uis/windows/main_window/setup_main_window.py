@@ -296,8 +296,10 @@ class SetupMainWindow:
             return left_column
 
         # ///////////////////////////////////////////////////////////////
-        # PAGE 1 - Welcome Page
+        # PAGE 1 - ADD LOGO TO MAIN PAGE
         # ///////////////////////////////////////////////////////////////
+        self.logo_svg = QSvgWidget(Functions.set_svg_image("bianbu-logo-dark.svg"))
+        self.ui.load_pages.logo_layout.addWidget(self.logo_svg, Qt.AlignCenter, Qt.AlignCenter)
 
         # ///////////////////////////////////////////////////////////////
         # PAGE 2 - ADD BUTTON FOR "智能影集"

@@ -196,7 +196,7 @@ class UI_MainWindow(object):
             parent,
             logo_width = 32, # Logo 宽度
             app_parent = self.central_widget,
-            logo_image = "logo_top.svg",
+            logo_image = "bianbu-image.svg",
             bg_color = self.themes["app_color"]["bg_two"],
             div_color = self.themes["app_color"]["bg_three"],
             btn_bg_color = self.themes["app_color"]["bg_two"],

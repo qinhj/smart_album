@@ -23,139 +23,42 @@ class Ui_MainPages(object):
         self.pages.setObjectName(u"pages")
         self.page_1 = QWidget()
         self.page_1.setObjectName(u"page_1")
-        self.page_1.setStyleSheet(u"font-size: 14pt")
-        self.horizontalLayout = QHBoxLayout(self.page_1)
-        self.horizontalLayout.setSpacing(0)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.page_1.setStyleSheet(u"font-size: 16pt")
+        self.page_1_layout = QVBoxLayout(self.page_1)
+        self.page_1_layout.setSpacing(5)
+        self.page_1_layout.setObjectName(u"page_1_layout")
+        self.page_1_layout.setContentsMargins(5, 5, 5, 5)
+        self.welcome_base = QFrame(self.page_1)
+        self.welcome_base.setObjectName(u"welcome_base")
+        self.welcome_base.setMinimumSize(QSize(300, 150))
+        self.welcome_base.setMaximumSize(QSize(400, 200))
+        self.welcome_base.setFrameShape(QFrame.NoFrame)
+        self.welcome_base.setFrameShadow(QFrame.Raised)
+        self.center_page_layout = QVBoxLayout(self.welcome_base)
+        self.center_page_layout.setSpacing(10)
+        self.center_page_layout.setObjectName(u"center_page_layout")
+        self.center_page_layout.setContentsMargins(0, 0, 0, 0)
+        self.logo = QFrame(self.welcome_base)
+        self.logo.setObjectName(u"logo")
+        self.logo.setMinimumSize(QSize(300, 120))
+        self.logo.setMaximumSize(QSize(400, 160))
+        self.logo.setFrameShape(QFrame.NoFrame)
+        self.logo.setFrameShadow(QFrame.Raised)
+        self.logo_layout = QVBoxLayout(self.logo)
+        self.logo_layout.setSpacing(0)
+        self.logo_layout.setObjectName(u"logo_layout")
+        self.logo_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.horizontalLayout.addStretch()
+        self.center_page_layout.addWidget(self.logo)
 
-        self.func_1 = QWidget(self.page_1)
-        self.func_1.setObjectName(u"func_1")
-        self.func_1.setStyleSheet(u"background: transparent;")
-        self.func_1_layout = QVBoxLayout(self.func_1)
-        self.func_1_layout.setSpacing(50)
-        self.func_1_layout.setObjectName(u"func_1_layout")
-        self.func_1_label = QLabel(self.func_1)
-        self.func_1_label.setObjectName(u"func_1_label")
-        self.func_1_label.setStyleSheet(u"background: transparent;font-family: Microsoft Yahei;font-size: 20pt;color: white;")
-        self.func_1_label.setAlignment(Qt.AlignCenter)
+        self.label = QLabel(self.welcome_base)
+        self.label.setObjectName(u"label")
+        self.label.setAlignment(Qt.AlignCenter)
 
-        self.func_1_layout.addStretch()
-        self.func_1_layout.addWidget(self.func_1_label)
-
-        self.func_1_frame_1 = QFrame(self.func_1)
-        self.func_1_frame_1.setObjectName(u"func_1_frame_1")
-        self.func_1_frame_1.setStyleSheet(u"background: transparent;")
-        self.func_1_frame_1.setFrameShape(QFrame.StyledPanel)
-        self.func_1_frame_1.setFrameShadow(QFrame.Raised)
-
-        self.func_1_layout.addWidget(self.func_1_frame_1)
-
-        self.func_1_frame_2 = QFrame(self.func_1)
-        self.func_1_frame_2.setObjectName(u"func_1_frame_2")
-        self.func_1_frame_2.setStyleSheet(u"background: transparent;")
-        self.func_1_frame_2.setFrameShape(QFrame.StyledPanel)
-        self.func_1_frame_2.setFrameShadow(QFrame.Raised)
-
-        self.func_1_layout.addWidget(self.func_1_frame_2)
-
-        self.func_1_frame_3 = QFrame(self.func_1)
-        self.func_1_frame_3.setObjectName(u"func_1_frame_3")
-        self.func_1_frame_3.setStyleSheet(u"background: transparent;")
-        self.func_1_frame_3.setFrameShape(QFrame.StyledPanel)
-        self.func_1_frame_3.setFrameShadow(QFrame.Raised)
-
-        self.func_1_layout.addWidget(self.func_1_frame_3)
-        self.func_1_layout.addStretch()
-
-        self.horizontalLayout.addWidget(self.func_1)
-
-        self.func_2 = QWidget(self.page_1)
-        self.func_2.setObjectName(u"func_2")
-        self.func_2.setStyleSheet(u"background: transparent;")
-        self.func_2_layout = QVBoxLayout(self.func_2)
-        self.func_2_layout.setSpacing(50)
-        self.func_2_layout.setObjectName(u"func_2_layout")
-        self.func_2_label = QLabel(self.func_2)
-        self.func_2_label.setObjectName(u"func_2_label")
-        self.func_2_label.setStyleSheet(u"background: transparent;font-family: Microsoft Yahei;font-size: 20pt;color: white;")
-        self.func_2_label.setAlignment(Qt.AlignCenter)
-
-        self.func_2_layout.addStretch()
-        self.func_2_layout.addWidget(self.func_2_label)
-
-        self.func_2_frame_1 = QFrame(self.func_2)
-        self.func_2_frame_1.setObjectName(u"func_2_frame_1")
-        self.func_2_frame_1.setStyleSheet(u"background: transparent;")
-        self.func_2_frame_1.setFrameShape(QFrame.StyledPanel)
-        self.func_2_frame_1.setFrameShadow(QFrame.Raised)
-
-        self.func_2_layout.addWidget(self.func_2_frame_1)
-
-        self.func_2_frame_2 = QFrame(self.func_2)
-        self.func_2_frame_2.setObjectName(u"func_2_frame_2")
-        self.func_2_frame_2.setStyleSheet(u"background: transparent;")
-        self.func_2_frame_2.setFrameShape(QFrame.StyledPanel)
-        self.func_2_frame_2.setFrameShadow(QFrame.Raised)
-
-        self.func_2_layout.addWidget(self.func_2_frame_2)
-
-        self.func_2_frame_3 = QFrame(self.func_2)
-        self.func_2_frame_3.setObjectName(u"func_2_frame_3")
-        self.func_2_frame_3.setStyleSheet(u"background: transparent;")
-        self.func_2_frame_3.setFrameShape(QFrame.StyledPanel)
-        self.func_2_frame_3.setFrameShadow(QFrame.Raised)
-
-        self.func_2_layout.addWidget(self.func_2_frame_3)
-        self.func_2_layout.addStretch()
-
-        self.horizontalLayout.addWidget(self.func_2)
-
-        self.func_3 = QWidget(self.page_1)
-        self.func_3.setObjectName(u"func_3")
-        self.func_3.setStyleSheet(u"background: transparent;")
-        self.func_3_layout = QVBoxLayout(self.func_3)
-        self.func_3_layout.setSpacing(50)
-        self.func_3_layout.setObjectName(u"func_3_layout")
-        self.func_3_label = QLabel(self.func_3)
-        self.func_3_label.setObjectName(u"func_3_label")
-        self.func_3_label.setStyleSheet(u"background: transparent;font-family: Microsoft Yahei;font-size: 20pt;color: white;")
-        self.func_3_label.setAlignment(Qt.AlignCenter)
-
-        self.func_3_layout.addStretch()
-        self.func_3_layout.addWidget(self.func_3_label)
-
-        self.func_3_frame_1 = QFrame(self.func_3)
-        self.func_3_frame_1.setObjectName(u"func_3_frame_1")
-        self.func_3_frame_1.setStyleSheet(u"background: transparent;")
-        self.func_3_frame_1.setFrameShape(QFrame.StyledPanel)
-        self.func_3_frame_1.setFrameShadow(QFrame.Raised)
-
-        self.func_3_layout.addWidget(self.func_3_frame_1)
-
-        self.func_3_frame_2 = QFrame(self.func_3)
-        self.func_3_frame_2.setObjectName(u"func_3_frame_2")
-        self.func_3_frame_2.setStyleSheet(u"background: transparent;")
-        self.func_3_frame_2.setFrameShape(QFrame.StyledPanel)
-        self.func_3_frame_2.setFrameShadow(QFrame.Raised)
-
-        self.func_3_layout.addWidget(self.func_3_frame_2)
-
-        self.func_3_frame_3 = QFrame(self.func_3)
-        self.func_3_frame_3.setObjectName(u"func_3_frame_3")
-        self.func_3_frame_3.setStyleSheet(u"background: transparent;")
-        self.func_3_frame_3.setFrameShape(QFrame.StyledPanel)
-        self.func_3_frame_3.setFrameShadow(QFrame.Raised)
-
-        self.func_3_layout.addWidget(self.func_3_frame_3)
-        self.func_3_layout.addStretch()
+        self.center_page_layout.addWidget(self.label)
 
 
-        self.horizontalLayout.addWidget(self.func_3)
-
-        self.horizontalLayout.addStretch()
+        self.page_1_layout.addWidget(self.welcome_base, 0, Qt.AlignHCenter)
 
         self.pages.addWidget(self.page_1)
         self.page_2 = QWidget()
@@ -316,7 +219,7 @@ class Ui_MainPages(object):
 
         self.retranslateUi(MainPages)
 
-        self.pages.setCurrentIndex(0)
+        self.pages.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainPages)
@@ -324,8 +227,6 @@ class Ui_MainPages(object):
 
     def retranslateUi(self, MainPages):
         MainPages.setWindowTitle(QCoreApplication.translate("MainPages", u"Form", None))
-        self.func_1_label.setText(QCoreApplication.translate("MainPages", u"\u4eba\u8138\u5206\u7c7b", None))
-        self.func_2_label.setText(QCoreApplication.translate("MainPages", u"\u4ee5\u56fe\u641c\u56fe", None))
-        self.func_3_label.setText(QCoreApplication.translate("MainPages", u"\u667a\u80fd\u5206\u6790", None))
+        self.label.setText(QCoreApplication.translate("MainPages", u"Welcome To Bianbu Smart Album GUI", None))
     # retranslateUi
 

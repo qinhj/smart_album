@@ -32,214 +32,110 @@
    <item>
     <widget class="QStackedWidget" name="pages">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_1">
       <property name="styleSheet">
-       <string notr="true">font-size: 14pt</string>
+       <string notr="true">font-size: 16pt</string>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QVBoxLayout" name="page_1_layout">
        <property name="spacing">
-        <number>0</number>
+        <number>5</number>
        </property>
        <property name="leftMargin">
-        <number>0</number>
+        <number>5</number>
        </property>
        <property name="topMargin">
-        <number>0</number>
+        <number>5</number>
        </property>
        <property name="rightMargin">
-        <number>0</number>
+        <number>5</number>
        </property>
        <property name="bottomMargin">
-        <number>0</number>
+        <number>5</number>
        </property>
-       <item>
-        <widget class="QWidget" name="func_1" native="true">
-         <property name="styleSheet">
-          <string notr="true">background: transparent;</string>
+       <item alignment="Qt::AlignHCenter">
+        <widget class="QFrame" name="welcome_base">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>150</height>
+          </size>
          </property>
-         <layout class="QVBoxLayout" name="func_1_layout">
+         <property name="maximumSize">
+          <size>
+           <width>400</width>
+           <height>200</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="center_page_layout">
           <property name="spacing">
-           <number>50</number>
+           <number>10</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
           </property>
           <item>
-           <widget class="QLabel" name="func_1_label">
-            <property name="styleSheet">
-             <string notr="true">background: transparent;font-family: Microsoft Yahei;font-size: 20pt;color: white;</string>
+           <widget class="QFrame" name="logo">
+            <property name="minimumSize">
+             <size>
+              <width>300</width>
+              <height>120</height>
+             </size>
             </property>
+            <property name="maximumSize">
+             <size>
+              <width>400</width>
+              <height>160</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="logo_layout">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label">
             <property name="text">
-             <string>人脸分类</string>
+             <string>Welcome To Bianbu Smart Album GUI</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="func_1_frame_1">
-            <property name="styleSheet">
-             <string notr="true">background: transparent;</string>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="func_1_frame_2">
-            <property name="styleSheet">
-             <string notr="true">background: transparent;</string>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="func_1_frame_3">
-            <property name="styleSheet">
-             <string notr="true">background: transparent;</string>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" name="func_2" native="true">
-         <property name="styleSheet">
-          <string notr="true">background: transparent;</string>
-         </property>
-         <layout class="QVBoxLayout" name="func_2_layout">
-          <property name="spacing">
-           <number>50</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="func_2_label">
-            <property name="styleSheet">
-             <string notr="true">background: transparent;font-family: Microsoft Yahei;font-size: 20pt;color: white;</string>
-            </property>
-            <property name="text">
-             <string>以图搜图</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="func_2_frame_1">
-            <property name="styleSheet">
-             <string notr="true">background: transparent;</string>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="func_2_frame_2">
-            <property name="styleSheet">
-             <string notr="true">background: transparent;</string>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="func_2_frame_3">
-            <property name="styleSheet">
-             <string notr="true">background: transparent;</string>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" name="func_3" native="true">
-         <property name="styleSheet">
-          <string notr="true">background: transparent;</string>
-         </property>
-         <layout class="QVBoxLayout" name="func_3_layout">
-          <property name="spacing">
-           <number>50</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="func_3_label">
-            <property name="styleSheet">
-             <string notr="true">background: transparent;font-family: Microsoft Yahei;font-size: 20pt;color: white;</string>
-            </property>
-            <property name="text">
-             <string>智能分析</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="func_3_frame_1">
-            <property name="styleSheet">
-             <string notr="true">background: transparent;</string>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="func_3_frame_2">
-            <property name="styleSheet">
-             <string notr="true">background: transparent;</string>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="func_3_frame_3">
-            <property name="styleSheet">
-             <string notr="true">background: transparent;</string>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
             </property>
            </widget>
           </item>
