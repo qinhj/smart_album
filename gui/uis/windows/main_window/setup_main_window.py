@@ -120,10 +120,6 @@ class SetupMainWindow:
             return self.ui.left_menu.sender()
         elif self.ui.left_column.sender() != None:
             return self.ui.left_column.sender()
-        elif self.ui.load_pages.page_3_left_column.menus.menu_1_layout.sender() != None:
-            return self.ui.load_pages.page_3_left_column.menus.menu_1_layout.sender()
-        elif self.ui.left_column.menus.menu_2_layout.sender() != None:
-            return self.ui.left_column.menus.menu_2_layout.sender()
 
     # SETUP MAIN WINDOW WITH CUSTOM PARAMETERS
     # ///////////////////////////////////////////////////////////////
@@ -247,6 +243,73 @@ class SetupMainWindow:
 
         # PAGES
         # ///////////////////////////////////////////////////////////////
+
+        def add_label(layout: QBoxLayout, text: str, name: str, parent = None):
+            label = QLabel(text, parent=parent)
+            label.setObjectName(name)
+            layout.addWidget(label, alignment=Qt.AlignCenter)
+            return label
+        
+        def add_btn(layout: QBoxLayout, text: str, slot, parent = None):
+            btn = PyPushButton(
+                text = text,
+                radius = 8,
+                color = self.themes["app_color"]["white"],
+                bg_color = self.themes["app_color"]["dark_one"],
+                bg_color_hover = self.themes["app_color"]["orange"],
+                bg_color_pressed = self.themes["app_color"]["orange"],
+                parent = parent,
+            )
+            btn.setMaximumWidth(200)
+            btn.setMinimumWidth(200)
+            btn.setMinimumHeight(40)
+            btn.clicked.connect(slot)
+            layout.addWidget(btn, alignment=Qt.AlignCenter)
+            return btn
+
+        # ADD CUSTOM LEFT COLUMN WIDGET
+        def add_left_column(layout: QBoxLayout, title: str):
+            frame = layout.parentWidget()
+            left_column = PyLeftColumn(
+                parent = frame,
+                app_parent = self.ui.central_widget,
+                text_title = title,
+                text_title_size = self.settings["font"]["title_size"],
+                text_title_color = self.themes['app_color']['text_foreground'],
+                icon_path = Functions.set_svg_icon("icon_folder_open.svg"),
+                dark_one = self.themes['app_color']['dark_one'],
+                bg_color = self.themes['app_color']['bg_three'],
+                btn_color = self.themes['app_color']['bg_three'],
+                btn_color_hover = self.themes['app_color']['bg_two'],
+                btn_color_pressed = self.themes['app_color']['bg_one'],
+                icon_color = self.themes['app_color']['icon_color'],
+                icon_color_hover = self.themes['app_color']['icon_hover'],
+                context_color = self.themes['app_color']['context_color'],
+                icon_color_pressed = self.themes['app_color']['icon_pressed'],
+                icon_close_path = Functions.set_svg_icon("no_icon.svg")
+            )
+            left_column.icon_frame.hide()
+            left_column.btn_frame.hide()
+            layout.addWidget(left_column)
+            # ADD WIDGETS: Person List Placeholder
+            left_column.menus.menu_1_layout.addWidget(QWidget())
+            return left_column
+
+        # ///////////////////////////////////////////////////////////////
+        # PAGE 2 - ADD BUTTON FOR "智能影集"
+        # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.page_2_top_widget_layout = QHBoxLayout(self.ui.load_pages.page_2_top_widget)
+        _ = add_label(self.ui.load_pages.page_2_top_widget_layout, u"智能影集", "page_2_func_label", self.ui.load_pages.page_2)
+        _ = add_btn(self.ui.load_pages.page_2_top_widget_layout, u"选择文件夹", lambda: MainFunctions.select_image_directory(self), self.ui.load_pages.page_2)
+        _ = add_btn(self.ui.load_pages.page_2_top_widget_layout, u"开始分析", lambda: self.backend("smart_album"), self.ui.load_pages.page_2)
+
+        # PAGE 2 - ADD LAYOUT TO LEFT COLUMN
+        self.ui.load_pages.page_2_left_column_frame.setMaximumWidth(self.settings["left_column_size"]["maximum"])
+        self.ui.load_pages.page_2_left_column_frame.setMinimumWidth(self.settings["left_column_size"]["minimum"])
+        self.ui.load_pages.page_2_left_column_frame.setStyleSheet(f"background: {self.themes['app_color']['bg_two']}")
+        self.ui.load_pages.album_list_layout = QVBoxLayout(self.ui.load_pages.page_2_left_column_frame)
+        self.ui.load_pages.album_list_layout.setContentsMargins(0,0,0,0)
+        self.ui.load_pages.page_2_left_column = add_left_column(self.ui.load_pages.album_list_layout, u"影集列表")
 
         # ///////////////////////////////////////////////////////////////
         # PAGE 3 - ADD BUTTON FOR "人脸分类"
@@ -441,6 +504,7 @@ class SetupMainWindow:
             _bg_color_hover = self.themes['app_color']['dark_one'],
             _bg_color_pressed = self.themes["app_color"]["orange"]
         )
+        self.ui.load_pages.page_2_right_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
         self.ui.load_pages.page_3_right_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
         self.ui.load_pages.page_4_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
         self.ui.load_pages.scrollArea_3.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
