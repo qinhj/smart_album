@@ -296,6 +296,10 @@ class SetupMainWindow:
             return left_column
 
         # ///////////////////////////////////////////////////////////////
+        # PAGE 1 - Welcome Page
+        # ///////////////////////////////////////////////////////////////
+
+        # ///////////////////////////////////////////////////////////////
         # PAGE 2 - ADD BUTTON FOR "智能影集"
         # ///////////////////////////////////////////////////////////////
         self.ui.load_pages.page_2_top_widget_layout = QHBoxLayout(self.ui.load_pages.page_2_top_widget)
@@ -363,52 +367,29 @@ class SetupMainWindow:
         self.ui.title_bar.set_custom_title_bar(False)
 
         # ///////////////////////////////////////////////////////////////
-        # PAGE 1 - ADD BUTTON FOR "智能分析"
+        # PAGE 5 - ADD BUTTON FOR "智能筛重"
         # ///////////////////////////////////////////////////////////////
-        self.func_btn_31 = PyPushButton(
-            text = u"选择文件夹",
-            radius = 8,
-            color = self.themes["app_color"]["white"],
-            bg_color = self.themes["app_color"]["dark_one"],
-            bg_color_hover = self.themes["app_color"]["orange"],
-            bg_color_pressed = self.themes["app_color"]["orange"]
-        )
-        self.func_btn_31.setMaximumWidth(200)
-        self.func_btn_31.setMinimumWidth(200)
-        self.func_btn_31.setMinimumHeight(40)
-        self.func_btn_31.clicked.connect(lambda: MainFunctions.select_image_directory(self))
-        self.ui.load_pages.func_3_frame_1_layout = QHBoxLayout(self.ui.load_pages.func_3_frame_1)
-        self.ui.load_pages.func_3_frame_1_layout.addWidget(self.func_btn_31, alignment=Qt.AlignCenter)
+        self.ui.load_pages.page_5_top_widget_layout = QHBoxLayout(self.ui.load_pages.page_5_top_widget)
+        _ = add_label(self.ui.load_pages.page_5_top_widget_layout, u"智能筛重",
+                      "page_5_func_label", self.ui.load_pages.page_5)
+        _ = add_btn(self.ui.load_pages.page_5_top_widget_layout, u"选择文件夹",
+                    lambda: MainFunctions.select_image_directory(self), self.ui.load_pages.page_5)
+        _ = add_btn(self.ui.load_pages.page_5_top_widget_layout, u"开始分析",
+                    lambda: self.backend("image_similarity"), self.ui.load_pages.page_5)
 
-        self.func_btn_32 = PyPushButton(
-            text = u"智能筛重",
+        # ADD CONFIRM BUTTON FOR PAGE5
+        self.commit_delete_button = PyPushButton(
+            text = u'确定',
             radius = 8,
-            color = self.themes["app_color"]["white"],
-            bg_color = self.themes["app_color"]["dark_one"],
-            bg_color_hover = self.themes["app_color"]["orange"],
-            bg_color_pressed = self.themes["app_color"]["orange"]
+            color = self.themes['app_color']['white'],
+            bg_color = self.themes['app_color']['dark_one'],
+            bg_color_hover = self.themes['app_color']['orange'],
+            bg_color_pressed = self.themes['app_color']['orange']
         )
-        self.func_btn_32.setMaximumWidth(200)
-        self.func_btn_32.setMinimumWidth(200)
-        self.func_btn_32.setMinimumHeight(40)
-        self.func_btn_32.clicked.connect(lambda: self.backend("image_similarity"))
-        self.ui.load_pages.func_3_frame_2_layout = QHBoxLayout(self.ui.load_pages.func_3_frame_2)
-        self.ui.load_pages.func_3_frame_2_layout.addWidget(self.func_btn_32, alignment=Qt.AlignCenter)
-
-        self.func_btn_33 = PyPushButton(
-            text = u"智能影集",
-            radius = 8,
-            color = self.themes["app_color"]["white"],
-            bg_color = self.themes["app_color"]["dark_one"],
-            bg_color_hover = self.themes["app_color"]["orange"],
-            bg_color_pressed = self.themes["app_color"]["orange"]
-        )
-        self.func_btn_33.setMaximumWidth(200)
-        self.func_btn_33.setMinimumWidth(200)
-        self.func_btn_33.setMinimumHeight(40)
-        self.func_btn_33.clicked.connect(lambda: self.backend("smart_album"))
-        self.ui.load_pages.func_3_frame_3_layout = QHBoxLayout(self.ui.load_pages.func_3_frame_3)
-        self.ui.load_pages.func_3_frame_3_layout.addWidget(self.func_btn_33, alignment=Qt.AlignCenter)
+        self.commit_delete_button.setMinimumHeight(40)
+        self.ui.load_pages.page_5_layout.addWidget(self.commit_delete_button)
+        self.commit_delete_button.hide()
+        self.commit_delete_button.clicked.connect(lambda: MainFunctions.update_similar_images(self))
 
         # SET SCROLLBAR STYLE
         # ///////////////////////////////////////////////////////////////
@@ -421,13 +402,13 @@ class SetupMainWindow:
         self.ui.load_pages.page_2_right_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
         self.ui.load_pages.page_3_right_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
         self.ui.load_pages.page_4_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
-        self.ui.load_pages.scrollArea_3.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
+        self.ui.load_pages.page_5_scrollArea.verticalScrollBar().setStyleSheet(custom_scrollbar_style)
 
         # ADD CONNECT TO CUSTOM WIDGET CREDITS
         self.ui.credits.person_name.returnPressed.connect(
             lambda: MainFunctions.update_image_object_label(self, self.ui.credits.person_name))
 
-        # ADD Widgets
+        # ADD Widgets (Layout)
         # ///////////////////////////////////////////////////////////////
 
         # SET GRID LAYOUT FOR PAGE2 ("智能影集")
@@ -458,25 +439,11 @@ class SetupMainWindow:
 
         # SET VERTICAL LAYOUT FOR PAGE5 ("智能筛重")
         # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.scrollArea_3_layout = QVBoxLayout(self.ui.load_pages.scrollAreaWidgetContents_3)
-        self.ui.load_pages.scrollArea_3_layout.setSpacing(0)
-        self.ui.load_pages.scrollArea_3_layout.setObjectName(u"scrollArea_3_layout")
-        self.ui.load_pages.scrollArea_3_layout.setContentsMargins(0, 0, 0, 0)
-        self.ui.load_pages.scrollArea_3_layout.setSpacing(20)
-
-        # ADD CONFIRM BUTTON FOR PAGE5
-        self.commit_delete_button = PyPushButton(
-            text = u'确定',
-            radius = 8,
-            color = self.themes['app_color']['white'],
-            bg_color = self.themes['app_color']['dark_one'],
-            bg_color_hover = self.themes['app_color']['orange'],
-            bg_color_pressed = self.themes['app_color']['orange']
-        )
-        self.commit_delete_button.setMinimumHeight(40)
-        self.ui.load_pages.page_5_layout.addWidget(self.commit_delete_button)
-        self.commit_delete_button.hide()
-        self.commit_delete_button.clicked.connect(lambda: MainFunctions.update_page5_with_similar_images(self))
+        self.ui.load_pages.scrollArea_layout_similarity = QVBoxLayout(self.ui.load_pages.page_5_scrollAreaWidgetContents)
+        self.ui.load_pages.scrollArea_layout_similarity.setSpacing(0)
+        self.ui.load_pages.scrollArea_layout_similarity.setObjectName(u"scrollArea_layout_similarity")
+        self.ui.load_pages.scrollArea_layout_similarity.setContentsMargins(0, 0, 0, 0)
+        self.ui.load_pages.scrollArea_layout_similarity.setSpacing(20)
 
         # RIGHT COLUMN
         # ///////////////////////////////////////////////////////////////

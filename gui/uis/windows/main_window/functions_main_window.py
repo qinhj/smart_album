@@ -428,27 +428,27 @@ class MainFunctions():
             return None
 
         # REMOVE PREVIOUS WIDGET
-        _image_page_count = self.ui.load_pages.scrollArea_3_layout.count()
+        _image_page_count = self.ui.load_pages.scrollArea_layout_similarity.count()
         for index in range(_image_page_count-1, -1, -1):
             MainFunctions.delete_widget(
-                self, self.ui.load_pages.scrollArea_3_layout, index, index+1)
+                self, self.ui.load_pages.scrollArea_layout_similarity, index, index+1)
         # ADD IMAGES
         for paths in self.image_similarity_result:
             image_page = PyImagePage()
             image_page.btn_group.setExclusive(False)
-            self.ui.load_pages.scrollArea_3_layout.addWidget(image_page)
+            self.ui.load_pages.scrollArea_layout_similarity.addWidget(image_page)
             for path in paths:
                 image_box = PyImage(path)
                 image_page.flow_layout.addWidget(image_box)
                 image_page.flow_layout.update()
                 image_page.btn_group.addButton(image_box.checkbox)
-                self.ui.load_pages.scrollArea_3_layout.update()
+                self.ui.load_pages.scrollArea_layout_similarity.update()
             self.image_similarity_pages.append(image_page)
         QApplication.processEvents()
         self.commit_delete_button.show()
         self.ui.credits.copyright_label.setText(u"选择要删除的图片并点击确定")
 
-    def update_page5_with_similar_images(self):
+    def update_similar_images(self):
         image_path_to_delete = []
         image_page_to_delete = []
         for image_page in self.image_similarity_pages:
@@ -471,8 +471,8 @@ class MainFunctions():
             # add empty or single image page to delete list
             if image_page.flow_layout.count() < 2:
                 image_page.setParent(None)
-                self.ui.load_pages.scrollArea_3_layout.removeWidget(image_page)
-                self.ui.load_pages.scrollArea_3_layout.update()
+                self.ui.load_pages.scrollArea_layout_similarity.removeWidget(image_page)
+                self.ui.load_pages.scrollArea_layout_similarity.update()
                 image_page_to_delete.append(image_page)
                 QApplication.processEvents()
         # remove empty image page from page5
