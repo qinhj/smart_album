@@ -454,10 +454,10 @@ class SetupMainWindow:
 
         # SET GRID LAYOUT FOR PAGE2 ("智能影集")
         # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.scrollArea_4_layout = QGridLayout(self.ui.load_pages.scrollAreaWidgetContents_4)
-        self.ui.load_pages.scrollArea_4_layout.setSpacing(0)
-        self.ui.load_pages.scrollArea_4_layout.setObjectName(u"scrollArea_4_layout")
-        self.ui.load_pages.scrollArea_4_layout.setContentsMargins(0, 0, 0, 0)
+        self.ui.load_pages.scrollArea_layout_album = QGridLayout(self.ui.load_pages.page_2_right_scrollAreaWidgetContents)
+        self.ui.load_pages.scrollArea_layout_album.setSpacing(0)
+        self.ui.load_pages.scrollArea_layout_album.setObjectName(u"scrollArea_layout_album")
+        self.ui.load_pages.scrollArea_layout_album.setContentsMargins(0, 0, 0, 0)
 
         # SET GRID LAYOUT FOR PAGE3 ("人物列表")
         # ///////////////////////////////////////////////////////////////

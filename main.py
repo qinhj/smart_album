@@ -124,8 +124,8 @@ class MainWindow(QMainWindow):
                 MainFunctions.toggle_left_column(self)
             # Load Page 2
             MainFunctions.set_page(self, self.ui.load_pages.page_2)
-            if self.ui.load_pages.scrollArea_4_layout.count():
-                MainFunctions.delete_widget(self, self.ui.load_pages.scrollArea_4_layout, 0, 1)
+            if self.ui.load_pages.scrollArea_layout_album.count():
+                MainFunctions.delete_widget(self, self.ui.load_pages.scrollArea_layout_album, 0, 1)
             # Load && Update Menu 2
             MainFunctions.update_left_column_menu2(self)
             MainFunctions.set_left_column_menu(

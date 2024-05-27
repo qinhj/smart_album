@@ -164,19 +164,36 @@ class Ui_MainPages(object):
         self.page_2_layout.setSpacing(5)
         self.page_2_layout.setObjectName(u"page_2_layout")
         self.page_2_layout.setContentsMargins(5, 5, 5, 5)
-        self.scrollArea_4 = QScrollArea(self.page_2)
-        self.scrollArea_4.setObjectName(u"scrollArea_4")
-        self.scrollArea_4.setStyleSheet(u"background: transparent;")
-        self.scrollArea_4.setFrameShape(QFrame.NoFrame)
-        self.scrollArea_4.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.scrollArea_4.setWidgetResizable(True)
-        self.scrollAreaWidgetContents_4 = QWidget()
-        self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 832, 572))
-        self.scrollAreaWidgetContents_4.setStyleSheet(u"background: transparent;")
-        self.scrollArea_4.setWidget(self.scrollAreaWidgetContents_4)
+        self.page_2_top_widget = QWidget(self.page_2)
+        self.page_2_top_widget.setObjectName(u"page_2_top_widget")
 
-        self.page_2_layout.addWidget(self.scrollArea_4)
+        self.page_2_layout.addWidget(self.page_2_top_widget)
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.page_2_left_column_frame = QFrame(self.page_2)
+        self.page_2_left_column_frame.setObjectName(u"page_2_left_column_frame")
+        self.page_2_left_column_frame.setFrameShape(QFrame.StyledPanel)
+        self.page_2_left_column_frame.setFrameShadow(QFrame.Raised)
+
+        self.horizontalLayout_2.addWidget(self.page_2_left_column_frame)
+
+        self.page_2_right_scrollArea = QScrollArea(self.page_2)
+        self.page_2_right_scrollArea.setObjectName(u"page_2_right_scrollArea")
+        self.page_2_right_scrollArea.setStyleSheet(u"background: transparent;")
+        self.page_2_right_scrollArea.setFrameShape(QFrame.NoFrame)
+        self.page_2_right_scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.page_2_right_scrollArea.setWidgetResizable(True)
+        self.page_2_right_scrollAreaWidgetContents = QWidget()
+        self.page_2_right_scrollAreaWidgetContents.setObjectName(u"page_2_right_scrollAreaWidgetContents")
+        self.page_2_right_scrollAreaWidgetContents.setGeometry(QRect(0, 0, 832, 563))
+        self.page_2_right_scrollAreaWidgetContents.setStyleSheet(u"background: transparent;")
+        self.page_2_right_scrollArea.setWidget(self.page_2_right_scrollAreaWidgetContents)
+
+        self.horizontalLayout_2.addWidget(self.page_2_right_scrollArea)
+
+
+        self.page_2_layout.addLayout(self.horizontalLayout_2)
 
         self.pages.addWidget(self.page_2)
         self.page_3 = QWidget()

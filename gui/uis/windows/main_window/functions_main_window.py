@@ -160,7 +160,7 @@ class MainFunctions():
         """ Reload smart album info. """
         if self.smart_album_result is None:
             MainFunctions.update_ui_credit_bar(self, copyright=u"还未生成智能影集")
-            #self.ui.load_pages.scrollAreaWidgetContents_4.hide()
+            #self.ui.load_pages.page_2_right_scrollAreaWidgetContents.hide()
             return None
         
         if len(self.smart_album_result) == 0:
@@ -168,7 +168,7 @@ class MainFunctions():
             if self.ui.left_column.menus.menu_2_layout.count():
                 MainFunctions.delete_widget(self, self.ui.left_column.menus.menu_2_layout, 0, 1)
             MainFunctions.update_ui_credit_bar(self, copyright=u"未能生成智能影集")
-            #self.ui.load_pages.scrollAreaWidgetContents_4.hide()
+            #self.ui.load_pages.page_2_right_scrollAreaWidgetContents.hide()
             return None
 
         #print(self.smart_album_result)
@@ -208,7 +208,7 @@ class MainFunctions():
             btn.setAutoExclusive(True)
             btn.clicked.connect(lambda: MainFunctions.load_images_of_checked_button(
                 self, image_dict=self.smart_album_dict, btn_group=self.smart_album_list_btn_group, read_only=True,
-                layout=self.ui.load_pages.scrollArea_4_layout, image_page_dict=self.smart_album_image_page))
+                layout=self.ui.load_pages.scrollArea_layout_album, image_page_dict=self.smart_album_image_page))
             self.smart_album_list_layout.addWidget(btn)
             self.smart_album_list_btn_group.addButton(btn)
         self.smart_album_list_layout.addStretch()
