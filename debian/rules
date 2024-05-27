@@ -11,7 +11,7 @@ install:
 	rm -rf $(CURDIR)/debian/bianbu-smart-album-fake/usr/src/bianbu-smart-album-fake/backend/tiorb
 	@for bk in fake tiorb; do \
 		PKG_DATA=$(CURDIR)/debian/bianbu-smart-album-$${bk}/usr/share; \
-		sed -i "s/@VERSION_NUMBER/$(shell cat VERSION_NUMBER)/g" $${PKG_DATA}/*/*.json $${PKG_DATA}/*/*.desktop; \
+		sed -i "s/@VERSION_NUMBER/$(shell cat VERSION_NUMBER)/g" $${PKG_DATA}/*/*.desktop; \
 		sed -i "s/@BACKEND/$${bk}/g" $${PKG_DATA}/*/*.json $${PKG_DATA}/*/*.desktop; \
 	done
 

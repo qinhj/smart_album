@@ -1,7 +1,5 @@
 {
     "app_name": "Smart Album",
-    "version": "@VERSION_NUMBER",
-    "copyright": "",
     "year": 2024,
     "theme_name": "default",
     "custom_title_bar": true,
