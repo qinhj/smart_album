@@ -283,6 +283,19 @@ class SetupMainWindow:
             layout.addWidget(left_column)
             return left_column
 
+        def run_backend(task: str, list_layout: QBoxLayout = None, image_layout: QBoxLayout = None, index = 0, count = 1):
+            # Clear previous list widget and image widgets.
+            if list_layout and list_layout.count():
+                MainFunctions.delete_widget(self, list_layout, index, count)
+            if image_layout and image_layout.count():
+                if count != -1:
+                    MainFunctions.delete_widget(self, image_layout, index, count)
+                else:
+                    for index in range(image_layout.count()-1, -1, -1):
+                        MainFunctions.delete_widget(
+                            self, image_layout, index, index+1)
+            self.backend(task)
+
         # ///////////////////////////////////////////////////////////////
         # PAGE 1 - ADD LOGO TO MAIN PAGE
         # ///////////////////////////////////////////////////////////////
@@ -290,17 +303,14 @@ class SetupMainWindow:
         self.ui.load_pages.logo_layout.addWidget(self.logo_svg, Qt.AlignCenter, Qt.AlignCenter)
 
         # ///////////////////////////////////////////////////////////////
-        # PAGE 2 - ADD BUTTON FOR "智能影集"
+        # PAGE 2 - SET LAYOUT FOR PAGE2 ("智能影集")
         # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.page_2_top_widget_layout = QHBoxLayout(self.ui.load_pages.page_2_top_widget)
-        _ = add_label(self.ui.load_pages.page_2_top_widget_layout, u"智能影集",
-                      "page_2_func_label", self.ui.load_pages.page_2)
-        _ = add_btn(self.ui.load_pages.page_2_top_widget_layout, u"选择文件夹",
-                    lambda: MainFunctions.select_image_directory(self), self.ui.load_pages.page_2)
-        _ = add_btn(self.ui.load_pages.page_2_top_widget_layout, u"开始分析",
-                    lambda: self.backend("smart_album"), self.ui.load_pages.page_2)
+        self.ui.load_pages.scrollArea_layout_album = QGridLayout(self.ui.load_pages.page_2_right_scrollAreaWidgetContents)
+        self.ui.load_pages.scrollArea_layout_album.setSpacing(0)
+        self.ui.load_pages.scrollArea_layout_album.setObjectName(u"scrollArea_layout_album")
+        self.ui.load_pages.scrollArea_layout_album.setContentsMargins(0, 0, 0, 0)
 
-        # PAGE 2 - ADD LAYOUT TO LEFT COLUMN
+        # PAGE 2 - ADD LEFT COLUMN
         self.ui.load_pages.page_2_left_column_frame.setMaximumWidth(self.settings["left_column_size"]["maximum"])
         self.ui.load_pages.page_2_left_column_frame.setMinimumWidth(self.settings["left_column_size"]["minimum"])
         self.ui.load_pages.page_2_left_column_frame.setStyleSheet(f"background: {self.themes['app_color']['bg_two']}")
@@ -308,18 +318,28 @@ class SetupMainWindow:
         self.ui.load_pages.album_list_layout.setContentsMargins(0,0,0,0)
         self.ui.load_pages.page_2_left_column = add_left_column(self.ui.load_pages.album_list_layout, u"影集列表")
 
-        # ///////////////////////////////////////////////////////////////
-        # PAGE 3 - ADD BUTTON FOR "人脸分类"
-        # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.page_3_top_widget_layout = QHBoxLayout(self.ui.load_pages.page_3_top_widget)
-        _ = add_label(self.ui.load_pages.page_3_top_widget_layout, u"人脸聚类",
-                      "page_3_func_label", self.ui.load_pages.page_3)
-        _ = add_btn(self.ui.load_pages.page_3_top_widget_layout, u"选择文件夹",
-                    lambda: MainFunctions.select_image_directory(self), self.ui.load_pages.page_3)
-        _ = add_btn(self.ui.load_pages.page_3_top_widget_layout, u"开始聚类",
-                    lambda: self.backend("face_cluster"), self.ui.load_pages.page_3)
+        # PAGE 2 - ADD COMMAND BUTTON
+        self.ui.load_pages.page_2_top_widget_layout = QHBoxLayout(self.ui.load_pages.page_2_top_widget)
+        _ = add_label(self.ui.load_pages.page_2_top_widget_layout, u"智能影集",
+                      "page_2_func_label", self.ui.load_pages.page_2)
+        _ = add_btn(self.ui.load_pages.page_2_top_widget_layout, u"选择文件夹",
+                    lambda: MainFunctions.select_image_directory(self), self.ui.load_pages.page_2)
+        _ = add_btn(self.ui.load_pages.page_2_top_widget_layout, u"开始分析",
+                    lambda: run_backend(
+                        "smart_album",
+                        self.ui.load_pages.scrollArea_layout_album,
+                        self.ui.load_pages.page_2_left_column.scrollAreaLayout
+                    ), self.ui.load_pages.page_2)
 
-        # PAGE 3 - ADD LAYOUT TO LEFT COLUMN
+        # ///////////////////////////////////////////////////////////////
+        # PAGE 3 - SET LAYOUT FOR PAGE3 ("人脸聚类")
+        # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.scrollArea_layout_human = QGridLayout(self.ui.load_pages.page_3_right_scrollAreaWidgetContents)
+        self.ui.load_pages.scrollArea_layout_human.setSpacing(0)
+        self.ui.load_pages.scrollArea_layout_human.setObjectName(u"scrollArea_layout_human")
+        self.ui.load_pages.scrollArea_layout_human.setContentsMargins(0, 0, 0, 0)
+
+        # PAGE 3 - ADD LEFT COLUMN
         self.ui.load_pages.page_3_left_column_frame.setMaximumWidth(self.settings["left_column_size"]["maximum"])
         self.ui.load_pages.page_3_left_column_frame.setMinimumWidth(self.settings["left_column_size"]["minimum"])
         self.ui.load_pages.page_3_left_column_frame.setStyleSheet(f"background: {self.themes['app_color']['bg_two']}")
@@ -327,9 +347,33 @@ class SetupMainWindow:
         self.ui.load_pages.human_list_layout.setContentsMargins(0,0,0,0)
         self.ui.load_pages.page_3_left_column = add_left_column(self.ui.load_pages.human_list_layout, u"人物列表")
 
+        # PAGE 3 - ADD COMMAND BUTTON
+        self.ui.load_pages.page_3_top_widget_layout = QHBoxLayout(self.ui.load_pages.page_3_top_widget)
+        _ = add_label(self.ui.load_pages.page_3_top_widget_layout, u"人脸聚类",
+                      "page_3_func_label", self.ui.load_pages.page_3)
+        _ = add_btn(self.ui.load_pages.page_3_top_widget_layout, u"选择文件夹",
+                    lambda: MainFunctions.select_image_directory(self), self.ui.load_pages.page_3)
+        _ = add_btn(self.ui.load_pages.page_3_top_widget_layout, u"开始聚类",
+                    lambda: run_backend(
+                        "face_cluster",
+                        self.ui.load_pages.scrollArea_layout_human,
+                        self.ui.load_pages.page_3_left_column.scrollAreaLayout
+                    ), self.ui.load_pages.page_3)
+
         # ///////////////////////////////////////////////////////////////
-        # PAGE 4 - ADD BUTTON FOR "智能搜图"
+        # PAGE 4 - SET LAYOUT FOR PAGE4 ("智能搜图")
         # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.search_info_layout = QHBoxLayout(self.ui.load_pages.page_4_search_info)
+        self.ui.load_pages.search_info_layout.setSpacing(0)
+        self.ui.load_pages.search_info_layout.setObjectName(u"search_info_layout")
+        self.ui.load_pages.search_info_layout.setContentsMargins(0, 0, 0, 0)
+        self.ui.load_pages.search_info_layout.setAlignment(Qt.AlignCenter)
+        self.ui.load_pages.scrollArea_layout_search = QGridLayout(self.ui.load_pages.page_4_scrollAreaWidgetContents)
+        self.ui.load_pages.scrollArea_layout_search.setSpacing(0)
+        self.ui.load_pages.scrollArea_layout_search.setObjectName(u"scrollArea_layout_search")
+        self.ui.load_pages.scrollArea_layout_search.setContentsMargins(0, 0, 0, 0)
+
+        # PAGE 4 - ADD COMMAND BUTTON
         self.ui.load_pages.page_4_top_widget_layout = QHBoxLayout(self.ui.load_pages.page_4_top_widget)
         _ = add_label(self.ui.load_pages.page_4_top_widget_layout, u"智能搜图",
                       "page_4_func_label", self.ui.load_pages.page_4)
@@ -338,7 +382,11 @@ class SetupMainWindow:
         _ = add_btn(self.ui.load_pages.page_4_top_widget_layout, u"选择图片",
                     lambda: MainFunctions.select_single_image(self), self.ui.load_pages.page_4)
         _ = add_btn(self.ui.load_pages.page_4_top_widget_layout, u"开始查找",
-                    lambda: self.backend("image_search"), self.ui.load_pages.page_4)
+                    lambda: run_backend(
+                        "image_search",
+                        self.ui.load_pages.search_info_layout,
+                        self.ui.load_pages.scrollArea_layout_search
+                    ), self.ui.load_pages.page_4)
 
         # ADD LINE EDIT TO TITLE BAR FOR CUSTOM SEARCH WITH TEXT
         self.search_text = PyLineEdit(place_holder_text = u"文搜图")
@@ -351,22 +399,34 @@ class SetupMainWindow:
             print("[INFO] Input text: {}".format(text))
             self.selected_image = text
             MainFunctions.update_ui_credit_bar(self, u"输入：", text)
-            self.backend("image_search")
+            run_backend("image_search",
+                        self.ui.load_pages.search_info_layout,
+                        self.ui.load_pages.scrollArea_layout_search)
             self.search_text.setText(u"")
         self.search_text.returnPressed.connect(lambda: search_text_slot(self.search_text.text()))
         # Hide Custom Title Bar
         self.ui.title_bar.set_custom_title_bar(False)
 
         # ///////////////////////////////////////////////////////////////
-        # PAGE 5 - ADD BUTTON FOR "智能筛重"
+        # PAGE 5 - SET LAYOUT FOR PAGE5 ("智能筛重")
         # ///////////////////////////////////////////////////////////////
+        self.ui.load_pages.scrollArea_layout_similarity = QVBoxLayout(self.ui.load_pages.page_5_scrollAreaWidgetContents)
+        self.ui.load_pages.scrollArea_layout_similarity.setSpacing(0)
+        self.ui.load_pages.scrollArea_layout_similarity.setObjectName(u"scrollArea_layout_similarity")
+        self.ui.load_pages.scrollArea_layout_similarity.setContentsMargins(0, 0, 0, 0)
+        self.ui.load_pages.scrollArea_layout_similarity.setSpacing(20)
+
+        # PAGE 5 - ADD COMMAND BUTTON
         self.ui.load_pages.page_5_top_widget_layout = QHBoxLayout(self.ui.load_pages.page_5_top_widget)
         _ = add_label(self.ui.load_pages.page_5_top_widget_layout, u"智能筛重",
                       "page_5_func_label", self.ui.load_pages.page_5)
         _ = add_btn(self.ui.load_pages.page_5_top_widget_layout, u"选择文件夹",
                     lambda: MainFunctions.select_image_directory(self), self.ui.load_pages.page_5)
         _ = add_btn(self.ui.load_pages.page_5_top_widget_layout, u"开始分析",
-                    lambda: self.backend("image_similarity"), self.ui.load_pages.page_5)
+                    lambda: run_backend(
+                        "image_similarity", None,
+                        self.ui.load_pages.scrollArea_layout_similarity, count = -1 # as all
+                    ), self.ui.load_pages.page_5)
 
         # ADD CONFIRM BUTTON FOR PAGE5
         self.commit_delete_button = PyPushButton(
@@ -401,42 +461,8 @@ class SetupMainWindow:
         self.ui.credits.person_name.returnPressed.connect(
             lambda: MainFunctions.update_image_object_label(self, self.ui.credits.person_name))
 
-        # ADD Widgets (Layout)
+        # ADD Widgets
         # ///////////////////////////////////////////////////////////////
-
-        # SET GRID LAYOUT FOR PAGE2 ("智能影集")
-        # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.scrollArea_layout_album = QGridLayout(self.ui.load_pages.page_2_right_scrollAreaWidgetContents)
-        self.ui.load_pages.scrollArea_layout_album.setSpacing(0)
-        self.ui.load_pages.scrollArea_layout_album.setObjectName(u"scrollArea_layout_album")
-        self.ui.load_pages.scrollArea_layout_album.setContentsMargins(0, 0, 0, 0)
-
-        # SET GRID LAYOUT FOR PAGE3 ("人物列表")
-        # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.scrollArea_layout_human = QGridLayout(self.ui.load_pages.page_3_right_scrollAreaWidgetContents)
-        self.ui.load_pages.scrollArea_layout_human.setSpacing(0)
-        self.ui.load_pages.scrollArea_layout_human.setObjectName(u"scrollArea_layout_human")
-        self.ui.load_pages.scrollArea_layout_human.setContentsMargins(0, 0, 0, 0)
-
-        # SET VERTICAL LAYOUT FOR PAGE4 ("智能搜图")
-        # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.search_info_layout = QHBoxLayout(self.ui.load_pages.page_4_search_info)
-        self.ui.load_pages.search_info_layout.setSpacing(0)
-        self.ui.load_pages.search_info_layout.setObjectName(u"search_info_layout")
-        self.ui.load_pages.search_info_layout.setContentsMargins(0, 0, 0, 0)
-        self.ui.load_pages.search_info_layout.setAlignment(Qt.AlignCenter)
-        self.ui.load_pages.scrollArea_layout_search = QGridLayout(self.ui.load_pages.page_4_scrollAreaWidgetContents)
-        self.ui.load_pages.scrollArea_layout_search.setSpacing(0)
-        self.ui.load_pages.scrollArea_layout_search.setObjectName(u"scrollArea_layout_search")
-        self.ui.load_pages.scrollArea_layout_search.setContentsMargins(0, 0, 0, 0)
-
-        # SET VERTICAL LAYOUT FOR PAGE5 ("智能筛重")
-        # ///////////////////////////////////////////////////////////////
-        self.ui.load_pages.scrollArea_layout_similarity = QVBoxLayout(self.ui.load_pages.page_5_scrollAreaWidgetContents)
-        self.ui.load_pages.scrollArea_layout_similarity.setSpacing(0)
-        self.ui.load_pages.scrollArea_layout_similarity.setObjectName(u"scrollArea_layout_similarity")
-        self.ui.load_pages.scrollArea_layout_similarity.setContentsMargins(0, 0, 0, 0)
-        self.ui.load_pages.scrollArea_layout_similarity.setSpacing(20)
 
         # RIGHT COLUMN
         # ///////////////////////////////////////////////////////////////
