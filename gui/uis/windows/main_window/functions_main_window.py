@@ -156,7 +156,7 @@ class MainFunctions():
         layout.removeWidget(_target_widget)
         layout.update()
 
-    def update_left_column_menu2(self):
+    def update_album_list(self):
         """ Reload smart album info. """
         if self.smart_album_result is None:
             MainFunctions.update_ui_credit_bar(self, copyright=u"还未生成智能影集")
@@ -165,8 +165,8 @@ class MainFunctions():
         
         if len(self.smart_album_result) == 0:
             # Delete previous smart album list widget
-            if self.ui.left_column.menus.menu_2_layout.count():
-                MainFunctions.delete_widget(self, self.ui.left_column.menus.menu_2_layout, 0, 1)
+            if self.ui.load_pages.page_2_left_column.menus.menu_1_layout.count():
+                MainFunctions.delete_widget(self, self.ui.load_pages.page_2_left_column.menus.menu_1_layout, 0, 1)
             MainFunctions.update_ui_credit_bar(self, copyright=u"未能生成智能影集")
             #self.ui.load_pages.page_2_right_scrollAreaWidgetContents.hide()
             return None
@@ -179,8 +179,8 @@ class MainFunctions():
             return # no change
 
         # Delete previous smart album list widget
-        if self.ui.left_column.menus.menu_2_layout.count():
-            MainFunctions.delete_widget(self, self.ui.left_column.menus.menu_2_layout, 0, 1)
+        if self.ui.load_pages.page_2_left_column.menus.menu_1_layout.count():
+            MainFunctions.delete_widget(self, self.ui.load_pages.page_2_left_column.menus.menu_1_layout, 0, 1)
 
         # Create a new widget to hold all buttons for quick replace/refresh
         # with latest smart album result.
@@ -213,8 +213,8 @@ class MainFunctions():
             self.smart_album_list_btn_group.addButton(btn)
         self.smart_album_list_layout.addStretch()
         self.smart_album_list_layout.setSpacing(10)
-        self.ui.left_column.menus.menu_2_layout.addWidget(self.smart_album_list_widget)
-        assert(self.ui.left_column.menus.menu_2_layout.count() == 1)
+        self.ui.load_pages.page_2_left_column.menus.menu_1_layout.addWidget(self.smart_album_list_widget)
+        assert(self.ui.load_pages.page_2_left_column.menus.menu_1_layout.count() == 1)
 
     def update_human_list(self):
         """ Reload person/face cluster info. """

@@ -127,13 +127,8 @@ class MainWindow(QMainWindow):
             if self.ui.load_pages.scrollArea_layout_album.count():
                 MainFunctions.delete_widget(self, self.ui.load_pages.scrollArea_layout_album, 0, 1)
             # Load && Update Menu 2
-            MainFunctions.update_left_column_menu2(self)
-            MainFunctions.set_left_column_menu(
-                self,
-                menu = self.ui.left_column.menus.menu_2,
-                title = btn.text(),
-                icon_path = btn._icon_path
-            )
+            MainFunctions.update_album_list(self)
+            MainFunctions.update_ui_credit_bar(self)
 
         # OPEN PAGE 3(pics)
         if btn.objectName() == 'btn_page_face_cluster':
