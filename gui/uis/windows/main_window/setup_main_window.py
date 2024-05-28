@@ -222,13 +222,10 @@ class SetupMainWindow:
         self.image_page_dict_person = {}
         # Image Search
         self.selected_image = None
-        self.image_search_changed = False
-        self.image_search_done = False
         self.image_search_result = {}
         self.image_search_pages = None
         # Image Similarity
-        self.image_similarity_done = False
-        self.image_similarity_result = []
+        self.image_similarity_result = None # []
         self.image_similarity_pages = []
         # Smart Album
         self.smart_album_result = None # dict: {"name":"", "images":[]}, None for init
@@ -274,12 +271,13 @@ class SetupMainWindow:
                     elif cmd == "face_cluster":
                         pass
                     elif cmd == "image_search":
-                        self._main_window.image_search_changed = True
-                        self._main_window.image_search_done = True
+                        self._main_window.image_search_result = {}
                     elif cmd == "image_similarity":
-                        pass
+                        self._main_window.image_similarity_pages = [] # reset PyImagePage list
                     else:
                         print(f"[WARN] unknonw cmd: {cmd}")
+                elif state == TaskState.ERROR:
+                    MainFunctions.update_ui_credit_bar(self._main_window, copyright="ERROR!")
                 else:
                     pass
 
@@ -331,7 +329,9 @@ class SetupMainWindow:
             layout.addWidget(left_column)
             return left_column
 
-        def run_backend(task: str, list_layout: QBoxLayout = None, image_layout: QBoxLayout = None, index = 0, count = 1):
+        def run_backend(
+                task: str, list_layout: QBoxLayout = None, image_layout: QBoxLayout = None,
+                index = 0, count = 1, text : str = None):
             if self.task_pending[task]:
                 print("[INFO] Ignore run {} since update is pending ...".format(task))
                 return
@@ -343,8 +343,14 @@ class SetupMainWindow:
                     MainFunctions.delete_widget(self, image_layout, index, count)
                 else:
                     for index in range(image_layout.count()-1, -1, -1):
-                        MainFunctions.delete_widget(
-                            self, image_layout, index, index+1)
+                        MainFunctions.delete_widget(self, image_layout, index, index+1)
+            # Load input image/text for "image_search".
+            if task == "image_search":
+                if text:
+                    self.selected_image = text
+                MainFunctions.load_image_search_info(self)
+            elif task == "image_similarity":
+                self.commit_delete_button.hide()
             self.backend(task)
 
         # ///////////////////////////////////////////////////////////////
@@ -448,11 +454,9 @@ class SetupMainWindow:
         self.ui.title_bar.custom_buttons_layout.addWidget(self.search_text_div_3)
         def search_text_slot(text):
             print("[INFO] Input text: {}".format(text))
-            self.selected_image = text
-            MainFunctions.update_ui_credit_bar(self, u"输入：", text)
             run_backend("image_search",
                         self.ui.load_pages.search_info_layout,
-                        self.ui.load_pages.scrollArea_layout_search)
+                        self.ui.load_pages.scrollArea_layout_search, text=text)
             self.search_text.setText(u"")
         self.search_text.returnPressed.connect(lambda: search_text_slot(self.search_text.text()))
         # Hide Custom Title Bar

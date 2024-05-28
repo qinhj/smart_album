@@ -354,8 +354,6 @@ class MainFunctions():
         """ 以图搜图: 选择图片 """
         m = QFileDialog.getOpenFileName(None, "选择图片", ".", "图片 (*.png *.jpg *.JPG *.jpeg *.JPEG *.tiff *.bmp);;")
         self.selected_image = m[0]
-        self.ui.credits.person.setText(u"输入")
-        self.ui.credits.person_name.setText(self.selected_image)
         return m[0]
 
     def select_image_directory(self):
@@ -371,28 +369,9 @@ class MainFunctions():
         self.ui.credits.copyright_label.setText("选择文件夹：{}".format(directory))
         return directory
     
-    def load_image_search_result(self):
-        if not self.image_search_done:
-            MainFunctions.update_ui_credit_bar(self, copyright=u"还未选择图片")
-            self.ui.load_pages.page_4_scrollAreaWidgetContents.hide()
-            return None
-        
-        if len(self.image_search_result) == 0:
-            MainFunctions.update_ui_credit_bar(self, copyright=u"未能找到相关图片")
-            self.ui.load_pages.page_4_scrollAreaWidgetContents.hide()
-            return None
-        #print(self.image_search_result)
-
-        self.ui.load_pages.page_4_scrollAreaWidgetContents.show()
-
-        name, paths = tuple(self.image_search_result.items())[0]
-        MainFunctions.update_ui_credit_bar(
-            self, u"输入：", name, "", "", u"总数量：{}".format(len(paths)))
-        
-        if not self.image_search_changed:
-            return None
-
-        self.image_search_changed = False
+    def load_image_search_info(self):
+        if not self.selected_image:
+            return
         # update widget for input image/text
         if self.ui.load_pages.search_info_layout.count():
             MainFunctions.delete_widget(self, self.ui.load_pages.search_info_layout, 0, 1)
@@ -404,6 +383,25 @@ class MainFunctions():
             _label_widget = QLabel(self.selected_image)
             self.ui.load_pages.search_info_layout.addWidget(_label_widget)
         self.ui.load_pages.search_info_layout.update()
+        # always update search info to credit bar
+        MainFunctions.update_ui_credit_bar(self, u"输入", self.selected_image)
+
+    def load_image_search_result(self):
+        if not self.selected_image:
+            MainFunctions.update_ui_credit_bar(self, copyright=u"还未选择图片")
+            self.ui.load_pages.page_4_scrollAreaWidgetContents.hide()
+            return None
+        
+        if len(self.image_search_result) == 0:
+            MainFunctions.update_ui_credit_bar(self, copyright=u"未能找到相关图片")
+            self.ui.load_pages.page_4_scrollAreaWidgetContents.hide()
+            return None
+        #print(self.image_search_result)
+        
+        self.ui.load_pages.page_4_scrollAreaWidgetContents.show()
+        name, paths = tuple(self.image_search_result.items())[0]
+        MainFunctions.update_ui_credit_bar(
+            self, u"输入：", name, "", "", u"总数量：{}".format(len(paths)))
 
         MainFunctions.update_ui_credit_bar(self, copyright=u"正在加载图片")
         QApplication.processEvents()
@@ -429,22 +427,17 @@ class MainFunctions():
         self.ui.load_pages.scrollArea_layout_search.update()
 
     def load_image_similarity_result(self):
-        if not self.image_similarity_done:
-            MainFunctions.update_ui_credit_bar(self, copyright=u"还未进行智能筛重")
-            return None
-        else:            
-            MainFunctions.update_ui_credit_bar(self, copyright=u"正在加载图片")
-            QApplication.processEvents()
-
-        if len(self.image_similarity_pages) != 0:
-            self.commit_delete_button.show()
-            self.ui.credits.copyright_label.setText(u"选择要删除的图片并点击确定")
+        if self.image_similarity_result is None:
+            # under running or idle
             return None
 
         if len(self.image_similarity_result) == 0:
             self.commit_delete_button.hide()
             self.ui.credits.copyright_label.setText(u"未发现相似图片")
             return None
+
+        MainFunctions.update_ui_credit_bar(self, copyright=u"正在加载图片")
+        QApplication.processEvents()
 
         # REMOVE PREVIOUS WIDGET
         _image_page_count = self.ui.load_pages.scrollArea_layout_similarity.count()

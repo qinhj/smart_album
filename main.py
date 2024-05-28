@@ -154,7 +154,15 @@ class MainWindow(QMainWindow):
                 MainFunctions.toggle_left_column(self)
             # Load Page 4
             MainFunctions.set_page(self, self.ui.load_pages.page_4)
-            MainFunctions.load_image_search_result(self)
+            # Update Credit Bar
+            if not self.selected_image:
+                MainFunctions.update_ui_credit_bar(self, copyright=u"还未选择图片")
+            elif len(self.image_search_result) == 0:
+                MainFunctions.update_ui_credit_bar(self, copyright=u"未能找到相关图片")
+            else:
+                name, paths = tuple(self.image_search_result.items())[0]
+                MainFunctions.update_ui_credit_bar(
+                    self, u"输入：", name, "", "", u"总数量：{}".format(len(paths)))
 
         # OPEN PAGE 5
         if btn.objectName() == 'btn_page_image_similarity':
@@ -165,7 +173,13 @@ class MainWindow(QMainWindow):
                 MainFunctions.toggle_left_column(self)
             # Load Page 5
             MainFunctions.set_page(self, self.ui.load_pages.page_5)
-            MainFunctions.load_image_similarity_result(self)
+            # Update Credit Bar
+            if self.image_similarity_result is None:
+                MainFunctions.update_ui_credit_bar(self)
+            elif len(self.image_similarity_result) > 0:
+                MainFunctions.update_ui_credit_bar(self, copyright=u"选择要删除的图片并点击确定")
+            else:
+                MainFunctions.update_ui_credit_bar(self, copyright=u"未发现相似图片")
 
         # SETTINGS LEFT
         if btn.objectName() == "btn_settings" or btn.objectName() == "btn_close_left_column":
