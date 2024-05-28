@@ -17,7 +17,8 @@
 # IMPORT PACKAGES AND MODULES
 # ///////////////////////////////////////////////////////////////
 from backend.backend import backend_selector
-from . functions_main_window import MainFunctions
+from backend.callback import ICallback, TaskState
+from . functions_main_window import MainFunctions, Functions
 
 # IMPORT QT CORE
 # ///////////////////////////////////////////////////////////////
@@ -214,10 +215,6 @@ class SetupMainWindow:
         themes = Themes(self.settings_path)
         self.themes = themes.items
 
-        # GET AND INIT AI BACKEND
-        # ///////////////////////////////////////////////////////////////
-        self.backend = backend_selector(self, self.settings["backend"])
-
         # DEFINE BTN FLAGS USED IN MainFunctions
         # ///////////////////////////////////////////////////////////////
         # Face Cluster
@@ -237,6 +234,57 @@ class SetupMainWindow:
         self.smart_album_result = None # dict: {"name":"", "images":[]}, None for init
         self.smart_album_btn_group = None
         self.smart_album_image_page = {}
+        # Task Pending
+        self.task_pending = { task : False for task in [
+            "smart_album",
+            "face_cluster",
+            "image_search",
+            "image_similarity",
+        ]}
+
+        # GET AND INIT AI BACKEND
+        # ///////////////////////////////////////////////////////////////
+        class BackendCallback(ICallback):
+            def __init__(self, main_window: QMainWindow):
+                super().__init__()
+                self._main_window = main_window
+
+            def __call__(self, cmd: str, state: TaskState, *args, **kwargs):
+                print(f"{cmd} {state}")
+                if state == TaskState.PREPARE:
+                    if cmd in ["smart_album", "face_cluster"]:
+                        MainFunctions.update_ui_credit_bar(self._main_window)
+                elif state == TaskState.FINISHED:
+                    self._main_window.task_pending[cmd] = False
+                    if cmd == "smart_album":
+                        MainFunctions.update_album_list(self._main_window)
+                    elif cmd == "face_cluster":
+                        MainFunctions.update_human_list(self._main_window)
+                    elif cmd == "image_search":
+                        MainFunctions.load_image_search_result(self._main_window)
+                    elif cmd == "image_similarity":
+                        MainFunctions.load_image_similarity_result(self._main_window)
+                    else:
+                        print(f"[WARN] unknown cmd: {cmd}")
+                elif state == TaskState.RUNNING:
+                    self._main_window.task_pending[cmd] = True
+                    if cmd == "smart_album":
+                        self._main_window.smart_album_result = None
+                        self._main_window.smart_album_image_page = {}
+                    elif cmd == "face_cluster":
+                        pass
+                    elif cmd == "image_search":
+                        self._main_window.image_search_changed = True
+                        self._main_window.image_search_done = True
+                    elif cmd == "image_similarity":
+                        pass
+                    else:
+                        print(f"[WARN] unknonw cmd: {cmd}")
+                else:
+                    pass
+
+        self.callback = BackendCallback(self)
+        self.backend = backend_selector(self, self.settings["backend"], self.callback)
 
         # LEFT COLUMN
         # ///////////////////////////////////////////////////////////////
@@ -284,6 +332,9 @@ class SetupMainWindow:
             return left_column
 
         def run_backend(task: str, list_layout: QBoxLayout = None, image_layout: QBoxLayout = None, index = 0, count = 1):
+            if self.task_pending[task]:
+                print("[INFO] Ignore run {} since update is pending ...".format(task))
+                return
             # Clear previous list widget and image widgets.
             if list_layout and list_layout.count():
                 MainFunctions.delete_widget(self, list_layout, index, count)
@@ -327,8 +378,8 @@ class SetupMainWindow:
         _ = add_btn(self.ui.load_pages.page_2_top_widget_layout, u"开始分析",
                     lambda: run_backend(
                         "smart_album",
+                        self.ui.load_pages.page_2_left_column.scrollAreaLayout,
                         self.ui.load_pages.scrollArea_layout_album,
-                        self.ui.load_pages.page_2_left_column.scrollAreaLayout
                     ), self.ui.load_pages.page_2)
 
         # ///////////////////////////////////////////////////////////////

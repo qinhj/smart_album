@@ -7,6 +7,7 @@
 # IMPORT PACKAGES AND MODULES
 # ///////////////////////////////////////////////////////////////
 from backend.backend import IBackend
+from backend.callback import ICallback
 from backend.worker import create_worker_smart_album
 from backend.worker import create_worker_face_cluster
 from backend.worker import create_worker_image_search
@@ -23,8 +24,8 @@ from gui.core.qt_core import *
 
 class TiorbBackend(IBackend):
 
-    def __init__(self, main_window: QMainWindow):
-        super().__init__(main_window)
+    def __init__(self, main_window: QMainWindow, callback: ICallback = None):
+        super().__init__(main_window, callback)
         # create handler for supported task and thread worker
         self._task_handler = {
             "smart_album"  : [create_worker_smart_album,  tiorb_smart_album],
@@ -41,7 +42,7 @@ class TiorbBackend(IBackend):
             # add workspace to input kwargs
             kwargs["workspace"] = self._workspace
             worker, handler = self._task_handler[cmd]
-            worker(self._main_window, handler, *args, **kwargs)
+            worker(self._main_window, handler, self._callback, *args, **kwargs)
         else:
             raise RuntimeError("Unsupported command {}".format(cmd))
 

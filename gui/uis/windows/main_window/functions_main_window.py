@@ -150,7 +150,9 @@ class MainFunctions():
     # CUSTOM FUNCTIONS
     # ///////////////////////////////////////////////////////////////
     def delete_widget(self, layout: QLayout, index: int = 0, count: int = 1):
-        assert(layout.count() == count), "layout count {} != expected count {}".format(layout.count(), count)
+        _target_object_name = [layout.itemAt(index).widget().objectName() for i in range(layout.count())]
+        assert(layout.count() == count), "layout count {} != expected count {}, obj: {}".format(
+            layout.count(), count, _target_object_name)
         _target_widget = layout.itemAt(index).widget()
         _target_widget.setParent(None)
         layout.removeWidget(_target_widget)
@@ -206,9 +208,16 @@ class MainFunctions():
             btn.setObjectName("SmartAlbum")
             btn.setCheckable(True)
             btn.setAutoExclusive(True)
-            btn.clicked.connect(lambda: MainFunctions.load_images_of_checked_button(
-                self, image_dict=self.smart_album_dict, btn_group=self.smart_album_list_btn_group, read_only=True,
-                layout=self.ui.load_pages.scrollArea_layout_album, image_page_dict=self.smart_album_image_page))
+            def btn_clicked():
+                if self.task_pending["smart_album"]:
+                    print("[INFO] Ignore smart album list btn click event since update is pending ...")
+                    return
+                self.task_pending["smart_album"] = True
+                MainFunctions.load_images_of_checked_button(
+                    self, image_dict=self.smart_album_dict, btn_group=self.smart_album_list_btn_group, read_only=True,
+                    layout=self.ui.load_pages.scrollArea_layout_album, image_page_dict=self.smart_album_image_page)
+                self.task_pending["smart_album"] = False
+            btn.clicked.connect(lambda: btn_clicked())
             self.smart_album_list_layout.addWidget(btn)
             self.smart_album_list_btn_group.addButton(btn)
         self.smart_album_list_layout.addStretch()
@@ -246,12 +255,21 @@ class MainFunctions():
             btn.setObjectName("Person")
             btn.setCheckable(True)
             btn.setAutoExclusive(True)
-            btn.clicked.connect(lambda: MainFunctions.load_images_of_checked_button(
+            def btn_clicked(slot, count = 1):
+                if self.task_pending["face_cluster"] and count == 1:
+                    print("[INFO] Ignore human list btn click event since update is pending ...")
+                    return
+                self.task_pending["face_cluster"] = True
+                try:
+                    slot()
+                finally:
+                    self.task_pending["face_cluster"] = False
+            btn.clicked.connect(lambda: btn_clicked(lambda: MainFunctions.load_images_of_checked_button(
                 self, image_dict=self.person_dict, btn_group=self.person_list_btn_group, read_only=False,
-                layout=self.ui.load_pages.scrollArea_layout_human, image_page_dict=self.image_page_dict_person))
-            btn.DoubleClickSig.connect(lambda: MainFunctions.update_image_group_name(
+                layout=self.ui.load_pages.scrollArea_layout_human, image_page_dict=self.image_page_dict_person), 1))
+            btn.DoubleClickSig.connect(lambda: btn_clicked(lambda: MainFunctions.update_image_group_name(
                 self, image_dict=self.person_dict, btn_group=self.person_list_btn_group,
-                layout=self.ui.load_pages.scrollArea_layout_human, image_page_dict=self.image_page_dict_person))
+                layout=self.ui.load_pages.scrollArea_layout_human, image_page_dict=self.image_page_dict_person), 2))
             self.person_list_layout.addWidget(btn)
             self.person_list_btn_group.addButton(btn)
         self.person_list_layout.addStretch()
@@ -336,7 +354,8 @@ class MainFunctions():
         """ 以图搜图: 选择图片 """
         m = QFileDialog.getOpenFileName(None, "选择图片", ".", "图片 (*.png *.jpg *.JPG *.jpeg *.JPEG *.tiff *.bmp);;")
         self.selected_image = m[0]
-        self.ui.credits.copyright_label.setText("选择图片：{}".format(self.selected_image))
+        self.ui.credits.person.setText(u"输入")
+        self.ui.credits.person_name.setText(self.selected_image)
         return m[0]
 
     def select_image_directory(self):

@@ -127,7 +127,7 @@ class PyLeftColumnInner(QWidget):
         self.scrollAreaLayout.setObjectName(u"scrollAreaLayout")
         self.scrollAreaLayout.setContentsMargins(0, 0, 0, 0)
         # Add Widget As Placeholder
-        self.scrollAreaLayout.addWidget(QWidget())
+        #self.scrollAreaLayout.addWidget(QWidget())
 
         # ADD TO CONTENT FRAME LAYOUT
         # ///////////////////////////////////////////////////////////////

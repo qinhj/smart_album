@@ -1,6 +1,6 @@
 # ///////////////////////////////////////////////////////////////
 #
-# BY: qinhj@lsec.cc.ac.cn
+# BY: hongjie.qin@spacemit.com
 #
 # ///////////////////////////////////////////////////////////////
 
@@ -8,6 +8,7 @@
 # ///////////////////////////////////////////////////////////////
 import os
 from abc import ABC, abstractmethod
+from backend.callback import ICallback, DefaultCallback
 from backend.worker import create_worker_smart_album
 from backend.worker import create_worker_face_cluster
 from backend.worker import create_worker_image_search
@@ -25,8 +26,9 @@ def _not_implemented(*args, **kwargs):
 
 class IBackend(ABC):
 
-    def __init__(self, main_window: QMainWindow):
+    def __init__(self, main_window: QMainWindow, callback: ICallback = DefaultCallback):
         self._main_window = main_window
+        self._callback = callback
 
     def __call__(self, cmd: str, *args, **kwargs):
         return _not_implemented(*args, **kwargs)
@@ -34,8 +36,8 @@ class IBackend(ABC):
 
 class FakeBackend(IBackend):
 
-    def __init__(self, main_window: QMainWindow):
-        super().__init__(main_window)
+    def __init__(self, main_window: QMainWindow, callback: ICallback = DefaultCallback):
+        super().__init__(main_window, callback)
         if main_window.workspace:
             # use customer assets
             self._image_dir = os.path.join(main_window.workspace, "assets", "obama")
@@ -143,15 +145,15 @@ class FakeBackend(IBackend):
     def __call__(self, cmd: str, *args, **kwargs):
         if cmd in self._task_handler.keys():
             worker, handler = self._task_handler[cmd]
-            worker(self._main_window, handler, *args, **kwargs)
+            worker(self._main_window, handler, self._callback, *args, **kwargs)
         else:
             raise RuntimeError("Unsupported command {}".format(cmd))
 
 
-def backend_selector(qw: QWidget, name: str):
+def backend_selector(qw: QWidget, name: str, callback: ICallback = DefaultCallback):
     if name.lower() == "fake":
-        return FakeBackend(qw)
+        return FakeBackend(qw, callback)
     if name.lower() == "tiorb":
         from backend.tiorb.api import TiorbBackend
-        return TiorbBackend(qw)
+        return TiorbBackend(qw, callback)
     raise RuntimeError("Unsupported backend: {}".format(name))

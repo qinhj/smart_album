@@ -7,6 +7,7 @@
 # IMPORT PACKAGES AND MODULES
 # ///////////////////////////////////////////////////////////////
 import time
+from backend.callback import TaskState, ICallback
 
 # IMPORT QT CORE
 # ///////////////////////////////////////////////////////////////
@@ -53,8 +54,11 @@ _TEXT_FILL_BLANK = "                                    "
 _TEXT_NEED_IMAGE_PATH = u"还未选择图片或输入文本，请先选择图片或输入文本后再执行"
 
 # Default worker for smart album task
-def create_worker_smart_album(main_window: QMainWindow, worker_handler, *args, **kwargs):
+def create_worker_smart_album(main_window: QMainWindow, worker_handler, worker_callback: ICallback, *args, **kwargs):
+    worker_callback("smart_album", TaskState.PREPARE, *args, **kwargs)
+
     if worker_handler is None:
+        worker_callback("smart_album", TaskState.ERROR, "worker_handler is None!")
         raise RuntimeError("Input worker handler for smart album task is None!")
 
     if main_window.settings["image_path"] == "":
@@ -68,17 +72,20 @@ def create_worker_smart_album(main_window: QMainWindow, worker_handler, *args, *
         timer.stop()
         main_window.smart_album_result = result
         QMessageBox.information(main_window, main_window.settings["app_name"], u"智能影集生成完毕{}".format(_TEXT_FILL_BLANK))
-        MainFunctions.update_album_list(main_window)
+        worker_callback("smart_album", TaskState.FINISHED, *args, **kwargs)
 
+    worker_callback("smart_album", TaskState.RUNNING, *args, **kwargs)
     main_window.smart_album_worker = Worker(worker_handler, main_window.settings["image_path"], *args, **kwargs)
     main_window.smart_album_worker.finished.connect(generate_finished)
     main_window.smart_album_worker.start()
-    main_window.smart_album_image_page = {}
 
 
 # Default worker for face cluster task
-def create_worker_face_cluster(main_window: QMainWindow, worker_handler, *args, **kwargs):
+def create_worker_face_cluster(main_window: QMainWindow, worker_handler, worker_callback: ICallback, *args, **kwargs):
+    worker_callback("face_cluster", TaskState.PREPARE, *args, **kwargs)
+
     if worker_handler is None:
+        worker_callback("face_cluster", TaskState.ERROR, "worker_handler is None!")
         raise RuntimeError("Input worker handler for face cluster task is None!")
 
     if main_window.settings["image_path"] == "":
@@ -92,16 +99,20 @@ def create_worker_face_cluster(main_window: QMainWindow, worker_handler, *args, 
         timer.stop()
         main_window.face_cluster_result = result
         QMessageBox.information(main_window, main_window.settings["app_name"], u"人脸聚类完成{}".format(_TEXT_FILL_BLANK))
-        MainFunctions.update_human_list(main_window)
+        worker_callback("face_cluster", TaskState.FINISHED, *args, **kwargs)
 
+    worker_callback("face_cluster", TaskState.RUNNING, *args, **kwargs)
     main_window.face_cluster_worker = Worker(worker_handler, main_window.settings["image_path"], *args, **kwargs)
     main_window.face_cluster_worker.finished.connect(cluster_finished)
     main_window.face_cluster_worker.start()
 
 
 # Default worker for image search task
-def create_worker_image_search(main_window: QMainWindow, worker_handler, *args, **kwargs):
+def create_worker_image_search(main_window: QMainWindow, worker_handler, worker_callback: ICallback, *args, **kwargs):
+    worker_callback("image_search", TaskState.PREPARE, *args, **kwargs)
+
     if worker_handler is None:
+        worker_callback("image_search", TaskState.ERROR, "worker_handler is None!")
         raise RuntimeError("Input worker handler for image search task is None!")
 
     if main_window.settings["image_path"] == "":
@@ -120,19 +131,20 @@ def create_worker_image_search(main_window: QMainWindow, worker_handler, *args, 
         timer.stop()
         main_window.image_search_result = result
         QMessageBox.information(main_window, main_window.settings["app_name"], u"智能搜图完成{}".format(_TEXT_FILL_BLANK))
-        MainFunctions.load_image_search_result(main_window)
+        worker_callback("image_search", TaskState.FINISHED, *args, **kwargs)
 
-    # TODO: decouple with input main_window?
-    main_window.image_search_changed = True
+    worker_callback("image_search", TaskState.RUNNING, *args, **kwargs)
     main_window.image_search_worker = Worker(worker_handler, [main_window.settings["image_path"], main_window.selected_image], *args, **kwargs)
     main_window.image_search_worker.finished.connect(search_finished)
     main_window.image_search_worker.start()
-    main_window.image_search_done = True
 
 
 # Default worker for image similarity task
-def create_worker_image_similarity(main_window: QMainWindow, worker_handler, *args, **kwargs):
+def create_worker_image_similarity(main_window: QMainWindow, worker_handler, worker_callback: ICallback, *args, **kwargs):
+    worker_callback("image_similarity", TaskState.PREPARE, *args, **kwargs)
+
     if worker_handler is None:
+        worker_callback("image_similarity", TaskState.ERROR, "worker_handler is None!")
         raise RuntimeError("Input worker handler for image similarity task is None!")
 
     if main_window.settings["image_path"] == "":
@@ -147,8 +159,9 @@ def create_worker_image_similarity(main_window: QMainWindow, worker_handler, *ar
         main_window.image_similarity_result = path
         main_window.image_similarity_pages = [] # reset PyImagePage list
         QMessageBox.information(main_window, main_window.settings["app_name"], u"智能筛重完成{}".format(_TEXT_FILL_BLANK))
-        MainFunctions.load_image_similarity_result(main_window)
+        worker_callback("image_similarity", TaskState.FINISHED, *args, **kwargs)
 
+    worker_callback("image_similarity", TaskState.RUNNING, *args, **kwargs)
     main_window.image_similarity_worker = Worker(worker_handler, main_window.settings['image_path'], *args, **kwargs)
     main_window.image_similarity_worker.finished.connect(similarity_finished)
     main_window.image_similarity_worker.start()
