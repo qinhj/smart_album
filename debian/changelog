@@ -1,6 +1,12 @@
+bianbu-smart-album (2.0.4.1) mantic-customization; urgency=medium
+
+  * Fix GUI Runtime Crash Issues
+
+ -- qinhongjie <hongjie.qin@spacemit.com>  Tue, 28 May 2024 21:52:00 +0800
+
 bianbu-smart-album (2.0.4) mantic-customization; urgency=medium
 
-  * Initial for bianbu-23.10
+  * Update GUI for Bianbu Smart Album
 
  -- qinhongjie <hongjie.qin@spacemit.com>  Fri, 24 May 2024 14:13:00 +0800
 
